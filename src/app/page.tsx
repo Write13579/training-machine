@@ -25,7 +25,7 @@ export default function Home() {
           <div>name: xxx</div>
           <div>email: xxx</div>
           <div>login: xxx</div>
-          <div>password: xxx123</div>
+          <div>password: xxx</div>
 
           <button onClick={() => setLoginSwitch(true)}>sign up</button>
         </div>
