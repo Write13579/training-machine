@@ -1,7 +1,8 @@
 @import "tailwindcss";
+/*@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');*/
 
 :root {
-  --background: #ffffff;
+  --background: #37364e;;
   --foreground: #171717;
 }
 
@@ -20,9 +21,10 @@
 }
 
 body {
-  background: var(--background);
+  height: auto;
+  background: linear-gradient(0deg,#37364e 1%, #9e8e91 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif, alfaSlab;
 }
 
 /*
@@ -149,6 +151,31 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-
 */
+
+@font-face {
+  font-family: 'AlfaSlab';
+  src: url('/fonts/AlfaSlabOne-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MySerif';
+  src: url('/fonts/Inter-VariableFont_opsz,wght.ttf');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* klasy util do użycia tylko tam, gdzie chcesz */
+.font-alfa {
+  font-family: 'AlfaSlab', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.font-mysans {
+  font-family: 'MySans', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.font-myserif {
+  font-family: 'MySerif', Georgia, "Times New Roman", serif;
+}

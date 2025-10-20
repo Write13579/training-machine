@@ -7,14 +7,14 @@ export default async function Home() {
   const user = await getMe();
 
   return (
-    <div>
-      <div className="border-2 p-2 font-bold">
-        <h1 className="text-red-500 justify-center flex">TRAINING MACHINE</h1>
+      <div id="tlo" className="relative items-center justify-center min-h-[100vh] min-w-[320px]">
+      <div className="font-MySerif text-[80px] p-40 font-bold">
+        <h1 className="text-[#ffffff] justify-center flex min-w-[320px]">Let's move!</h1>
       </div>
 
       {!user && <ZalogujPage />}
 
-      <div className="border-2 p-3 flex justify-center mx-10 flex-col">
+      <div className="border-2 p-3 flex justify-center mx-10 flex-col min-h-[10vh]">
         <div>blog/feed</div>
         {user && <div>Witaj, {JSON.stringify(user)}!</div>}
       </div>
@@ -25,5 +25,6 @@ export default async function Home() {
         </div>
       )}
     </div>
+    
   );
 }
