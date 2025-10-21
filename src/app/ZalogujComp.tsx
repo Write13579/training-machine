@@ -49,7 +49,7 @@ export default function ZalogujPage() {
     <div
       id="obramowowka tego gownoforma"
       className="relative z-20 
-      mx-auto min-h-[300px] h-[60%] w-[24%] rounded-[32px] bg-[#ffffff] min-w-[300px]">
+      mx-auto min-h-[300px] h-[60%] w-[32%] rounded-[32px] bg-[#ffffff] min-w-[300px]">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 m-6">
           <FormField
@@ -57,7 +57,7 @@ export default function ZalogujPage() {
             name="login"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-MySerif mt-1 flex justify-center text-[24px] text-[#000000]">
+                <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
                   Login
                 </FormLabel>
                 <FormControl>
@@ -103,23 +103,23 @@ export default function ZalogujPage() {
               type="submit"
               loading={form.formState.isSubmitting}
               className="
-                
-                  px-[34%] py-[17px]
-                  rounded-full
-                  cursor-pointer
-                  border-0
-                  bg-black
-                  uppercase
-                  text-[15px]
-                  transition-all duration-500 ease-in-out
-                  hover:tracking-[1px]
-                  hover:text-white
-                  active:tracking-[5px]
-                  active:bg-white
-                  active:text-black
-                  active:translate-y-[-2px]
-                  active:duration-[100ms]
-                ">
+                w-full
+                rounded-full
+                cursor-pointer
+                border-0
+                bg-black
+                uppercase
+                text-[15px]
+                transition-y duration-500 ease-in-out
+                hover:tracking-[1px]
+                hover:text-white
+                active:tracking-[3px]
+                active:bg-white
+                active:text-black
+                active:translate-y-[-2px]
+                active:duration-[100ms]
+              "
+            >
               Zaloguj
             </Button>
           </div>

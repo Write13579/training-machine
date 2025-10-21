@@ -59,89 +59,127 @@ export default function RejestracjaComp() {
   }
 
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nazwa użytkownika</FormLabel>
-                <FormControl>
-                  <Input placeholder="username" {...field} />
-                </FormControl>
-                <FormDescription>
-                  To jest twoja publiczna nazwa wyświetlana.
-                </FormDescription>
-                <FormMessage className="text-red-600 font-bold text-sm" />
-                {/* wyswietla bledy */}
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="login"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Login</FormLabel>
-                <FormControl>
-                  <Input placeholder="login" {...field} />
-                </FormControl>
-                <FormDescription>Tym się logujesz do konta.</FormDescription>
-                <FormMessage className="text-red-600 font-bold text-sm" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="email@example.com" {...field} />
-                </FormControl>
-                {/* <FormDescription>To jest twój adres email.</FormDescription> */}
-                <FormMessage className="text-red-600 font-bold text-sm" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="haslo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Hasło</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="hasło" {...field} />
-                </FormControl>
-                <FormMessage className="text-red-600 font-bold text-sm" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="potworzHaslo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Powtórz hasło</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="powtórz hasło"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-600 font-bold text-sm" />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="border-2 cursor-pointer">
-            Zarejestruj
-          </Button>
-        </form>
-      </Form>
-    </div>
+    
+      <div
+        className="relative z-20 mx-auto min-h-[300px] min-w-[300px] h-[60%] w-[32%] rounded-[32px] bg-[#ffffff] transition-none"
+      >
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="m-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
+                    Nazwa użytkownika</FormLabel>
+                  <FormControl>
+                    <Input placeholder="username" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    To jest twoja publiczna nazwa wyświetlana.
+                  </FormDescription>
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage className="text-red-600 font-bold text-sm" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="login"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
+                    Login
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-2 border-gray-300 focus:border-black text-black bg-white/20"
+                      placeholder={"Login"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage className="text-red-600 font-bold text-sm" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="email@example.com" {...field} />
+                  </FormControl>
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage className="text-red-600 font-bold text-sm" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="haslo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Hasło</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="hasło" {...field} />
+                  </FormControl>
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage className="text-red-600 font-bold text-sm" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="potworzHaslo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Powtórz hasło</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="powtórz hasło"
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage className="text-red-600 font-bold text-sm" />
+                  </div>
+                </FormItem>
+              )}
+            />
+            <Button
+              type="submit"
+              className="
+                w-full
+                py-[17px]
+                my-4
+                rounded-full
+                cursor-pointer
+                border-0
+                bg-black
+                uppercase
+                text-[15px]
+                transition-all duration-500 ease-in-out
+                hover:tracking-[1px]
+                hover:text-white
+                active:tracking-[3px]
+                active:bg-white
+                active:text-black
+                active:translate-y-[-2px]
+                active:duration-[100ms]
+              "
+            >
+              Zarejestruj
+            </Button>
+          </form>
+        </Form>
+      </div>
   );
 }

@@ -18,12 +18,33 @@ export default async function Home() {
 
       {
         !user && (
-          <div>
+          <div className="flex flex-col items-center w-full">
             <ZalogujPage />
-            <Link href="/rejestracja">
-              <div className="border-2 flex justify-center items-center m-4 p-4">
-                Zarejestruj się
-              </div>
+            <Link href="/rejestracja" className="w-[24%] min-w-[252px] mx-auto">
+              <button
+                type="button"
+                className="
+                  w-full
+                  py-[8.75px]
+                  mt-4
+                  rounded-full
+                  cursor-pointer
+                  border-0
+                  bg-[#ffffff]                  uppercase
+                  text-[15px]
+                  text-black
+                  transition-y duration-500 ease-in-out
+                  hover:tracking-[1px]
+                  hover:text-black
+                  active:tracking-[3px]
+                  active:bg-white
+                  active:text-black
+                  active:translate-y-[-2px]
+                  active:duration-[300ms]
+                "
+              >
+                Rejestracja
+              </button>
             </Link>
           </div>
         ) // q9tBm49FvB
