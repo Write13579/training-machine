@@ -41,8 +41,7 @@ export default async function Home() {
                   active:text-black
                   active:translate-y-[-2px]
                   active:duration-[300ms]
-                "
-              >
+                ">
                 Rejestracja
               </button>
             </Link>
@@ -58,6 +57,11 @@ export default async function Home() {
       {user && (
         <div>
           <WylogujBtn />
+        </div>
+      )}
+      {user && user.admin && (
+        <div className="mt-4 flex justify-center border-2 bg-red-600">
+          <Link href="/admin">Admin Panel</Link>
         </div>
       )}
     </div>

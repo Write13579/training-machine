@@ -7,7 +7,8 @@ import { toast } from "sonner";
 export default function WylogujBtn() {
   return (
     <Button
-      variant="destructive"
+      variant="outline"
+      className="cursor-pointer"
       onClick={async () => {
         await Wyloguj();
         toast("Logged out correctly!");

@@ -3,8 +3,15 @@
 import { db } from "@/lib/database";
 import { exercises } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
+import { getMe } from "../authutils";
 
 export async function createExercise(name: string, description: string) {
+  const user = await getMe();
+
+  if (!user || !user.admin) {
+    throw new Error("Access Denied");
+  }
+
   if (name.length < 1) {
     return [{ field: "name", error: "Nazwa nie może być pusta" }];
   }
@@ -35,4 +42,14 @@ export async function createExercise(name: string, description: string) {
   });
 
   return [];
+}
+
+export async function deleteExercise(exerciseId: number) {
+  const user = await getMe();
+
+  if (!user || !user.admin) {
+    throw new Error("Access Denied");
+  }
+
+  await db.delete(exercises).where(eq(exercises.id, exerciseId));
 }

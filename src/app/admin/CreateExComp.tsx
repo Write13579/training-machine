@@ -5,11 +5,9 @@ import { useRouter } from "next/navigation";
 import { Path, useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
-import { sprawdzLogowanie, zarejestruj } from "../auth-actions";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -39,6 +37,7 @@ export default function CreateExComp() {
     if (errors.length === 0) {
       toast(`Dodano ćwiczenie ${values.name}!`);
       form.reset();
+      router.refresh();
     }
     errors.forEach((formerror) => {
       form.setError(formerror.field as Path<z.infer<typeof formSchema>>, {
