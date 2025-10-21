@@ -13,18 +13,20 @@ export async function GET() {
   }
 
   const password = generateRandomString(10);
+  const pass = "123";
 
   await db
     .insert(users)
     .values({
       login: "patrykbaraniak",
       name: "Patryk Baraniak",
-      password: await hashPassword(password),
+      email: "padajo12@gmail.com",
+      password: await hashPassword(pass) /*await hashPassword(password)*/,
       admin: true,
     })
     .returning({ insertedId: users.id });
 
-  return Response.json({ password });
+  return Response.json({ pass });
 }
 
 export const dynamic = "force-dynamic";
