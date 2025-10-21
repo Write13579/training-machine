@@ -4,7 +4,7 @@ import { getMe } from "./app/authutils";
 
 export async function middleware(request: NextRequest) {
   //podstrony gdzie musisz byc zalogowany, żeby wejść
-  const AUTH_PAGES = [{ url: "/xxx", admin: false }];
+  const AUTH_PAGES = [{ url: "/admin", admin: true }];
 
   //podstrony widoczne TYLKO dla niezalogowanych
   const PUBLIC_ONLY_PAGES = ["/rejestracja"];

@@ -20,6 +20,14 @@ export const users = pgTable("users", {
 
 export type User = typeof users.$inferSelect;
 
+export const exercises = pgTable("exercises", {
+  id: serial("id").primaryKey(),
+  nazwa: varchar("nazwa", { length: 256 }).unique().notNull(),
+  opis: varchar("opis", { length: 700 }).notNull(),
+});
+
+export type Exercise = typeof exercises.$inferSelect;
+
 // export const infos = pgTable("infos", {
 //   id: serial("id").primaryKey(),
 //   tytul: varchar("tytul", { length: 256 }).notNull(),
