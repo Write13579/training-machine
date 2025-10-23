@@ -1,5 +1,4 @@
 import { db } from "@/lib/database";
-import { columns } from "./columns";
 import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
 import { eq } from "drizzle-orm";
@@ -15,10 +14,10 @@ export default async function UstawPlanPage() {
     with: { exercise: true },
     where: eq(plans.userId, user.id),
   });
-  //console.log(data);
+
+  const listaCwiczen = await db.query.exercises.findMany();
 
   // Grupowanie po dniu + deduplikacja nazw ćwiczeń
-
   const byDay = new Map<number, Set<string>>(
     Array.from({ length: 7 }, (_, i) => [i, new Set<string>()])
   );
@@ -39,7 +38,7 @@ export default async function UstawPlanPage() {
   return (
     <div>
       <h1>Ustaw Plan Treningowy</h1>
-      <DataTable columns={columns} data={parsedData} />
+      <DataTable data={parsedData} listaCwiczen={listaCwiczen} />
     </div>
   );
 }

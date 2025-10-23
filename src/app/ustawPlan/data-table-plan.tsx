@@ -15,19 +15,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { columns } from "./columns";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  listaCwiczen: { id: number; nazwa: string; opis: string }[];
 }
 
 export function DataTable<TData, TValue>({
-  columns,
   data,
+  listaCwiczen,
 }: DataTableProps<TData, TValue>) {
+  const cols = columns(listaCwiczen) as ColumnDef<TData, TValue>[];
+
   const table = useReactTable({
     data,
-    columns,
+    columns: cols,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -67,7 +70,7 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
+              <TableCell colSpan={cols.length} className="h-24 text-center">
                 No results.
               </TableCell>
             </TableRow>

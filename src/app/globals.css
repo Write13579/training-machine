@@ -22,9 +22,11 @@
 
 body {
   height: auto;
-  background: #e5e5e5;
+  /* background: #e5e5e5; se to odkomentuj, a to na dole zakomentuj */
+  background: gray;
   color: var(--foreground);
-  font-family: 'InterVariable', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: "InterVariable", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 /*
@@ -169,7 +171,6 @@ body {
   font-display: swap;
 }
 
-/* klasy util do użycia tylko tam, gdzie chcesz */
 .font-alfa {
   font-family: "AlfaSlab", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
     sans-serif;
@@ -182,21 +183,10 @@ body {
   font-family: "MySerif", Georgia, "Times New Roman", serif;
 }
 
-/* Inter Variable - import z public/fonts (plik: /public/fonts/Inter-VariableFont_opsz,wght.ttf) */
 @font-face {
-  font-family: 'InterVariable';
-  src: url('/fonts/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-family: "InterVariable";
+  src: url("/fonts/Inter-VariableFont_opsz,wght.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-}
-
-/* jeśli masz już inny @font-face dla Inter, usuń duplikat powyżej */
-
-/* ustawiamy InterVariable jako domyślną czcionkę dla całej aplikacji */
-body {
-  height: auto;
-  background: #e5e5e5;
-  color: var(--foreground);
-  font-family: 'InterVariable', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }

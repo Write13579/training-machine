@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import AuthProvider from "@/lib/auth";
+import Link from "next/link";
+import { getMe } from "./authutils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,17 +21,18 @@ export const metadata: Metadata = {
   description: "A web application for tracking exercises and workouts.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getMe();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          {/* globalne defs z gradientem — dostępne na wszystkich stronach */}
-        <svg aria-hidden="true" width="0" height="0" className="absolute">
+        {/* <svg aria-hidden="true" width="0" height="0" className="absolute">
           <defs>
             <linearGradient id="loginGradient" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#590d22" />
@@ -42,8 +47,22 @@ export default function RootLayout({
               <stop offset="100%" stopColor="#fff0f3" />
             </linearGradient>
           </defs>
-        </svg>
-        {children}
+        </svg> */}
+
+        {/** NIE WIEM CO TO JEST POWYZEJ, ALE NARAZIE MA TEGO NIE BYĆ */}
+
+        <AuthProvider user={user}>
+          <nav
+            id="topNavbar"
+            className=" w-full bg-gray-300 p-4 items-center justify-between flex mb-4">
+            {/* <MenuBar /> */}
+            <h1 id="title" className="text-xl font-semibold animate-Shake">
+              <Link href="/">pulpit</Link>
+            </h1>
+            {/* <ProfileBar/> */}
+          </nav>
+          <main>{children}</main> <Toaster />
+        </AuthProvider>
       </body>
     </html>
   );
