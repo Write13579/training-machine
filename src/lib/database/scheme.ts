@@ -4,10 +4,10 @@ import {
   pgTable,
   serial,
   varchar,
-  timestamp,
   integer,
-  date,
 } from "drizzle-orm/pg-core";
+
+// TABELE
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -28,9 +28,34 @@ export const exercises = pgTable("exercises", {
 
 export type Exercise = typeof exercises.$inferSelect;
 
-// export const infos = pgTable("infos", {
-//   id: serial("id").primaryKey(),
-//   tytul: varchar("tytul", { length: 256 }).notNull(),
-//   tresc: varchar("tresc", { length: 700 }).notNull(),
-//   createdAt: timestamp("createdAt", { mode: "date" }).defaultNow().notNull(),
-// });
+//  w zasadzie to dzien z planu tygodniowego
+export const plans = pgTable("plans", {
+  id: serial("id").primaryKey(),
+  userId: integer("userId")
+    .references(() => users.id)
+    .notNull(),
+  dzienTygodnia: integer("dzienTygodnia").notNull(), // 0 - poniedziałek, 6 - niedziela
+  exerciseId: integer("exerciseId")
+    .references(() => exercises.id)
+    .notNull(),
+});
+
+export type Plan = typeof plans.$inferSelect;
+
+// RELACJE
+
+export const usersRelations = relations(users, ({ many }) => ({
+  plans: many(plans),
+}));
+
+export const plansRelations = relations(plans, ({ one }) => ({
+  user: one(users, { fields: [plans.userId], references: [users.id] }),
+  exercise: one(exercises, {
+    fields: [plans.exerciseId],
+    references: [exercises.id],
+  }),
+}));
+
+export const exercisesRelations = relations(exercises, ({ many }) => ({
+  plans: many(plans),
+}));
