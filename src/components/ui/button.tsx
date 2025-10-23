@@ -54,7 +54,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={loading || props.disabled}
         {...props}>
         {loading ? (
-          <span className="flex items-center gap-10">
+          <span className="flex items-center gap-1">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             {size !== "icon" && "Ładowanie..."}
           </span>

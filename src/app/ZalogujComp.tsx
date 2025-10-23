@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { sprawdzLogowanie } from "./auth-actions";
+import { Dumbbell } from 'lucide-react';
+import Link from "next/link";
 
 export default function ZalogujPage() {
   const formSchema = z.object({
@@ -48,8 +50,8 @@ export default function ZalogujPage() {
   return (
     <div
       id="obramowowka tego gownoforma"
-      className="relative z-20 
-      mx-auto min-h-[300px] h-[60%] w-[32%] rounded-[32px] bg-[#ffffff] min-w-[300px]">
+      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
+                 shadow-2xl shadow-black/40 ring-1 ring-black/5">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 m-6">
           <FormField
@@ -57,16 +59,49 @@ export default function ZalogujPage() {
             name="login"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
-                  Login
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className="border-2 border-gray-300 focus:border-black text-black bg-white/20"
-                    placeholder={"Login"}
-                    {...field}
+                {/* ikona */}
+                <div className="flex flex-col items-center">
+                  <Dumbbell
+                    className="w-12 h-12 mb-10"
+                    stroke="url(#loginGradient)"
+                    strokeWidth={1.8}
+                    aria-hidden="true"
                   />
-                </FormControl>
+
+                  {/* DUŻY TEKST - zmień treść wg potrzeb */}
+                  <div className="text-center text-black text-3xl md:text-4xl font-bold leading-tight">
+                    WITAJ PONOWNIE!
+                  </div>
+
+                  {/* etykieta nad polem (mała) */}
+                  <FormLabel className="font-MySerif mt-5 mb-10 text-[12px] text-[#858383] font-bold">
+                    Proszę, podać swoje dane
+                  </FormLabel>
+                </div>
+
+                {/* pole i stała kreska */}
+                <div>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Wpisz login"
+                      aria-label="login"
+                      className="
+                        w-full
+                        bg-transparent
+                        border-0
+                        outline-none
+                        focus:outline-none
+                        focus:ring-0
+                        transition-none
+                        placeholder-gray-500
+                        py-2"
+                    />
+                  </FormControl>
+
+                  {/* prosta, stała linia pod polem */}
+                  <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                </div>
 
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
@@ -74,22 +109,36 @@ export default function ZalogujPage() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="haslo"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-MySerif flex justify-center text-[24px] text-[#000000]">
-                  Hasło
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    className="border-2 border-gray-300 focus:border-black text-black bg-white/20"
-                    placeholder={"Hasło"}
-                    {...field}
-                  />
-                </FormControl>
+
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Wpisz hasło"
+                      aria-label="haslo"
+                      className="
+                        w-full
+                        bg-transparent
+                        border-0
+                        outline-none
+                        focus:outline-none
+                        focus:ring-0
+                        transition-none
+                        placeholder-gray-500
+                        py-2
+                      "
+                    />
+                  </FormControl>
+
+                  <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                </div>
 
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
@@ -122,6 +171,19 @@ export default function ZalogujPage() {
             >
               Zaloguj
             </Button>
+          </div>
+
+          {/* wizualny przycisk Rejestracja w tym samym bloku (nie zmienia logiki formularza) */}
+          <div className="mt-3 w-full">
+            <Link href="/rejestracja">
+              <button
+                type="button" /* ważne: nie submituje formularza */
+                className="
+                  w-full pt-[8.75px] mt-4 rounded-full cursor-pointer border-0 bg-[#ffffff] uppercase text-[15px] text-black transition-y duration-500 ease-in-out hover:tracking-[1px] hover:text-black active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[300ms] "
+              >
+                Rejestracja
+              </button>
+            </Link>
           </div>
         </form>
       </Form>

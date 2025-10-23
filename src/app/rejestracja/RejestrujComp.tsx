@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Dumbbell } from "lucide-react";
 
 export default function RejestracjaComp() {
   const formSchema = z.object({
@@ -59,127 +61,193 @@ export default function RejestracjaComp() {
   }
 
   return (
-    
-      <div
-        className="relative z-20 mx-auto min-h-[300px] min-w-[300px] h-[60%] w-[32%] rounded-[32px] bg-[#ffffff] transition-none"
-      >
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="m-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
-                    Nazwa użytkownika</FormLabel>
-                  <FormControl>
-                    <Input placeholder="username" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    To jest twoja publiczna nazwa wyświetlana.
-                  </FormDescription>
-                  <div className="min-h-[1.25rem]">
-                    <FormMessage className="text-red-600 font-bold text-sm" />
-                  </div>
-                </FormItem>
-              )}
+    <div
+      id="obramowowka tego gownoforma"
+      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
+                 shadow-2xl shadow-black/40 ring-1 ring-black/5"
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="m-6">
+          {/* header: ikona + duży tekst + mała etykieta - taki sam jak w Zaloguj */}
+          <div className="flex flex-col items-center mb-6">
+            <Dumbbell
+              className="w-12 h-12 mb-10"
+              stroke="url(#loginGradient)"
+              strokeWidth={1.8}
+              aria-hidden="true"
             />
-            <FormField
-              control={form.control}
-              name="login"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">
-                    Login
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="border-2 border-gray-300 focus:border-black text-black bg-white/20"
-                      placeholder={"Login"}
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="min-h-[1.25rem]">
-                    <FormMessage className="text-red-600 font-bold text-sm" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="email@example.com" {...field} />
-                  </FormControl>
-                  <div className="min-h-[1.25rem]">
-                    <FormMessage className="text-red-600 font-bold text-sm" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="haslo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Hasło</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="hasło" {...field} />
-                  </FormControl>
-                  <div className="min-h-[1.25rem]">
-                    <FormMessage className="text-red-600 font-bold text-sm" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="potworzHaslo"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-MySerif mt-2 flex justify-center text-[24px] text-[#000000]">Powtórz hasło</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="powtórz hasło"
-                      {...field}
-                    />
-                  </FormControl>
-                  <div className="min-h-[1.25rem]">
-                    <FormMessage className="text-red-600 font-bold text-sm" />
-                  </div>
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              className="
-                w-full
-                py-[17px]
-                my-4
-                rounded-full
-                cursor-pointer
-                border-0
-                bg-black
-                uppercase
-                text-[15px]
-                transition-all duration-500 ease-in-out
-                hover:tracking-[1px]
-                hover:text-white
-                active:tracking-[3px]
-                active:bg-white
-                active:text-black
-                active:translate-y-[-2px]
-                active:duration-[100ms]
-              "
-            >
-              Zarejestruj
-            </Button>
-          </form>
-        </Form>
-      </div>
+            <div className="text-center text-black text-3xl md:text-4xl font-bold leading-tight">
+              Dołącz do nas
+            </div>
+            <FormLabel className="font-MySerif mt-3 mb-2 text-[12px] text-[#858383] font-bold">
+              Utwórz nowe konto
+            </FormLabel>
+          </div>
+
+          {/* name (duży label was originally "Nazwa użytkownika") */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Nazwa użytkownika"
+                    className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+                  />
+                </FormControl>
+                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* login */}
+          <FormField
+            control={form.control}
+            name="login"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Login"
+                    className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+                  />
+                </FormControl>
+                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* email */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="email@example.com"
+                    className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+                  />
+                </FormControl>
+                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* haslo */}
+          <FormField
+            control={form.control}
+            name="haslo"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="Hasło"
+                    className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+                  />
+                </FormControl>
+                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          {/* potworzHaslo */}
+          <FormField
+            control={form.control}
+            name="potworzHaslo"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="password"
+                    placeholder="Powtórz hasło"
+                    className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+                  />
+                </FormControl>
+                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <Button
+            type="submit"
+            className="
+              w-full
+              py-[17px]
+              my-4
+              rounded-full
+              cursor-pointer
+              border-0
+              bg-black
+              uppercase
+              text-[15px]
+              transition-all duration-500 ease-in-out
+              hover:tracking-[1px]
+              hover:text-white
+              active:tracking-[3px]
+              active:bg-white
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[100ms]
+            "
+          >
+            Zarejestruj
+          </Button>
+
+          {/* powrót - pozostawiony bez zmian */}
+          <div className="mt-3 w-full">
+            <Link href="/">
+              <button
+                type="button"
+                className="
+                  w-full
+                  pt-[8.75px]
+                  mt-4
+                  rounded-full
+                  cursor-pointer
+                  border-0
+                  bg-[#ffffff]
+                  uppercase
+                  text-[15px]
+                  text-black
+                  transition-y duration-500 ease-in-out
+                  hover:tracking-[1px]
+                  hover:text-black
+                  active:tracking-[3px]
+                  active:bg-white
+                  active:text-black
+                  active:translate-y-[-2px]
+                  active:duration-[300ms]
+                "
+              >
+                Powrót
+              </button>
+            </Link>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }
