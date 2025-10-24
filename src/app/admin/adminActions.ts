@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/database";
-import { exercises } from "@/lib/database/scheme";
+import { exercises, plans, users } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
 import { getMe } from "../authutils";
 
@@ -52,4 +52,16 @@ export async function deleteExercise(exerciseId: number) {
   }
 
   await db.delete(exercises).where(eq(exercises.id, exerciseId));
+}
+
+export async function deleteUser(userId: number) {
+  const user = await getMe();
+
+  if (!user || !user.admin) {
+    throw new Error("Access Denied");
+  }
+
+  await db.delete(users).where(eq(users.id, userId));
+
+  await db.delete(plans).where(eq(plans.userId, userId));
 }
