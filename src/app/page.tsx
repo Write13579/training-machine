@@ -10,16 +10,18 @@ export default async function Home() {
     <div
       id="tlo"
       className="relative items-center justify-center min-h-[100vh] min-w-[320px]">
-
       {!user && (
         <div className="flex flex-col items-center w-full">
-          <ZalogujPage  />
+          <ZalogujPage />
         </div>
       )}
       {user && (
-        <div>
-          <div>Witaj, {user.name}!</div>
+        <div className="flex flex-col gap-5">
+          <div>
+            Witaj, {user.name} {new Date().getDay()} !
+          </div>
           <Link href="/ustawPlan">ustaw plan treningowy</Link>
+          <Link href="/wpiszWyniki">wpisz wyniki do aktualnego planu</Link>
         </div>
       )}
       <div className="border-2 p-3 flex justify-center mx-10 flex-col min-h-[10vh]">

@@ -1,7 +1,7 @@
 import { db } from "@/lib/database";
 import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { plans } from "@/lib/database/scheme";
 
 export default async function UstawPlanPage() {
@@ -12,7 +12,7 @@ export default async function UstawPlanPage() {
 
   const data = await db.query.plans.findMany({
     with: { exercise: true },
-    where: eq(plans.userId, user.id),
+    where: and(eq(plans.userId, user.id), eq(plans.activated, true)),
   });
 
   const listaCwiczen = await db.query.exercises.findMany();

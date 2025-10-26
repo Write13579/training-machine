@@ -109,14 +109,13 @@ export const columns = (
           row.original.dzień,
           values.cwiczenie
         );
-        if (errors) {
+        if (errors.length > 0) {
           errors.forEach((error) => {
             toast(error.error);
-            return;
           });
+        } else {
+          toast("Dodano ćwiczenie do dnia");
         }
-
-        toast("Dodano ćwiczenie do dnia");
       }
 
       return (

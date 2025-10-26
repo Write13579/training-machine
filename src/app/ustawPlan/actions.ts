@@ -35,15 +35,22 @@ export async function dodajCwiczenieDoDnia(
     ),
   });
 
-  if (istniejeCwiczenie) {
+  if (istniejeCwiczenie && istniejeCwiczenie.activated) {
     return [{ error: "Ćwiczenie o podanej nazwie już istnieje" }];
   }
 
-  await db.insert(plans).values({
-    userId: user.id,
-    dzienTygodnia: dzien,
-    exerciseId: znajdzCwiczeniePoNazwie.id,
-  });
+  if (istniejeCwiczenie && !istniejeCwiczenie.activated) {
+    await db
+      .update(plans)
+      .set({ activated: true })
+      .where(eq(plans.id, istniejeCwiczenie.id));
+  } else {
+    await db.insert(plans).values({
+      userId: user.id,
+      dzienTygodnia: dzien,
+      exerciseId: znajdzCwiczeniePoNazwie.id,
+    });
+  }
 
   return [];
 }
@@ -63,7 +70,8 @@ export async function usunCwiczenieZDnia(dzien: number, nazwa: string) {
   }
 
   await db
-    .delete(plans)
+    .update(plans)
+    .set({ activated: false })
     .where(
       and(
         eq(plans.dzienTygodnia, dzien),

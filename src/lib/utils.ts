@@ -54,19 +54,19 @@ export function createDateFromString(dateString?: string) {
 export function numerTygodniaNaString(numerTygodnia: number) {
   switch (numerTygodnia) {
     case 0:
-      return "Poniedziałek";
-    case 1:
-      return "Wtorek";
-    case 2:
-      return "Środa";
-    case 3:
-      return "Czwartek";
-    case 4:
-      return "Piątek";
-    case 5:
-      return "Sobota";
-    case 6:
       return "Niedziela";
+    case 1:
+      return "Poniedziałek";
+    case 2:
+      return "Wtorek";
+    case 3:
+      return "Środa";
+    case 4:
+      return "Czwartek";
+    case 5:
+      return "Piątek";
+    case 6:
+      return "Sobota";
     default:
       return "Nieznany dzień";
   }

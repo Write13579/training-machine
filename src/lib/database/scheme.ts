@@ -5,6 +5,8 @@ import {
   serial,
   varchar,
   integer,
+  date,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 // TABELE
@@ -38,6 +40,12 @@ export const plans = pgTable("plans", {
   exerciseId: integer("exerciseId")
     .references(() => exercises.id)
     .notNull(),
+  addedAt: timestamp("addedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt")
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+  activated: boolean("activated").default(true).notNull(),
 });
 
 export type Plan = typeof plans.$inferSelect;
