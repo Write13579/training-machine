@@ -219,7 +219,7 @@ export default function RejestracjaComp() {
               active:bg-white
               active:text-black
               active:translate-y-[-2px]
-              active:duration-[100ms]
+              active:duration-[200ms]
             ">
             Zarejestruj
           </Button>
@@ -246,7 +246,7 @@ export default function RejestracjaComp() {
                   active:bg-white
                   active:text-black
                   active:translate-y-[-2px]
-                  active:duration-[300ms]
+                  active:duration-[200ms]
                 ">
                 Powrót
               </button>

@@ -63,7 +63,7 @@ export const columns = (
         <Popover>
           <PopoverTrigger asChild>
             <Button variant="outline">
-              {row.original.ćwiczenia.length} ćwiczeń
+              {row.original.ćwiczenia.length} {row.original.ćwiczenia.length === 1 ? "ćwiczenie" : row.original.ćwiczenia.length === 2 && "ćwiczenia" }
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-80">

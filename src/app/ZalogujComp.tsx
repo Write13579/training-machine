@@ -168,17 +168,15 @@ export default function ZalogujPage() {
               active:bg-white
               active:text-black
               active:translate-y-[-2px]
-              active:duration-[100ms]
+              active:duration-[200ms]
               ">
               Zaloguj
             </Button>
           </div>
-
-          {/* wizualny przycisk Rejestracja w tym samym bloku (nie zmienia logiki formularza) */}
           <div className="mt-3 w-full">
             <Link href="/rejestracja">
               <button
-                type="button" /* ważne: nie submituje formularza */
+                type="button"
                 className="
                   w-full pt-[8.75px] mt-4 rounded-full cursor-pointer border-0 bg-[#ffffff] uppercase text-[15px] text-black transition-y duration-500 ease-in-out hover:tracking-[1px] hover:text-black active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[300ms] ">
                 Rejestracja
