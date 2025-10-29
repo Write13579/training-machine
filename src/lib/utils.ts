@@ -71,3 +71,21 @@ export function numerTygodniaNaString(numerTygodnia: number) {
       return "Nieznany dzień";
   }
 }
+
+export function formatujSlowoCwiczenieWgLiczby(liczba: number) {
+  if (liczba === 1) {
+    return "ćwiczenie";
+  }
+
+  const ostatniaCyfra = parseFloat(liczba.toString().at(-1) ?? "0");
+
+  if (
+    (liczba > 20 || liczba < 10) &&
+    ostatniaCyfra >= 2 &&
+    ostatniaCyfra <= 4
+  ) {
+    return "ćwiczenia";
+  }
+
+  return "ćwiczeń";
+}
