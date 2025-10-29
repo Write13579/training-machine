@@ -9,11 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { numerTygodniaNaString } from "@/lib/utils";
-import { Plan } from "@/lib/database/scheme";
+import { PlanWithExercise } from "@/lib/database/scheme";
+import { DataTable } from "./data-table-wpisz-wyniki";
+import { columns } from "./columns";
 
-export default function WpiszComp({ data }: { data: Plan[] }) {
+export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
   const [selectedDay, setSelectedDay] = useState<number>(new Date().getDay());
-  const [chosenData, setChosenData] = useState<Plan[]>([]);
+  const [chosenData, setChosenData] = useState<PlanWithExercise[]>([]);
 
   useEffect(() => {
     const filteredData = data.filter(
@@ -40,10 +42,9 @@ export default function WpiszComp({ data }: { data: Plan[] }) {
           </SelectContent>
         </Select>
       </div>
+      <br />
       <div>
-        {chosenData.map((item) => (
-          <div key={item.id}>{JSON.stringify(item)}</div> // no tu bedzie kiedys tabela na wyniki xd
-        ))}
+        <DataTable columns={columns} data={chosenData} />
       </div>
     </div>
   );

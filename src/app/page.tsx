@@ -17,7 +17,8 @@ export default async function Home() {
         </div>
       )}
       {user && (
-        <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
+        <div
+          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
                  shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
@@ -33,8 +34,11 @@ export default async function Home() {
               WITAJ PONOWNIE
             </div>
             <div className="text-[#FF4D6D] inline-block text-4xl md:text-4xl font-bold leading-tight">
-              {user.name} {new Date().getDay()}
-              <div className="mt-[-5px] h-1 bg-black rounded w-auto mx-auto" aria-hidden="true" />
+              {user.name}
+              <div
+                className="mt-[-5px] h-1 bg-black rounded w-auto mx-auto"
+                aria-hidden="true"
+              />
             </div>
           </div>
 
@@ -90,15 +94,17 @@ export default async function Home() {
               active:translate-y-[-2px]
               active:duration-[200ms]
               ">
-             Wpisz wyniki treningu
+              Wpisz wyniki treningu
             </button>
           </Link>
           <div>
             <WylogujBtn />
           </div>
           {user && user.admin && (
-              <Link href="/admin">
-                <button type="button" className="w-full
+            <Link href="/admin">
+              <button
+                type="button"
+                className="w-full
               py-[8.75px]
               my-2
               rounded-full
@@ -116,9 +122,9 @@ export default async function Home() {
               active:text-black
               active:translate-y-[-2px]
               active:duration-[200ms]">
-                  Panel administratora
-                </button>
-              </Link>
+                Panel administratora
+              </button>
+            </Link>
           )}
         </div>
       )}
@@ -126,4 +132,5 @@ export default async function Home() {
         <div>blog/feed</div>
       </div>
     </div>
-  )}
+  );
+}

@@ -39,6 +39,10 @@ export default async function UstawPlanPage() {
     <div>
       <h1>Ustaw Plan Treningowy</h1>
       <DataTable data={parsedData} listaCwiczen={listaCwiczen} />
+      <div>
+        UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
+        zaległe wyniki, bo po zmianie planu będzie to niemożliwe.
+      </div>
     </div>
   );
 }

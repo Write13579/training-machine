@@ -15,6 +15,7 @@ export default async function WpiszWynikiPage() {
 
   const data = await db.query.plans.findMany({
     where: and(eq(plans.userId, user.id), eq(plans.activated, true)), //to activated z dystansem narazie, bo przeszlosc bedzie niemozliwa do aktualizacji
+    with: { exercise: true },
   });
 
   return (
