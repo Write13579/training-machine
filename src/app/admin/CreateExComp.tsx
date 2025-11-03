@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Path, useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
+import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -49,15 +50,19 @@ export default function CreateExComp() {
 
   return (
     <div>
-      <div className="flex flex-col items-center mb-6">
+      <div className="flex flex-col items-center mb-6 mt-10">
         <Dumbbell
           className="w-12 h-12 mb-4"
           stroke="url(#loginGradient)"
           strokeWidth={1.8}
           aria-hidden="true"
         />
+
         <div className="text-black text-2xl md:text-3xl font-bold">
           Stwórz ćwiczenie
+        </div>
+        <div className="font-MySerif mt-5 mb-10 text-[12px] text-[#858383] font-bold">
+          Uzupełnij opis ćwiczenia poniżej
         </div>
       </div>
 
@@ -68,15 +73,11 @@ export default function CreateExComp() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-MySerif mb-2 text-sm text-black/90">
-                  Nazwa ćwiczenia
-                </FormLabel>
-
                 <FormControl>
                   <Input
                     {...field}
                     type="text"
-                    placeholder="np. bench press"
+                    placeholder="Wpisz nazwę ćwiczenia"
                     className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
                   />
                 </FormControl>
@@ -94,14 +95,10 @@ export default function CreateExComp() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-MySerif mb-2 text-sm text-black/90">
-                  Opis
-                </FormLabel>
-
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="np. sztanga góra dół na płaskiej"
+                    placeholder="Wpisz opis ćwiczenia"
                     className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
                   />
                 </FormControl>
@@ -120,7 +117,6 @@ export default function CreateExComp() {
             className="
               w-full
               py-[17px]
-              my-4
               rounded-full
               cursor-pointer
               border-0
@@ -139,8 +135,36 @@ export default function CreateExComp() {
           >
             Utwórz
           </Button>
+          <Link href="/">
+            <button
+              type="submit"
+              className="
+                w-full
+              py-[8.75px]
+              rounded-full
+              cursor-pointer
+              border-0
+              bg-[#FF4D6D]
+              uppercase
+              text-[15px]
+              text-black
+              font-bold
+              transition-all duration-500 ease-in-out
+              hover:tracking-[1px]
+              active:tracking-[3px]
+              active:bg-white
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[200ms]
+              "
+            >
+              Powrót
+            </button>
+          </Link>
         </form>
+
       </Form>
+
     </div>
   );
 }

@@ -32,7 +32,8 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        { <svg aria-hidden="true" width="0" height="0" className="absolute">
+          {/* globalne defs gradientu */}
+        <svg aria-hidden="true" width="0" height="0" className="absolute">
           <defs>
             <linearGradient id="loginGradient" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#590d22" />
@@ -47,7 +48,7 @@ export default async function RootLayout({
               <stop offset="100%" stopColor="#fff0f3" />
             </linearGradient>
           </defs>
-        </svg> }
+        </svg>
 
         {/** NIE WIEM CO TO JEST POWYZEJ, ALE NARAZIE MA TEGO NIE BYĆ */}
 

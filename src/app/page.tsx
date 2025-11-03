@@ -21,11 +21,11 @@ export default async function Home() {
                  shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
-              className="w-12 h-12 mb-10"
-              stroke="url(#loginGradient)"
-              strokeWidth={1.8}
-              aria-hidden="true"
-            />
+                    className="w-12 h-12 mb-10"
+                    stroke="url(#loginGradient)"
+                    strokeWidth={1.8}
+                    aria-hidden="true"
+              />
           </div>
 
           <div className="text-center">
