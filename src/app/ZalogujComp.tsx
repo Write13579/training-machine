@@ -134,10 +134,7 @@ export default function ZalogujPage() {
                     />
                   </FormControl>
 
-                  <div
-                    className="h-[2px] bg-black w-full mt-0"
-                    aria-hidden="true"
-                  />
+                  <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true"/>
                 </div>
 
                 <div className="min-h-[1.25rem]">
