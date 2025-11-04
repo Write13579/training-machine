@@ -1,3 +1,4 @@
+import { WynikType } from "@/app/wpiszWyniki/columns";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -52,6 +53,7 @@ export type Plan = typeof plans.$inferSelect;
 
 export type PlanWithExercise = Plan & {
   exercise: Exercise;
+  wynik: Wynik; // ?
 };
 
 export const wyniki = pgTable("wyniki", {
@@ -64,6 +66,8 @@ export const wyniki = pgTable("wyniki", {
   ciezar: integer("ciezar").notNull(),
   dataWykonania: date("dataWykonania", { mode: "date" }).notNull(),
 });
+
+export type Wynik = typeof wyniki.$inferSelect;
 
 // RELACJE
 

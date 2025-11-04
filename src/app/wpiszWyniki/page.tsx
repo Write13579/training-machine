@@ -3,6 +3,7 @@ import { plans } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 import { getMe } from "../authutils";
 import WpiszComp from "./WpiszComp";
+import { columns } from "./columns";
 
 export default async function WpiszWynikiPage() {
   const user = await getMe();
@@ -13,10 +14,28 @@ export default async function WpiszWynikiPage() {
 
   // stworzyc baze danych na wyniki i ?przekazac do wpisz?
 
-  const data = await db.query.plans.findMany({
+  const rawData = await db.query.plans.findMany({
     where: and(eq(plans.userId, user.id), eq(plans.activated, true)), //to activated z dystansem narazie, bo przeszlosc bedzie niemozliwa do aktualizacji
-    with: { exercise: true },
+    with: {
+      exercise: true,
+      wyniki: true, // ?
+    },
   });
+
+  // ?
+  const data = rawData.map((plan) => ({
+    ...plan,
+    wynik: plan.wyniki[0] || {
+      id: 0,
+      planId: plan.id,
+      serie: 0,
+      powtorzenia: 0,
+      ciezar: 0,
+      dataWykonania: new Date(),
+    },
+  }));
+
+  // ?
 
   return (
     <div className="flex flex-col gap-5">

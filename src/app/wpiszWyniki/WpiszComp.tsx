@@ -17,12 +17,24 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
   const [selectedDay, setSelectedDay] = useState<number>(new Date().getDay());
   const [chosenData, setChosenData] = useState<PlanWithExercise[]>([]);
 
+  const [dataWybranegoDnia, setDataWybranegoDnia] = useState<Date>(new Date());
+  const dzisiaj = new Date();
+
   useEffect(() => {
     const filteredData = data.filter(
       (item) => item.dzienTygodnia === selectedDay
     );
     setChosenData(filteredData);
-  }, [selectedDay]);
+
+    const todayDow = dzisiaj.getDay();
+    const deltaDays = (todayDow - selectedDay + 7) % 7;
+    const targetDate = new Date(
+      dzisiaj.getFullYear(),
+      dzisiaj.getMonth(),
+      dzisiaj.getDate() - deltaDays
+    );
+    setDataWybranegoDnia(targetDate);
+  }, [selectedDay, columns]);
 
   return (
     <div>
@@ -42,6 +54,8 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
           </SelectContent>
         </Select>
       </div>
+      <h2>Wybrana data: {dataWybranegoDnia.toDateString()}</h2>
+
       <br />
       <div>
         <DataTable columns={columns} data={chosenData} />
