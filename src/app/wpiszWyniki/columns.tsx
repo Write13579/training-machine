@@ -48,20 +48,23 @@ export const columns: ColumnDef<WynikType>[] = [
         <div id="alles">
           <span>serie:</span>
           <Input
-            className="w-10"
+            className="w-20"
             value={serie}
+            type="number"
             onChange={(e) => useSerie(Number(e.target.value))}
           />
           <span>powtórzenia:</span>
           <Input
-            className="w-10"
+            className="w-20"
             value={powtorzenia}
+             type="number"
             onChange={(e) => usePowtorzenia(Number(e.target.value))}
           />
           <span>ciężar:</span>
           <Input
-            className="w-10"
+            className="w-20"
             value={ciezar}
+             type="number"
             onChange={(e) => useCiezar(Number(e.target.value))}
           />
           <ZapiszWynikBtn
