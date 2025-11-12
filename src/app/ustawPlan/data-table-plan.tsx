@@ -35,14 +35,14 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border">
-      <Table>
+      <Table className="w-full table-fixed rounded-md border overflow-hidden">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id}
+                  className="text-center font-MySerif text-sm text-black/90 pb-2">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -60,10 +60,19 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}>
+                data-state={row.getIsSelected() && "selected"}
+                className="align-top"
+                >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id}
+                  className="py-2 align-top"
+                  >
+                    <div className="flex flex-col">
+                    <div className="min-h-[1.6rem]"/>
+                    <div className="text-pink-600 font-MySerif text-center">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </div>
+                    </div>
                   </TableCell>
                 ))}
               </TableRow>
@@ -77,6 +86,5 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-    </div>
   );
 }

@@ -34,14 +34,10 @@ export default async function Home() {
             </div>
             <div className="text-[#FF4D6D] inline-block text-4xl md:text-4xl font-bold leading-tight">
               {user.name}
-              <div
-                className="mt-[-5px] h-1 bg-black rounded w-auto mx-auto"
-                aria-hidden="true"
-              />
             </div>
           </div>
 
-          <div className="flex flex-col items-center font-MySerif mt-5 mb-10 text-[12px] text-[#858383] font-bold">
+          <div className="flex flex-col items-center font-MySerif mt-3 mb-10 text-[12px] text-[#858383] font-bold">
             Stwórz swój plan treningowy i śledź postępy!
           </div>
 

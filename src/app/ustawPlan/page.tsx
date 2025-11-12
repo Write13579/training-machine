@@ -3,6 +3,7 @@ import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
 import { and, eq } from "drizzle-orm";
 import { plans } from "@/lib/database/scheme";
+import { CircleStar} from "lucide-react";
 
 export default async function UstawPlanPage() {
   const user = await getMe();
@@ -36,8 +37,22 @@ export default async function UstawPlanPage() {
   }));
 
   return (
-    <div>
-      <h1>Ustaw Plan Treningowy</h1>
+    <div
+      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
+                 bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5"
+    >
+      <div className="flex flex-col items-center mb-6">
+        <CircleStar
+        className="w-12 h-12 mb-4"
+          stroke="url(#loginGradient)"
+          strokeWidth={1.8}
+          aria-hidden="true"
+           />
+        <h1 className="text-black text-2xl font-bold">Ustaw plan treningowy</h1>
+        <div className="font-MySerif mt-3 mb-6 text-[12px] text-[#858383] font-bold">
+          Wybierz ćwiczenia i przypisz do dni tygodnia
+        </div>
+      </div>
       <DataTable data={parsedData} listaCwiczen={listaCwiczen} />
       <div>
         UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
