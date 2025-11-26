@@ -25,7 +25,7 @@ export const columns = (
     header: "Ćwiczenia",
     cell: ({ row }) =>
       row.original.ćwiczenia.length !== 0 ? (
-        <div>
+        <div className="flex items-center justify-center">
           <WyswietlCwiczeniaZPlanu row={row.original} />
         </div>
       ) : (
@@ -36,7 +36,7 @@ export const columns = (
     accessorKey: "akcje",
     header: "Akcje",
     cell: ({ row }) => (
-      <div>
+      <div className="flex items-center justify-center">
         <DodajCwiczenieDoPlanu row={row.original} listaCwiczen={listaCwiczen} />
       </div>
     ),

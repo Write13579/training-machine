@@ -25,6 +25,17 @@ export default async function AdminPage() {
 
   return (
     <div className="w-[84%] mx-auto max-w-[100%]">
+      <div className="mb-4 w-full block lg:hidden">
+        <Link href="/" className="block w-full">
+          <button
+            type="button"
+            className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]"
+          >
+            Powrót
+          </button>
+        </Link>
+      </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
         <div className="bg-white rounded-lg shadow-md p-4 flex flex-col min-h-[360px] w-full">
             <CreateExComp/>
@@ -83,6 +94,35 @@ export default async function AdminPage() {
             ))}
           </div>
         </div>
+      </div>
+
+      <div className="mt-6 mx-auto w-full sm:w-1/2 lg:w-1/3 hidden lg:block">
+        <Link href="/" className="block w-full">
+          <button
+            type="button"
+            className="
+              w-full
+              py-[8.75px]
+              rounded-full
+              cursor-pointer
+              border-0
+              bg-[#FF4D6D]
+              uppercase
+              text-[15px]
+              text-black
+              font-bold
+              transition-all duration-500 ease-in-out
+              hover:tracking-[1px]
+              active:tracking-[3px]
+              active:bg-white
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[200ms]
+            "
+          >
+            Powrót
+          </button>
+        </Link>
       </div>
     </div>
   );

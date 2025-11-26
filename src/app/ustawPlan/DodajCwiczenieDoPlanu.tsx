@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
 import { dodajCwiczenieDoDnia } from "./actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, BicepsFlexed } from "lucide-react";
 import { DzienTreningowy } from "./columns";
 
 export default function DodajCwiczenieDoPlanu({
@@ -75,48 +75,102 @@ export default function DodajCwiczenieDoPlanu({
             <Plus />
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px] bg-gray-600">
+        <DialogContent className="mx-auto mtd-10 min-h-[80vh] h-[auto] min-w-[340px] w-[44%] rounded-[20px] bg-[#ffffff] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 ">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <DialogHeader>
-                <DialogTitle>Dodaj Cwiczenie</DialogTitle>
-                <DialogDescription>
-                  napisz tu cos madrego albo usun
-                </DialogDescription>
+                <div className="flex flex-col items-center">
+                  <BicepsFlexed
+                    className="w-12 h-12 my-4"
+                    stroke="url(#loginGradient)"
+                    strokeWidth={1.8}
+                    aria-hidden="true"
+                  />
+                  <DialogTitle className="text-black text-2xl font-bold">
+                    Dodaj Ćwiczenie
+                  </DialogTitle>
+                  <DialogDescription className="font-MySerif mt-3 mb-2 text-[12px] text-[#858383] font-bold">
+                    Wybierz ćwiczenie z listy, które chcesz dodać do planu
+                  </DialogDescription>
+                </div>
               </DialogHeader>
-              <div className="grid gap-4">
-                <FormField
-                  control={form.control}
-                  name="cwiczenie"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-bold">
-                        Wybierz ćwiczenie
-                      </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}>
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="cwiczenie" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {listaCwiczen.map((cwiczenie, index) => (
-                            <SelectItem key={index} value={cwiczenie.nazwa}>
-                              {cwiczenie.nazwa}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="cwiczenie"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="max-h-[60vh] overflow-y-auto p-1">
+                      {listaCwiczen.map((cwiczenie, index) => {
+                        const selected = field.value === cwiczenie.nazwa;
+                        return (
+                          <button
+                            type="button"
+                            key={index}
+                            onClick={() => field.onChange(cwiczenie.nazwa)}
+                            className={`w-full flex flex-col p-3 rounded-lg transition-colors text-left ${selected
+                                ? "bg-[#FF4D6D] text-white"
+                                : "hover:bg-[#FFCCD5] bg-transparent text-black/90"
+                              }`}
+                          >
+                            <div className="w-full">
+                              <div className="font-medium">{cwiczenie.nazwa}</div>
+                              <div className="text-[12px] text-black mt-1">
+                                {cwiczenie.opis}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
+                  <Button
+                    className="w-full
+              py-[8.75px]
+              rounded-full
+              cursor-pointer
+              border-0
+              bg-[#FF4D6D]
+              uppercase
+              text-[15px]
+              text-black
+              font-bold
+              transition-all duration-500 ease-in-out
+              hover:tracking-[1px]
+              active:tracking-[3px]
+              active:bg-white
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[200ms]"
+                  >Cancel
+                  </Button>
                 </DialogClose>
-                <Button type="submit">Dodaj</Button>
+                <Button type="submit"
+                  className="
+                w-full
+              py-[17px]
+              my-4
+              rounded-full
+              cursor-pointer
+              border-0
+              bg-black
+              uppercase
+              text-[15px]
+              transition-all duration-500 ease-in-out
+              hover:tracking-[1px]
+              hover:text-white
+              active:tracking-[3px]
+              active:bg-white
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[200ms]
+              ">Dodaj
+                </Button>
               </DialogFooter>
             </form>
           </Form>

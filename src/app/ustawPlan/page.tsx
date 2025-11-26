@@ -38,7 +38,7 @@ export default async function UstawPlanPage() {
 
   return (
     <div
-      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
+      className="relative z-20 mx-auto my-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
                  bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5"
     >
       <div className="flex flex-col items-center mb-6">

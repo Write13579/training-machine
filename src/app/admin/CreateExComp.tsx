@@ -135,32 +135,6 @@ export default function CreateExComp() {
           >
             Utwórz
           </Button>
-          <Link href="/">
-            <button
-              type="submit"
-              className="
-                w-full
-              py-[8.75px]
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-[#FF4D6D]
-              uppercase
-              text-[15px]
-              text-black
-              font-bold
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              "
-            >
-              Powrót
-            </button>
-          </Link>
         </form>
 
       </Form>
