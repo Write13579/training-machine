@@ -39,7 +39,7 @@ export default async function UstawPlanPage() {
   return (
     <div
       className="relative z-20 mx-auto my-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
-                 bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5"
+                 bg-[#ffffff] min-w-[450px] py-8 px-4 shadow-2xl shadow-black/40 ring-1 ring-black/5"
     >
       <div className="flex flex-col items-center mb-6">
         <CircleStar
@@ -49,7 +49,7 @@ export default async function UstawPlanPage() {
           aria-hidden="true"
            />
         <h1 className="text-black text-2xl font-bold">Ustaw plan treningowy</h1>
-        <div className="font-MySerif mt-3 mb-6 text-[12px] text-[#858383] font-bold">
+        <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
           Wybierz ćwiczenia i przypisz do dni tygodnia
         </div>
       </div>

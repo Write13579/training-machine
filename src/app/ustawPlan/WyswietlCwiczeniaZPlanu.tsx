@@ -22,19 +22,17 @@ export default function WyswietlCwiczeniaZPlanu({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">
-          {row.ćwiczenia.length}{" "}
-          {formatujSlowoCwiczenieWgLiczby(row.ćwiczenia.length)}
-        </Button>
+        <span className="inline-flex items-center justify-center w-full h-full min-w-0">
+          {row.ćwiczenia.length} {formatujSlowoCwiczenieWgLiczby(row.ćwiczenia.length)}
+        </span>
       </PopoverTrigger>
       <PopoverContent className="w-[min(60vw,720px)] max-h-[80vh] bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
-        <div className="flex flex-col max-h-[60vh] overflow-y-auto ">
+        <div className="flex flex-col max-h-[35vh] overflow-y-auto ">
           {row.ćwiczenia.map((nazwa, index) => (
             <div
               key={index}
-              className="flex items-center justify-between gap-3 p-1 rounded-lg bg-transparent"
-            >
-              <span className="text-black/90 truncate">{nazwa}</span>
+              className="flex items-center justify-between gap-3 p-1 rounded-lg bg-transparent">
+              <span className="text-black">{nazwa}</span>
               <button
                 type="button"
                 onClick={() => {

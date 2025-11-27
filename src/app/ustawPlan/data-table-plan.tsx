@@ -61,20 +61,20 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                className="align-top"
+                className="align-center"
                 >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}
-                  className="py-2 align-top"
-                  >
-                    <div className="flex flex-col">
-                    <div className="min-h-[1.6rem]"/>
-                    <div className="text-pink-600 font-MySerif text-center">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </div>
-                    </div>
-                  </TableCell>
-                ))}
+                {row.getVisibleCells().map((cell) => {
+                  const cellClass = (cell.column.columnDef as any).meta?.cellClass as string | undefined;
+
+                  return (
+                    <TableCell key={cell.id}
+                    className="py-1 align-center">
+                        <div className={cellClass}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </div>
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))
           ) : (
