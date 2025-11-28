@@ -28,7 +28,7 @@ export const columns = (
       row.original.ćwiczenia.length !== 0 ? (
         <WyswietlCwiczeniaZPlanu row={row.original} />
       ) : (
-        <Button>rest day</Button>
+        <Button className="inline-flex items-center justify-center w-full h-full min-w-0">rest day</Button>
       ),
     meta: { cellClass: "w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]" },
   },

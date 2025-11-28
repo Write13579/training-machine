@@ -71,8 +71,19 @@ export default function DodajCwiczenieDoPlanu({
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">
-            <Plus />
+          <Button className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center
+              transition-all
+              cursor-pointer 
+              duration-500 
+              ease-in-out
+              hover:rotate-90
+              hover:bg-[#FFCCD5]
+              active:tracking-[3px]
+              active:bg-[#FF758F]
+              active:text-black
+              active:translate-y-[-2px]
+              active:duration-[200ms]">
+            <Plus className="w-6 h-6"/>
           </Button>
         </DialogTrigger>
         <DialogContent className="mx-auto mtd-10 min-h-[80vh] h-[auto] min-w-[340px] w-[44%] rounded-[20px] bg-[#ffffff] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 ">
@@ -109,7 +120,7 @@ export default function DodajCwiczenieDoPlanu({
                             onClick={() => field.onChange(cwiczenie.nazwa)}
                             className={`w-full flex flex-col p-3 rounded-lg transition-colors text-left ${selected
                                 ? "bg-[#FF4D6D] text-white"
-                                : "hover:bg-[#FFCCD5] bg-transparent text-black/90"
+                                : "hover:bg-[#FFCCD5] bg-transparent text-black"
                               }`}
                           >
                             <div className="w-full">

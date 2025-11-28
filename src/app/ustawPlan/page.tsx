@@ -4,6 +4,7 @@ import { getMe } from "../authutils";
 import { and, eq } from "drizzle-orm";
 import { plans } from "@/lib/database/scheme";
 import { CircleStar} from "lucide-react";
+import Link from "next/link";
 
 export default async function UstawPlanPage() {
   const user = await getMe();
@@ -37,26 +38,34 @@ export default async function UstawPlanPage() {
   }));
 
   return (
-    <div
-      className="relative z-20 mx-auto my-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
-                 bg-[#ffffff] min-w-[450px] py-8 px-4 shadow-2xl shadow-black/40 ring-1 ring-black/5"
-    >
-      <div className="flex flex-col items-center mb-6">
-        <CircleStar
-        className="w-12 h-12 mb-4"
-          stroke="url(#loginGradient)"
-          strokeWidth={1.8}
-          aria-hidden="true"
-           />
-        <h1 className="text-black text-2xl font-bold">Ustaw plan treningowy</h1>
-        <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
-          Wybierz ćwiczenia i przypisz do dni tygodnia
+    <div>
+      <Link
+        href="/"
+        className="relative z-20 mx-auto mt-4 w-[34%] min-w-[450px] block"
+      >
+        <span className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+          Powrót
+        </span>
+      </Link>
+      <div className="relative z-20 mx-auto mt-2 mb-10 min-h-[360px] h-auto w-[34%] rounded-[20px]
+                 bg-[#ffffff] min-w-[450px] py-8 px-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+        <div className="flex flex-col items-center mb-6">
+          <CircleStar
+          className="w-12 h-12 mb-4"
+            stroke="url(#loginGradient)"
+            strokeWidth={1.8}
+            aria-hidden="true"
+             />
+          <h1 className="text-black text-2xl font-bold">Ustaw plan treningowy</h1>
+          <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
+            Wybierz ćwiczenia i przypisz do dni tygodnia
+          </div>
         </div>
-      </div>
-      <DataTable data={parsedData} listaCwiczen={listaCwiczen} />
-      <div>
-        UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
-        zaległe wyniki, bo po zmianie planu będzie to niemożliwe.
+        <DataTable data={parsedData} listaCwiczen={listaCwiczen} />
+        <div>
+          UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
+          zaległe wyniki, bo po zmianie planu będzie to niemożliwe.
+        </div>
       </div>
     </div>
   );

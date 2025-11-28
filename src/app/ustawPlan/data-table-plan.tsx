@@ -16,6 +16,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { columns } from "./columns";
+import { numerTygodniaNaString } from "@/lib/utils"; // <-- do wyświetlenia dnia
+import WyswietlCwiczeniaZPlanu from "./WyswietlCwiczeniaZPlanu";
+import DodajCwiczenieDoPlanu from "./DodajCwiczenieDoPlanu";
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
@@ -35,56 +39,84 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-      <Table className="w-full table-fixed rounded-md border overflow-hidden">
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}
-                  className="text-center font-MySerif text-sm text-black/90 pb-2">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className="align-center"
-                >
-                {row.getVisibleCells().map((cell) => {
-                  const cellClass = (cell.column.columnDef as any).meta?.cellClass as string | undefined;
+    <Table className="w-full table-fixed rounded-md overflow-hidden">
+      <TableHeader>
+        {/* Jedna wspólna linia nagłówka dopasowana do układu wiersza */}
+        <TableRow>
+          <TableHead colSpan={cols.length} className=" px-8 py-2">
+            <div className="flex flex-row flex-wrap items-center gap-4">
+              <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
+                Dzień
+              </div>
+              <div className="flex-1 min-w-[160px] text-center font-MySerif text-sm text-black">
+                Ćwiczenia
+              </div>
+              <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
+                Akcje
+              </div>
+            </div>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
 
-                  return (
-                    <TableCell key={cell.id}
-                    className="py-1 align-center">
-                        <div className={cellClass}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </div>
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={cols.length} className="h-24 text-center">
-                No results.
-              </TableCell>
+      <TableBody>
+        {table.getRowModel().rows?.length ? (
+          table.getRowModel().rows.map((row) => (
+            // jeden TableRow -> pojedynczy TableCell z colSpan dla całego wiersza
+            <TableRow
+              key={row.id}
+              data-state={row.getIsSelected() && "selected"}
+              className="align-center"
+            >
+              <TableCell colSpan={cols.length} className="py-1">
+                <div className="bg-[#FF4D6D] rounded-[14px] p-4 flex flex-row flex-wrap items-center gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
+                   {/* lewa kolumna: Dzień */}
+                  <div className="flex-none w-[22%] min-w-[72px] text-center">
+                    <div className="text-black font-MySerif font-medium">
+                       {numerTygodniaNaString((row.original as any).dzień)}
+                     </div>
+                   </div>
+ 
+                   {/* środkowa kolumna: Ćwiczenia */}
+                  <div className="flex-1 min-w-[160px] py-2 bg-black rounded-full text-center
+                  transition-all 
+                  duration-500 
+                  ease-in-out
+                  cursor-pointer 
+                  hover:tracking-[1px]
+                  active:tracking-[3px]
+                active:bg-white
+                active:text-black
+                  active:translate-y-[-2px]
+                  active:duration-[200ms]">
+                    {(row.original as any).ćwiczenia?.length ? (
+                      <WyswietlCwiczeniaZPlanu row={(row.original as any)} />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white font-MySerif font-medium">
+                        rest day
+                      </div>
+                    )}
+                  </div>
+ 
+                   {/* prawa kolumna: Akcje */}
+                  <div className="flex-none w-[22%] min-w-[72px] flex justify-center items-center">
+                     <DodajCwiczenieDoPlanu
+                       row={(row.original as any)}
+                       listaCwiczen={listaCwiczen}
+                     />
+                   </div>
+                 </div>
+               </TableCell>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          ))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={cols.length} className="h-24 text-center">
+              No results.
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 }
