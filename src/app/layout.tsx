@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import AuthProvider from "@/lib/auth";
 import Link from "next/link";
 import { getMe } from "./authutils";
+import { User } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +33,7 @@ export default async function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          {/* globalne defs gradientu */}
+        {/* globalne defs gradientu */}
         <svg aria-hidden="true" width="0" height="0" className="absolute">
           <defs>
             <linearGradient id="loginGradient" x1="0" y1="0" x2="1" y2="1">
@@ -50,8 +51,6 @@ export default async function RootLayout({
           </defs>
         </svg>
 
-        {/** NIE WIEM CO TO JEST POWYZEJ, ALE NARAZIE MA TEGO NIE BYĆ */}
-
         <AuthProvider user={user}>
           <nav
             id="topNavbar"
@@ -61,6 +60,13 @@ export default async function RootLayout({
               <Link href="/">pulpit</Link>
             </h1>
             {/* <ProfileBar/> */}
+            {user && (
+              <div>
+                <Link href={`/profile/${user.id}`}>
+                  <User />
+                </Link>
+              </div>
+            )}
           </nav>
           <main>{children}</main> <Toaster />
         </AuthProvider>

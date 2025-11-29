@@ -18,24 +18,31 @@ import { toast } from "sonner";
 import { sprawdzLogowanie } from "./auth-actions";
 import { Dumbbell } from "lucide-react";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function ZalogujPage() {
   const formSchema = z.object({
     login: z.string().min(1, { message: "To pole nie może być puste" }),
     haslo: z.string().min(1, { message: "To pole nie może być puste" }),
+    zapamietajHaslo: z.boolean(),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       login: "",
       haslo: "",
+      zapamietajHaslo: false,
     },
   });
 
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const errors = await sprawdzLogowanie(values.login, values.haslo);
+    const errors = await sprawdzLogowanie(
+      values.login,
+      values.haslo,
+      values.zapamietajHaslo
+    );
     if (errors.length === 0) {
       toast("Zalogowano pomyślnie!");
       router.push("/");
@@ -134,12 +141,34 @@ export default function ZalogujPage() {
                     />
                   </FormControl>
 
-                  <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true"/>
+                  <div
+                    className="h-[2px] bg-black w-full mt-0"
+                    aria-hidden="true"
+                  />
                 </div>
 
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
                 </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="zapamietajHaslo"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="font-normal cursor-pointer">
+                  Zapamiętaj hasło
+                </FormLabel>
+                <FormMessage />
               </FormItem>
             )}
           />

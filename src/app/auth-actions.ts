@@ -63,7 +63,11 @@ export async function zarejestruj(
   return [];
 }
 
-export async function sprawdzLogowanie(login: string, password: string) {
+export async function sprawdzLogowanie(
+  login: string,
+  password: string,
+  zapamietajHaslo: boolean
+) {
   const user = await db.query.users.findFirst({
     where: eq(users.login, login),
   });
@@ -79,7 +83,9 @@ export async function sprawdzLogowanie(login: string, password: string) {
 
   const exp = new Date();
 
-  exp.setDate(exp.getDate() + 8);
+  zapamietajHaslo
+    ? exp.setDate(exp.getDate() + 31)
+    : exp.setDate(exp.getDate() + 1);
   exp.setHours(0, 0, 0, 0);
 
   (await cookies()).set("JWTToken", token, { expires: exp });
