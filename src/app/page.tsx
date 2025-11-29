@@ -17,15 +17,16 @@ export default async function Home() {
         </div>
       )}
       {user && (
-        <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
+        <div
+          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
                  shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
-                    className="w-12 h-12 mb-10"
-                    stroke="url(#loginGradient)"
-                    strokeWidth={1.8}
-                    aria-hidden="true"
-              />
+              className="w-12 h-12 mb-10"
+              stroke="url(#loginGradient)"
+              strokeWidth={1.8}
+              aria-hidden="true"
+            />
           </div>
 
           <div className="text-center">
@@ -33,7 +34,7 @@ export default async function Home() {
               WITAJ PONOWNIE
             </div>
             <div className="text-[#FF4D6D] inline-block text-4xl md:text-4xl font-bold leading-tight">
-              {user.name}
+              <Link href={`/profile/${user.id}`}>{user.name}</Link>
             </div>
           </div>
 

@@ -8,6 +8,7 @@ import {
   integer,
   date,
   timestamp,
+  primaryKey,
 } from "drizzle-orm/pg-core";
 
 // TABELE
@@ -69,10 +70,45 @@ export const wyniki = pgTable("wyniki", {
 
 export type Wynik = typeof wyniki.$inferSelect;
 
+// obserwacje
+export const usersToUsers = pgTable(
+  "usersToUsers",
+  {
+    osobaObserwujacaId: integer("osobaObserwujacaId")
+      .references(() => users.id)
+      .notNull(),
+    osobaObserwowanaId: integer("osobaObserwowanaId")
+      .references(() => users.id)
+      .notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.osobaObserwujacaId, t.osobaObserwowanaId] })]
+);
+
+export type UserToUser = typeof usersToUsers.$inferSelect;
+
 // RELACJE
 
 export const usersRelations = relations(users, ({ many }) => ({
   plans: many(plans),
+  obserwatorzy: many(usersToUsers, {
+    relationName: "obserwatorzy",
+  }),
+  obserwujacy: many(usersToUsers, {
+    relationName: "obserwujacy",
+  }),
+}));
+
+export const usersToUsersRelations = relations(usersToUsers, ({ one }) => ({
+  obserwatorzy: one(users, {
+    fields: [usersToUsers.osobaObserwujacaId],
+    references: [users.id],
+    relationName: "obserwatorzy",
+  }),
+  obserwujacy: one(users, {
+    fields: [usersToUsers.osobaObserwowanaId],
+    references: [users.id],
+    relationName: "obserwujacy",
+  }),
 }));
 
 export const plansRelations = relations(plans, ({ one, many }) => ({
