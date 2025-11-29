@@ -17,6 +17,14 @@ export async function submitWynik(
     throw new Error("Nieautoryzowany");
   }
 
+  if (serie < 0 || powtorzenia < 0 || ciezar < 0) {
+    return "Wyniki nie mogą być ujemne";
+  }
+
+  if (serie === 0 && (powtorzenia > 0 || ciezar > 0)) {
+    return "Jak mogłeś zrobić zero serii i wpisać powtórzenia lub ciężar?";
+  }
+
   const existingRecord = await db.query.wyniki.findFirst({
     where: and(
       eq(wyniki.planId, idPlanu),
@@ -45,4 +53,14 @@ export async function submitWynik(
     dataWykonania: dataWykonania,
   });
   return "Wynik zapisany";
+}
+
+export async function usunZapisanyWynik(idWyniku: number) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("Nieautoryzowany");
+  }
+
+  await db.delete(wyniki).where(eq(wyniki.id, idWyniku));
+  return "Wynik usunięty";
 }

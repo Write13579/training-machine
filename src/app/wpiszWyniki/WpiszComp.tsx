@@ -12,6 +12,7 @@ import { numerTygodniaNaString } from "@/lib/utils";
 import { PlanWithExercise } from "@/lib/database/scheme";
 import { DataTable } from "./data-table-wpisz-wyniki";
 import { columns } from "./columns";
+import { useRouter } from "next/navigation";
 
 export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
   const [selectedDay, setSelectedDay] = useState<number>(new Date().getDay());
@@ -19,6 +20,7 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
 
   const [dataWybranegoDnia, setDataWybranegoDnia] = useState<Date>(new Date());
   const dzisiaj = new Date();
+  const router = useRouter();
 
   useEffect(() => {
     const filteredData = data.filter(
@@ -34,6 +36,7 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
       dzisiaj.getDate() - deltaDays
     );
     setDataWybranegoDnia(targetDate);
+    router.refresh();
   }, [selectedDay, columns]);
 
   return (

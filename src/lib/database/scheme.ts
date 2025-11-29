@@ -53,7 +53,7 @@ export type Plan = typeof plans.$inferSelect;
 
 export type PlanWithExercise = Plan & {
   exercise: Exercise;
-  wynik: Wynik; // ?
+  wyniki: Wynik[]; // ?
 };
 
 export const wyniki = pgTable("wyniki", {

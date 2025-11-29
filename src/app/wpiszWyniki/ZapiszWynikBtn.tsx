@@ -5,6 +5,7 @@ import { submitWynik } from "./actions";
 import { fixDate } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export default function ZapiszWynikBtn({
   id,
@@ -19,7 +20,6 @@ export default function ZapiszWynikBtn({
   ciezar: number;
   targetDate: Date;
 }) {
-  const router = useRouter();
   return (
     <div>
       <Button
@@ -33,7 +33,6 @@ export default function ZapiszWynikBtn({
             fixDate(targetDate)
           );
           toast(result);
-          router.refresh();
         }}>
         submit
       </Button>
