@@ -1,8 +1,8 @@
 import { db } from "@/lib/database";
 import { users, usersToUsers } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
-import PrzestanObserwowacBtn from "../PrzestanObserwowacBtn";
-import DodajZnajomegoComp from "../DodajZnajomegoComp";
+import PrzestanObserwowacBtn from "./PrzestanObserwowacBtn";
+import DodajZnajomegoComp from "./DodajZnajomegoComp";
 import Link from "next/link";
 import { getMe } from "@/app/authutils";
 
@@ -46,6 +46,8 @@ export default async function ProfilePage({
   if (!user) {
     return <div>User not found</div>;
   }
+
+  //console.log(userId, ja.id); //ty ja nwm czemu userId to string a ja.id to number wg servera xddd
 
   return (
     <div>
@@ -95,6 +97,12 @@ export default async function ProfilePage({
           <DodajZnajomegoComp ja={userId} />
         </div>
       )}
+      <div id="znajdz wynik treningu po dacie">
+        <Link href={`/profile/${userId}/sprawdzWyniki`}>
+          Sprawdz {userId == ja.id && "swoje"} wyniki{" "}
+          {userId != ja.id && "użytkownika"}
+        </Link>
+      </div>
     </div>
   );
 }

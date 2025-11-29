@@ -1,9 +1,9 @@
 "use server";
 
+import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
 import { users, usersToUsers } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
-import { getMe } from "../authutils";
 
 export async function przestanObserwowac(ja: number, on: number) {
   const user = await getMe();
