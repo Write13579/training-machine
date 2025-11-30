@@ -20,12 +20,12 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
 
   const [dataWybranegoDnia, setDataWybranegoDnia] = useState<Date>(new Date());
   const dzisiaj = new Date();
-  const router = useRouter();
 
   useEffect(() => {
     const filteredData = data.filter(
       (item) => item.dzienTygodnia === selectedDay
     );
+
     setChosenData(filteredData);
 
     const todayDow = dzisiaj.getDay();
@@ -36,7 +36,6 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
       dzisiaj.getDate() - deltaDays
     );
     setDataWybranegoDnia(targetDate);
-    router.refresh();
   }, [selectedDay, columns]);
 
   return (

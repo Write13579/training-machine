@@ -29,13 +29,13 @@ export const columns: ColumnDef<PlanWithExercise>[] = [
   {
     header: "alles",
     cell: ({ row }) => {
-      const [serie, useSerie] = useState<number>(
+      const [serie, setSerie] = useState<number>(
         0 /*row.original.wynik.serie */
       );
-      const [powtorzenia, usePowtorzenia] = useState<number>(
+      const [powtorzenia, setPowtorzenia] = useState<number>(
         0 /* row.original.wynik.powtorzenia */
       );
-      const [ciezar, useCiezar] = useState<number>(
+      const [ciezar, setCiezar] = useState<number>(
         0 /* row.original.wynik.ciezar */
       );
 
@@ -72,59 +72,53 @@ export const columns: ColumnDef<PlanWithExercise>[] = [
 
       return (
         <div id="alles">
-          {
-            /*!giveWynikFromCurrentDate(row.original).ciezar &&
-          !giveWynikFromCurrentDate(row.original).powtorzenia &&
-          !giveWynikFromCurrentDate(row.original).serie*/ giveWynikFromCurrentDate(
-              row.original
-            ).id === -1 ? (
+          {giveWynikFromCurrentDate(row.original).id === -1 ? (
+            <div>
+              <span>serie:</span>
+              <Input
+                className="w-20"
+                value={serie}
+                type="number"
+                onChange={(e) => setSerie(Number(e.target.value))}
+              />
+              <span>powtórzenia:</span>
+              <Input
+                className="w-20"
+                value={powtorzenia}
+                type="number"
+                onChange={(e) => setPowtorzenia(Number(e.target.value))}
+              />
+              <span>ciężar:</span>
+              <Input
+                className="w-20"
+                value={ciezar}
+                type="number"
+                onChange={(e) => setCiezar(Number(e.target.value))}
+              />
+              <ZapiszWynikBtn
+                id={row.original.id}
+                serie={serie}
+                powtorzenia={powtorzenia}
+                ciezar={ciezar}
+                targetDate={targetDate}
+              />
+            </div>
+          ) : (
+            <div>
+              <div>Wynik wpisany!</div>
               <div>
-                <span>serie:</span>
-                <Input
-                  className="w-20"
-                  value={serie}
-                  type="number"
-                  onChange={(e) => useSerie(Number(e.target.value))}
-                />
-                <span>powtórzenia:</span>
-                <Input
-                  className="w-20"
-                  value={powtorzenia}
-                  type="number"
-                  onChange={(e) => usePowtorzenia(Number(e.target.value))}
-                />
-                <span>ciężar:</span>
-                <Input
-                  className="w-20"
-                  value={ciezar}
-                  type="number"
-                  onChange={(e) => useCiezar(Number(e.target.value))}
-                />
-                <ZapiszWynikBtn
-                  id={row.original.id}
-                  serie={serie}
-                  powtorzenia={powtorzenia}
-                  ciezar={ciezar}
-                  targetDate={targetDate}
+                Serie: {giveWynikFromCurrentDate(row.original).serie},
+                Powtórzenia:{" "}
+                {giveWynikFromCurrentDate(row.original).powtorzenia}, Ciężar:{" "}
+                {giveWynikFromCurrentDate(row.original).ciezar}kg
+              </div>
+              <div>
+                <UsunZapisanyWynikBtn
+                  id={giveWynikFromCurrentDate(row.original).id}
                 />
               </div>
-            ) : (
-              <div>
-                <div>Wynik wpisany!</div>
-                <div>
-                  Serie: {giveWynikFromCurrentDate(row.original).serie},
-                  Powtórzenia:{" "}
-                  {giveWynikFromCurrentDate(row.original).powtorzenia}, Ciężar:{" "}
-                  {giveWynikFromCurrentDate(row.original).ciezar}kg
-                </div>
-                <div>
-                  <UsunZapisanyWynikBtn
-                    id={giveWynikFromCurrentDate(row.original).id}
-                  />
-                </div>
-              </div>
-            )
-          }
+            </div>
+          )}
         </div>
       );
     },

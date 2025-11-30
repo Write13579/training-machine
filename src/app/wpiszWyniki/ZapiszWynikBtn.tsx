@@ -4,8 +4,7 @@ import { Button } from "@/components/ui/button";
 import { submitWynik } from "./actions";
 import { fixDate } from "@/lib/utils";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useState } from "react";
 
 export default function ZapiszWynikBtn({
   id,
@@ -20,11 +19,15 @@ export default function ZapiszWynikBtn({
   ciezar: number;
   targetDate: Date;
 }) {
+  const [loading, setLoading] = useState(false);
+
   return (
     <div>
       <Button
+        loading={loading}
         className="border-2 cursor-pointer"
         onClick={async () => {
+          setLoading(true);
           const result = await submitWynik(
             id,
             serie,
@@ -33,6 +36,8 @@ export default function ZapiszWynikBtn({
             fixDate(targetDate)
           );
           toast(result);
+          window.location.reload(); //tymczasowo, bo to hard refresh xd
+          setLoading(false);
         }}>
         submit
       </Button>
