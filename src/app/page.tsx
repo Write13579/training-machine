@@ -3,9 +3,85 @@ import WylogujBtn from "@/components/ui/WylogujBtn";
 import Link from "next/link";
 import ZalogujPage from "./ZalogujComp";
 import { Dumbbell } from "lucide-react";
+import { db } from "@/lib/database";
+import { eq } from "drizzle-orm";
+import { usersToUsers, wyniki } from "@/lib/database/scheme";
+import { createStringFromDate } from "@/lib/utils";
 
 export default async function Home() {
   const user = await getMe();
+
+  const udostepnioneWynikiWszystkieQuery = await db.query.wyniki.findMany({
+    with: {
+      plan: { with: { exercise: true, user: true } },
+    },
+    where: eq(wyniki.udostepniony, true),
+  });
+
+  const udostepnioneWynikiWszystkie = udostepnioneWynikiWszystkieQuery.reduce(
+    (acc, wynik) => {
+      const userId = wynik.plan.userId;
+      const dataKey = createStringFromDate(wynik.dataWykonania);
+      const key = `${userId}-${dataKey}`;
+
+      if (!acc[key]) {
+        acc[key] = {
+          userId: userId,
+          userName: wynik.plan.user.name,
+          data: wynik.dataWykonania,
+          dataString: dataKey,
+          wyniki: [],
+        };
+      }
+
+      acc[key].wyniki.push({
+        id: wynik.id,
+        cwiczenie: wynik.plan.exercise.nazwa,
+        serie: wynik.serie,
+        powtorzenia: wynik.powtorzenia,
+        ciezar: wynik.ciezar,
+      });
+
+      return acc;
+    },
+    {} as Record<
+      string,
+      {
+        userId: number;
+        userName: string;
+        data: Date;
+        dataString: string;
+        wyniki: Array<{
+          id: number;
+          cwiczenie: string;
+          serie: number;
+          powtorzenia: number;
+          ciezar: number;
+        }>;
+      }
+    >
+  );
+
+  // 5 ostatnich treningów od kogokolwiek
+  const ostatnie5Treningow = Object.values(udostepnioneWynikiWszystkie)
+    .sort((a, b) => b.data.getTime() - a.data.getTime())
+    .slice(0, 5);
+
+  const kogoJaObserwujeQuery = user
+    ? await db.query.usersToUsers.findMany({
+        where: eq(usersToUsers.osobaObserwujacaId, user.id),
+      })
+    : [];
+
+  const kogoJaObserwuje = kogoJaObserwujeQuery.map(
+    (relacja) => relacja.osobaObserwowanaId
+  );
+
+  const udostepnioneWynikiZnajomych = user
+    ? Object.values(udostepnioneWynikiWszystkie).filter((wynik) =>
+        kogoJaObserwuje.includes(wynik.userId)
+      )
+    : [];
 
   return (
     <div
@@ -124,8 +200,38 @@ export default async function Home() {
           )}
         </div>
       )}
-      <div className="border-2 p-3 flex justify-center mx-10 flex-col min-h-[10vh]">
-        <div>blog/feed</div>
+      <div className="border-2 p-3 flex justify-center mx-10 flex-col min-h-[10vh] mt-10">
+        <h2 className="font-bold text-xl">
+          {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
+        </h2>
+        <div className="space-y-6">
+          {(user ? udostepnioneWynikiZnajomych : ostatnie5Treningow).map(
+            (grupa) => (
+              <div key={`${grupa.userId}-${grupa.dataString}`}>
+                <div>
+                  <div>{grupa.userName}</div> wrzucił wyniki z dnia{" "}
+                  {grupa.dataString}
+                </div>
+                <div>
+                  {grupa.wyniki.map((wynik) => (
+                    <div key={wynik.id}>
+                      <span>{wynik.cwiczenie}</span>: {wynik.serie} serii po{" "}
+                      {wynik.powtorzenia} powtórzeń po {wynik.ciezar} kg
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          )}
+          {user && udostepnioneWynikiZnajomych.length === 0 && (
+            <div className="text-gray-500">
+              Brak wyników do wyświetlenia. Zacznij obserwować znajomych!
+            </div>
+          )}
+          {!user && ostatnie5Treningow.length === 0 && (
+            <div className="text-gray-500">Brak udostępnionych treningów</div>
+          )}
+        </div>
       </div>
     </div>
   );
