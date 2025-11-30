@@ -85,6 +85,19 @@ export const usersToUsers = pgTable("usersToUsers", {
 
 export type UserToUser = typeof usersToUsers.$inferSelect;
 
+//polubienia - userToWynik
+export const polubienia = pgTable("polubienia", {
+  id: serial("id").primaryKey(),
+  osobaLubiacaId: integer("osobaLubiacaId")
+    .references(() => users.id)
+    .notNull(),
+  wynikId: integer("wynikId")
+    .references(() => wyniki.id)
+    .notNull(),
+});
+
+export type Polubienie = typeof polubienia.$inferSelect;
+
 // RELACJE
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -95,6 +108,15 @@ export const usersRelations = relations(users, ({ many }) => ({
   obserwujacy: many(usersToUsers, {
     relationName: "obserwujacy",
   }),
+  polubienia: many(polubienia),
+}));
+
+export const polubieniaRelations = relations(polubienia, ({ one }) => ({
+  osobaLubiacaId: one(users, {
+    fields: [polubienia.osobaLubiacaId],
+    references: [users.id],
+  }),
+  wynik: one(wyniki, { fields: [polubienia.wynikId], references: [wyniki.id] }),
 }));
 
 export const usersToUsersRelations = relations(usersToUsers, ({ one }) => ({
@@ -123,6 +145,7 @@ export const exercisesRelations = relations(exercises, ({ many }) => ({
   plans: many(plans),
 }));
 
-export const wynikiRelations = relations(wyniki, ({ one }) => ({
+export const wynikiRelations = relations(wyniki, ({ one, many }) => ({
   plan: one(plans, { fields: [wyniki.planId], references: [plans.id] }),
+  polubienia: many(polubienia),
 }));

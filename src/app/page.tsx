@@ -7,6 +7,8 @@ import { db } from "@/lib/database";
 import { eq } from "drizzle-orm";
 import { usersToUsers, wyniki } from "@/lib/database/scheme";
 import { createStringFromDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import PulubBtn from "./PolubBtn";
 
 export default async function Home() {
   const user = await getMe();
@@ -82,6 +84,18 @@ export default async function Home() {
         kogoJaObserwuje.includes(wynik.userId)
       )
     : [];
+
+  const polubieniaWszystkie = await db.query.polubienia.findMany();
+
+  const mojePolubienia = await polubieniaWszystkie.filter(
+    (polubienie) => polubienie.osobaLubiacaId === user?.id
+  );
+
+  function liczbaPolubienWyniku(wynikId: number) {
+    return polubieniaWszystkie.filter(
+      (polubienie) => polubienie.wynikId === wynikId
+    ).length;
+  }
 
   return (
     <div
@@ -219,6 +233,10 @@ export default async function Home() {
                       {wynik.powtorzenia} powtórzeń po {wynik.ciezar} kg
                     </div>
                   ))}
+                  <div>
+                    liczba srapek: {liczbaPolubienWyniku(grupa.wyniki[0].id)}
+                    <PulubBtn wynikId={grupa.wyniki[0].id} />
+                  </div>
                 </div>
               </div>
             )
