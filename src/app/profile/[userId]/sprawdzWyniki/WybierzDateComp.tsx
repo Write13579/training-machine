@@ -12,11 +12,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Wynik } from "@/lib/database/scheme";
 import { ChevronDownIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { przestanObserwowac, share } from "../actions";
+import { toast } from "sonner";
 
 export default function WybierzDateComp({
   wynikiUsera,
@@ -28,6 +29,7 @@ export default function WybierzDateComp({
     powtorzenia: number;
     ciezar: number;
     dataWykonania: Date;
+    udostepniony: boolean;
     plan: {
       id: number;
       userId: number;
@@ -162,6 +164,38 @@ export default function WybierzDateComp({
         ) : (
           <div>Brak wyników</div>
         )}
+
+        <div>
+          {wynikiDoWyswietlenia.length > 0 &&
+          !wynikiDoWyswietlenia[0].udostepniony ? (
+            <Button
+              onClick={async () => {
+                const response = await share(
+                  wynikiDoWyswietlenia[0].dataWykonania
+                );
+                toast(response.info);
+                router.refresh();
+              }}>
+              udostępnij swoje wyniki / ten trening nwm
+            </Button>
+          ) : (
+            <div>
+              <div>Wyniki zostały już udostępnione</div>
+              <Button
+                onClick={async () => {
+                  const przestanUdostepniac = true;
+                  const response = await share(
+                    wynikiDoWyswietlenia[0].dataWykonania,
+                    przestanUdostepniac
+                  );
+                  toast(response.info);
+                  router.refresh();
+                }}>
+                Przestan udostepniac
+              </Button>
+            </div>
+          )}
+        </div>
 
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-6">

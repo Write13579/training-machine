@@ -2,7 +2,8 @@
 
 import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
-import { users, usersToUsers } from "@/lib/database/scheme";
+import { plans, users, usersToUsers, wyniki } from "@/lib/database/scheme";
+import { info } from "console";
 import { and, eq } from "drizzle-orm";
 
 export async function przestanObserwowac(ja: number, on: number) {
@@ -54,4 +55,39 @@ export async function zacznijObserwowac(ja: number, on: string) {
     error: 0,
     info: `Zacząłeś obserwować użytkownika ${goChceObserwowac.name}`,
   };
+}
+
+export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("Nieautoryzowany");
+  }
+
+  const znajdzWyniki = await db.query.wyniki.findMany({
+    where: eq(wyniki.dataWykonania, dataWynikow),
+  });
+
+  if (znajdzWyniki.length === 0) {
+    return { error: 1, info: "Brak wyników do podjecia akcji" };
+  }
+
+  if (przestanUdostepniac) {
+    await db
+      .update(wyniki)
+      .set({ udostepniony: false })
+      .where(eq(wyniki.dataWykonania, dataWynikow));
+    return { error: 0, info: "Przestałeś udostępniać te wyniki" };
+  }
+
+  if (znajdzWyniki[0].udostepniony) {
+    return { error: 1, info: "Wyniki zostały już udostępnione" };
+  }
+
+  znajdzWyniki.forEach(async (wynik) => {
+    await db
+      .update(wyniki)
+      .set({ udostepniony: true })
+      .where(eq(wyniki.id, wynik.id));
+  });
+  return { error: 0, info: "Wyniki zostały udostępnione" };
 }

@@ -1,4 +1,5 @@
 import { WynikType } from "@/app/wpiszWyniki/columns";
+import { id } from "date-fns/locale";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -66,23 +67,21 @@ export const wyniki = pgTable("wyniki", {
   powtorzenia: integer("powtorzenia").notNull(),
   ciezar: integer("ciezar").notNull(),
   dataWykonania: date("dataWykonania", { mode: "date" }).notNull(),
+  udostepniony: boolean("udostepniony").default(false).notNull(),
 });
 
 export type Wynik = typeof wyniki.$inferSelect;
 
 // obserwacje
-export const usersToUsers = pgTable(
-  "usersToUsers",
-  {
-    osobaObserwujacaId: integer("osobaObserwujacaId")
-      .references(() => users.id)
-      .notNull(),
-    osobaObserwowanaId: integer("osobaObserwowanaId")
-      .references(() => users.id)
-      .notNull(),
-  },
-  (t) => [primaryKey({ columns: [t.osobaObserwujacaId, t.osobaObserwowanaId] })]
-);
+export const usersToUsers = pgTable("usersToUsers", {
+  id: serial("id").primaryKey(),
+  osobaObserwujacaId: integer("osobaObserwujacaId")
+    .references(() => users.id)
+    .notNull(),
+  osobaObserwowanaId: integer("osobaObserwowanaId")
+    .references(() => users.id)
+    .notNull(),
+});
 
 export type UserToUser = typeof usersToUsers.$inferSelect;
 
