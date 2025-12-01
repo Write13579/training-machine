@@ -98,7 +98,7 @@ export async function zmienHaslo(stareHaslo: string, noweHaslo: string) {
     return [];
   }
   const correctOldPassword = await verifyPassword(stareHaslo, user.password);
-  const correctNewPassword = noweHaslo.length >= 4 || noweHaslo.length <= 25;
+  const correctNewPassword = noweHaslo.length >= 4 && noweHaslo.length <= 25;
 
   if (!correctOldPassword) {
     return [{ field: "stareHaslo", error: "podane hasło jest nieprawidłowe" }];
