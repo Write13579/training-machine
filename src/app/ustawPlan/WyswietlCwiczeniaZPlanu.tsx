@@ -20,6 +20,7 @@ export default function WyswietlCwiczeniaZPlanu({
 }) {
   const router = useRouter();
   return (
+    
     <Popover>
       <PopoverTrigger asChild>
         <span className="inline-flex items-center justify-center w-full h-full min-w-0">

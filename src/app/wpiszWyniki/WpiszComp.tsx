@@ -40,16 +40,21 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
 
   return (
     <div>
-      <div id="select">
+      <div id="select" className="flex justify-center">
         <Select
           value={selectedDay.toString()}
           onValueChange={(newVal) => setSelectedDay(Number(newVal))}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Wybierz dzień" />
+          <SelectTrigger className="w-[180px] h-10 inline-flex items-center justify-center border border-black bg-[#FF4D6D] rounded-[14px] px-3 shadow-md shadow-black/40 ring-1 ring-black/5">
+            <SelectValue className="w-full text-center text-black" placeholder="Wybierz dzień" />
           </SelectTrigger>
-          <SelectContent>
+
+          <SelectContent className="w-[min(95vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 text-black">
             {[0, 1, 2, 3, 4, 5, 6].map((dayNum) => (
-              <SelectItem key={dayNum} value={dayNum.toString()}>
+              <SelectItem
+                key={dayNum}
+                value={dayNum.toString()}
+                className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] last:border-b-0 text-black"
+              >
                 {numerTygodniaNaString(dayNum)}
               </SelectItem>
             ))}
@@ -58,7 +63,6 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
       </div>
       <h2>Wybrana data: {dataWybranegoDnia.toDateString()}</h2>
 
-      <br />
       <div>
         <DataTable columns={columns} data={chosenData} />
       </div>

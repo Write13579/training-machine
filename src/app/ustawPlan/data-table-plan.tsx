@@ -41,7 +41,6 @@ export function DataTable<TData, TValue>({
   return (
     <Table className="w-full table-fixed rounded-md overflow-hidden">
       <TableHeader>
-        {/* Jedna wspólna linia nagłówka dopasowana do układu wiersza */}
         <TableRow>
           <TableHead colSpan={cols.length} className=" px-8 py-2">
             <div className="flex flex-row flex-wrap items-center gap-4">
@@ -62,7 +61,6 @@ export function DataTable<TData, TValue>({
       <TableBody>
         {table.getRowModel().rows?.length ? (
           table.getRowModel().rows.map((row) => (
-            // jeden TableRow -> pojedynczy TableCell z colSpan dla całego wiersza
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
