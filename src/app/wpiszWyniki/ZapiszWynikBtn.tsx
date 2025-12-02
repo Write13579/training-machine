@@ -22,10 +22,23 @@ export default function ZapiszWynikBtn({
   const [loading, setLoading] = useState(false);
 
   return (
-    <div>
+    <div className="flex items-center justify-center bg-white text-black px-4 mx-8 w-full 
+                  rounded-full 
+                  cursor-pointer 
+                  uppercase 
+                  text-[15px]
+                  transition-y 
+                  duration-500 
+                  ease-in-out 
+                  hover:tracking-[1px] 
+                  hover:text-black 
+                  active:tracking-[3px] 
+                  active:bg-white 
+                  active:text-black 
+                  active:translate-y-[-2px] 
+                  active:duration-[300ms]">
       <Button
         loading={loading}
-        className="border-2 cursor-pointer"
         onClick={async () => {
           setLoading(true);
           const result = await submitWynik(
@@ -39,7 +52,7 @@ export default function ZapiszWynikBtn({
           window.location.reload(); //tymczasowo, bo to hard refresh xd
           setLoading(false);
         }}>
-        submit
+        Zapisz
       </Button>
     </div>
   );

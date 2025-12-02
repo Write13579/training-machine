@@ -40,20 +40,21 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
 
   return (
     <div>
-      <div id="select" className="flex justify-center">
+      <div id="select" className="flex justify-center w-full">
         <Select
           value={selectedDay.toString()}
           onValueChange={(newVal) => setSelectedDay(Number(newVal))}>
-          <SelectTrigger className="w-[180px] h-10 inline-flex items-center justify-center border border-black bg-[#FF4D6D] rounded-[14px] px-3 shadow-md shadow-black/40 ring-1 ring-black/5">
-            <SelectValue className="w-full text-center text-black" placeholder="Wybierz dzień" />
-          </SelectTrigger>
+          <SelectTrigger className="w-full inline-flex items-center justify-center gap-2 border-0 bg-[#FF4D6D] rounded-[14px] px-4 shadow-md shadow-black/40 ring-0 hover:shadow-lg transition-shadow duration-200">
+               <SelectValue className="w-full text-center text-black font-semibold" 
+               placeholder="Wybierz dzień" />
+           </SelectTrigger>
 
-          <SelectContent className="w-[min(95vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 text-black">
+          <SelectContent className="w-[min(95vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-0 ring-black/0 text-black">
             {[0, 1, 2, 3, 4, 5, 6].map((dayNum) => (
               <SelectItem
                 key={dayNum}
                 value={dayNum.toString()}
-                className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] last:border-b-0 text-black"
+                className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] text-black"
               >
                 {numerTygodniaNaString(dayNum)}
               </SelectItem>

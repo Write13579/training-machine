@@ -11,7 +11,7 @@ export default function UsunZapisanyWynikBtn({ id }: { id: number }) {
   return (
     <Button
       loading={loading}
-      className="border-2 cursor-pointer bg-amber-800"
+      className="border-0 cursor-pointer"
       onClick={async () => {
         setLoading(true);
         const result = await usunZapisanyWynik(id);
@@ -19,7 +19,9 @@ export default function UsunZapisanyWynikBtn({ id }: { id: number }) {
         window.location.reload(); //tymczasowo, bo to hard refresh xd
         setLoading(false);
       }}>
-      <Trash color="red" />
+      <div className="cursor-pointer inline-flex items-center px-10 py-2 bg-black transition ease-in-out delay-75 hover:bg-[#FF4D6D] active:bg-[#C9184A] text-white text-sm font-medium rounded-full hover:-translate-y-1 hover:scale-110">
+          <Trash/>
+        </div>
     </Button>
   );
 }

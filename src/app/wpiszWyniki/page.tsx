@@ -55,17 +55,19 @@ export default async function WpiszWynikiPage() {
         plan z przeszlosci: zeby zmieniac przeszlosc trzeba dowalic sort wg
         updatedAt + unique exerciseId
       </div>
-      <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
-        <div className="flex flex-col items-center mb-6">
-          <CircleStar className="w-12 h-12 mb-4" 
-          stroke="url(#loginGradient)" 
-          strokeWidth={1.8} 
-          aria-hidden="true" />
-          <h1 className="text-black text-2xl font-bold">Wpisz wyniki</h1>
-          <div className="font-MySerif mt-3 mb-6 text-[12px] text-black font-bold">
-            Wprowadź nazwę ćwiczenia oraz serie, powtórzenia i ciężar
+      <div className="relative z-20 mx-auto mt-2 mb-10 min-h-[360px] h-auto w-[min(95vw,720px)] rounded-[20px] bg-[#ffffff] text-center min-w-[450px] py-8 px-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+        <div className="flex flex-col mb-6">
+          <CircleStar
+          className="w-12 h-12 mb-4 mx-auto"
+            stroke="url(#loginGradient)"
+            strokeWidth={1.8}
+            aria-hidden="true"
+             />
+          <h1 className="text-black text-2xl font-bold">Ustaw plan treningowy</h1>
+          <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
+            Wybierz ćwiczenia i przypisz do dni tygodnia
           </div>
-      <div>
+      <div className="mt-8">
         <WpiszComp data={rawData} />
       </div>
         </div>

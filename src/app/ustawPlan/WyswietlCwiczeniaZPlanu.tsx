@@ -23,7 +23,7 @@ export default function WyswietlCwiczeniaZPlanu({
     
     <Popover>
       <PopoverTrigger asChild>
-        <span className="inline-flex items-center justify-center w-full h-full min-w-0">
+        <span className="inline-flex items-center justify-center w-full h-full">
           {row.ćwiczenia.length} {formatujSlowoCwiczenieWgLiczby(row.ćwiczenia.length)}
         </span>
       </PopoverTrigger>
