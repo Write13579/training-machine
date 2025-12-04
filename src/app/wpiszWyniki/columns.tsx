@@ -63,16 +63,16 @@ export const columns: ColumnDef<PlanWithExercise>[] = [
 
       return (
         <div>
-          <div className="w-full min-w-0 bg-[#FF4D6D] rounded-[14px] p-6 flex flex-col shadow-md shadow-black/40 ring-1 ring-black/5">
-            <div className="flex flex-row items-center gap-4 w-full min-w-0">
-              <div className="flex-none basis-[60%] min-w-0">
-                <div className="grid grid-rows-2 gap-2 items-center py-8 m-4 bg-[#FFB3C1] rounded-[14px] shadow-md shadow-black/40 ring-1 ring-black/5">
+          <div className="w-full min-w-0 bg-[#FF4D6D] rounded-[20px] p-4 md:p-6 flex flex-col gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
+            <div className="flex flex-col md:flex-row items-center gap-4 w-full min-w-0">
+              <div className="flex-none md:basis-[60%] basis-full min-w-0">
+                <div className="grid grid-rows-2 gap-2 items-center py-3 md:py-8 m-0 md:m-4 bg-[#FFB3C1] rounded-[14px] shadow-md shadow-black/40 ring-1 ring-black/5">
                   <div className="flex items-center justify-center w-full">
                     <span className="inline-flex items-center justify-center text-center text-white font-MySerif bg-black rounded-[14px] px-4 py-3 max-w-full break-words">
                       {row.original.exercise.nazwa}
                     </span>
                   </div>
-                  <div className="flex items-center justify-center ">
+                  <div className="flex items-center justify-center w-full px-2">
                     {current.id === -1 ? (
                       <ZapiszWynikBtn
                         id={row.original.id}
@@ -90,7 +90,7 @@ export const columns: ColumnDef<PlanWithExercise>[] = [
                 </div>
               </div>
 
-              {/* prawa część: inputy / wynik (pozwól jej rosnąć) */}
+              {/* right block: inputs — pozwól mu się łamać na małych ekranach */}
               <div className="flex-1 min-w-0">
                 {current.id === -1 ? (
                   <div className="grid grid-cols-1 gap-3 w-full">

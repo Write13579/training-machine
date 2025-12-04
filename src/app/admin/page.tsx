@@ -37,11 +37,11 @@ export default async function AdminPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col min-h-[360px] w-full">
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
             <CreateExComp/>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full">
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full">
           <div className="flex flex-col items-center mb-6 mt-10">
         <FolderCode
                     className="w-12 h-12 mb-4"
@@ -68,7 +68,7 @@ export default async function AdminPage() {
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full sm:col-span-2 lg:col-span-1">
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full sm:col-span-2 lg:col-span-1">
           <div className="flex flex-col items-center mb-6 mt-10">
         <User
                     className="w-12 h-12 mb-4"

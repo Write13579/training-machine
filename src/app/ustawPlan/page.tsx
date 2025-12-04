@@ -41,13 +41,13 @@ export default async function UstawPlanPage() {
     <div>
       <Link
         href="/"
-        className="relative z-20 mx-auto mt-4 w-[34%] min-w-[450px] block"
+        className="relative z-20 mx-auto mt-6 w-full px-4 max-w-[640px] md:max-w-[900px] lg:max-w-[1100px] block"
       >
         <span className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
           Powrót
         </span>
       </Link>
-      <div className="relative z-20 mx-auto mt-2 mb-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[450px] py-8 px-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+      <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] py-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="flex flex-col items-center mb-6">
           <CircleStar
           className="w-12 h-12 mb-4"
