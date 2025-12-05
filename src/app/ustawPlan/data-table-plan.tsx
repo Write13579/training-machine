@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
               <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
                 Dzień
               </div>
-              <div className="flex-1 min-w-[160px] text-center font-MySerif text-sm text-black">
+              <div className="flex-1 w-[56%] text-center font-MySerif text-sm text-black">
                 Ćwiczenia
               </div>
               <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
               className="align-center"
             >
               <TableCell colSpan={cols.length} className="py-1">
-                <div className="bg-[#FF4D6D] rounded-[14px] p-4 flex flex-row flex-wrap items-center gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
+                <div className="bg-[#FF4D6D] rounded-[20px] p-4 flex flex-row flex-wrap items-center gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
                    {/* lewa kolumna: Dzień */}
                   <div className="flex-none w-[22%] min-w-[72px] text-center">
                     <div className="text-black font-MySerif font-medium">
@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
                    </div>
  
                    {/* środkowa kolumna: Ćwiczenia */}
-                  <div className="flex-1 min-w-[160px] py-2 bg-black rounded-full text-center
+                  <div className="flex-1 min-w-[100px] py-2 bg-black rounded-full text-center
                   transition-all 
                   duration-500 
                   ease-in-out

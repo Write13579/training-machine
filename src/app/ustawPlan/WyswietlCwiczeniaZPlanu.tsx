@@ -27,7 +27,7 @@ export default function WyswietlCwiczeniaZPlanu({
           {row.ćwiczenia.length} {formatujSlowoCwiczenieWgLiczby(row.ćwiczenia.length)}
         </span>
       </PopoverTrigger>
-      <PopoverContent className="w-[min(60vw,720px)] max-h-[80vh] bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+      <PopoverContent className=" bg-white rounded-[20px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="flex flex-col max-h-[35vh] overflow-y-auto ">
           {row.ćwiczenia.map((nazwa, index) => (
             <div

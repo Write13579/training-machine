@@ -214,43 +214,94 @@ export default async function Home() {
           )}
         </div>
       )}
-      <div className="border-2 p-3 flex justify-center mx-10 flex-col min-h-[10vh] mt-10">
-        <h2 className="font-bold text-xl">
-          {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
-        </h2>
-        <div className="space-y-6">
-          {(user ? udostepnioneWynikiZnajomych : ostatnie5Treningow).map(
-            (grupa) => (
-              <div key={`${grupa.userId}-${grupa.dataString}`}>
-                <div>
-                  <div>{grupa.userName}</div> wrzucił wyniki z dnia{" "}
-                  {grupa.dataString}
-                </div>
-                <div>
-                  {grupa.wyniki.map((wynik) => (
-                    <div key={wynik.id}>
-                      <span>{wynik.cwiczenie}</span>: {wynik.serie} serii po{" "}
-                      {wynik.powtorzenia} powtórzeń po {wynik.ciezar} kg
+      <section className="mt-10 w-full px-4">
+        <div className="mx-auto w-full max-w-[900px]">
+          <h2 className="font-bold text-xl mb-4 text-black">
+            {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
+          </h2>
+
+          <div className="space-y-4">
+            {(user ? udostepnioneWynikiZnajomych : ostatnie5Treningow).map(
+              (grupa) => (
+                <article
+                  key={`${grupa.userId}-${grupa.dataString}`}
+                  className="bg-white rounded-[14px] shadow-md p-4 flex flex-col sm:flex-row gap-4"
+                >
+                  <div className="flex-none">
+                    <div className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
+                      {grupa.userName?.split(" ").map(n => n[0]).slice(0,2).join("")}
                     </div>
-                  ))}
-                  <div>
-                    liczba srapek: {liczbaPolubienWyniku(grupa.wyniki[0].id)}
-                    <PulubBtn wynikId={grupa.wyniki[0].id} />
                   </div>
-                </div>
-              </div>
-            )
-          )}
-          {user && udostepnioneWynikiZnajomych.length === 0 && (
-            <div className="text-gray-500">
-              Brak wyników do wyświetlenia. Zacznij obserwować znajomych!
-            </div>
-          )}
-          {!user && ostatnie5Treningow.length === 0 && (
-            <div className="text-gray-500">Brak udostępnionych treningów</div>
-          )}
+
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="text-black font-MySerif font-semibold text-base">
+                          {grupa.userName}
+                        </div>
+                        <div className="text-sm text-[#858383] mt-1">
+                          {grupa.dataString}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-sm text-[#858383]">
+                          {liczbaPolubienWyniku(grupa.wyniki[0].id)}
+                        </div>
+                        <PulubBtn wynikId={grupa.wyniki[0].id} />
+                      </div>
+                    </div>
+
+                    <div className="mt-3 space-y-2">
+                      {grupa.wyniki.map((wynik) => (
+                        <div
+                          key={wynik.id}
+                          className="flex items-center justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium truncate">
+                              {wynik.cwiczenie}
+                            </div>
+                          </div>
+
+                          <div className="ml-4 flex items-center gap-3">
+                            <div className="flex flex-col items-center px-2">
+                              <div className="text-lg sm:text-xl font-bold leading-none">
+                                {wynik.serie}
+                              </div>
+                              <div className="text-[11px] opacity-90">Serie</div>
+                            </div>
+
+                            <div className="flex flex-col items-center px-2">
+                              <div className="text-lg sm:text-xl font-bold leading-none">
+                                {wynik.powtorzenia}
+                              </div>
+                              <div className="text-[11px] opacity-90">Powtórzenia</div>
+                            </div>
+
+                            <div className="flex flex-col items-center px-2">
+                              <div className="text-lg sm:text-xl font-bold leading-none">
+                                {wynik.ciezar}kg
+                              </div>
+                              <div className="text-[11px] opacity-90">Ciężar</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+              )
+            )}
+
+            {user && udostepnioneWynikiZnajomych.length === 0 && (
+              <div className="text-gray-500">Brak wyników do wyświetlenia. Zacznij obserwować znajomych!</div>
+            )}
+            {!user && ostatnie5Treningow.length === 0 && (
+              <div className="text-gray-500">Brak udostępnionych treningów</div>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

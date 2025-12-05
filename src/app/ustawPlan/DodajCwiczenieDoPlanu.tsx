@@ -86,7 +86,7 @@ export default function DodajCwiczenieDoPlanu({
             <Plus className="w-6 h-6"/>
           </Button>
         </DialogTrigger>
-        <DialogContent className="mx-auto mtd-10 min-h-[80vh] h-[auto] min-w-[340px] w-[44%] rounded-[20px] bg-[#ffffff] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 ">
+        <DialogContent className="mx-auto mtd-10 min-w-[340px] w-[44%] rounded-[20px] bg-white p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 ">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <DialogHeader>
@@ -110,7 +110,7 @@ export default function DodajCwiczenieDoPlanu({
                 name="cwiczenie"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="max-h-[60vh] overflow-y-auto p-1">
+                    <div className="max-h-[40vh] sm:max-h-[60vh] overflow-y-auto p-1">
                       {listaCwiczen.map((cwiczenie, index) => {
                         const selected = field.value === cwiczenie.nazwa;
                         return (

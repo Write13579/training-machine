@@ -5,11 +5,13 @@ import { polubTrening } from "./actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Heart } from "lucide-react";
 
 export default function PulubBtn({ wynikId }: { wynikId: number }) {
   const router = useRouter();
   const [napis, setNapis] = useState<string>("Polub");
   const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <div>
       <Button
@@ -22,7 +24,10 @@ export default function PulubBtn({ wynikId }: { wynikId: number }) {
           setLoading(false);
           setNapis(reqest.lubi ? "Polubiono" : "Polub");
         }}>
-        {napis}
+        <span className="inline-flex items-center">
+          <Heart className={`${napis === "Polubiono" ? "text-[#FF4D6D]" : "text-black"} w-8 h-8`} />
+          <span className="ml-2">{napis}</span>
+        </span>
       </Button>
     </div>
   );
