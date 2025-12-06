@@ -9,7 +9,7 @@ import { Heart } from "lucide-react";
 
 export default function PulubBtn({ wynikId }: { wynikId: number }) {
   const router = useRouter();
-  const [napis, setNapis] = useState<string>("Polub");
+  const [napis, setNapis] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
@@ -22,10 +22,10 @@ export default function PulubBtn({ wynikId }: { wynikId: number }) {
           toast(reqest.message);
           router.refresh();
           setLoading(false);
-          setNapis(reqest.lubi ? "Polubiono" : "Polub");
+          setNapis(reqest.lubi ? "" : "");
         }}>
         <span className="inline-flex items-center">
-          <Heart className={`${napis === "Polubiono" ? "text-[#FF4D6D]" : "text-black"} w-8 h-8`} />
+          <Heart className={`${napis === "" ? "text-[#FF4D6D]" : "text-black"} w-8 h-8`} />
           <span className="ml-2">{napis}</span>
         </span>
       </Button>

@@ -214,9 +214,9 @@ export default async function Home() {
           )}
         </div>
       )}
-      <section className="mt-10 w-full px-4">
-        <div className="mx-auto w-full max-w-[900px]">
-          <h2 className="font-bold text-xl mb-4 text-black">
+      <section className="w-full px-4 flex justify-center">
+        <div className="w-[34%] min-w-[340px]">
+          <h2 className="text-black font-bold items-center bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4 mt-10 mb-4">
             {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
           </h2>
 
@@ -225,69 +225,70 @@ export default async function Home() {
               (grupa) => (
                 <article
                   key={`${grupa.userId}-${grupa.dataString}`}
-                  className="bg-white rounded-[14px] shadow-md p-4 flex flex-col sm:flex-row gap-4"
+                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4"
                 >
-                  <div className="flex-none">
-                    <div className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
-                      {grupa.userName?.split(" ").map(n => n[0]).slice(0,2).join("")}
+                  <div className="flex flex-row items-start gap-4">
+                    <div className="flex-none">
+                      <div className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
+                        {grupa.userName?.split(" ").map(n => n[0]).slice(0,2).join("")}
+                      </div>
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <div className="text-black font-MySerif font-semibold text-base">
+                            {grupa.userName}
+                          </div>
+                          <div className="text-sm text-black mt-1">
+                            {grupa.dataString}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <div className="text-[16px] font-bold text-black">
+                            {liczbaPolubienWyniku(grupa.wyniki[0].id)}
+                          </div>
+                          <PulubBtn wynikId={grupa.wyniki[0].id} />
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="text-black font-MySerif font-semibold text-base">
-                          {grupa.userName}
-                        </div>
-                        <div className="text-sm text-[#858383] mt-1">
-                          {grupa.dataString}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-sm text-[#858383]">
-                          {liczbaPolubienWyniku(grupa.wyniki[0].id)}
-                        </div>
-                        <PulubBtn wynikId={grupa.wyniki[0].id} />
-                      </div>
-                    </div>
-
-                    <div className="mt-3 space-y-2">
-                      {grupa.wyniki.map((wynik) => (
-                        <div
-                          key={wynik.id}
-                          className="flex items-center justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium truncate">
-                              {wynik.cwiczenie}
-                            </div>
-                          </div>
-
-                          <div className="ml-4 flex items-center gap-3">
-                            <div className="flex flex-col items-center px-2">
-                              <div className="text-lg sm:text-xl font-bold leading-none">
-                                {wynik.serie}
-                              </div>
-                              <div className="text-[11px] opacity-90">Serie</div>
-                            </div>
-
-                            <div className="flex flex-col items-center px-2">
-                              <div className="text-lg sm:text-xl font-bold leading-none">
-                                {wynik.powtorzenia}
-                              </div>
-                              <div className="text-[11px] opacity-90">Powtórzenia</div>
-                            </div>
-
-                            <div className="flex flex-col items-center px-2">
-                              <div className="text-lg sm:text-xl font-bold leading-none">
-                                {wynik.ciezar}kg
-                              </div>
-                              <div className="text-[11px] opacity-90">Ciężar</div>
-                            </div>
+                  <div className="space-y-2 w-full">
+                    {grupa.wyniki.map((wynik) => (
+                      <div
+                        key={wynik.id}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2 gap-2"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm sm:text-base font-medium whitespace-normal break-words text-center sm:text-left px-3 py-1">
+                            {wynik.cwiczenie}
                           </div>
                         </div>
-                      ))}
-                    </div>
+
+                        <div className="flex items-center justify-center sm:justify-end gap-3">
+                          <div className="flex flex-col items-center px-2">
+                            <div className="text-lg sm:text-xl font-bold leading-none">
+                              {wynik.serie}
+                            </div>
+                            <div className="text-[11px]">Serie</div>
+                          </div>
+
+                          <div className="flex flex-col items-center px-2">
+                            <div className="text-lg sm:text-xl font-bold leading-none">
+                              {wynik.powtorzenia}
+                            </div>
+                            <div className="text-[11px]">Powtórzenia</div>
+                          </div>
+
+                          <div className="flex flex-col items-center px-2">
+                            <div className="text-lg sm:text-xl font-bold leading-none">
+                              {wynik.ciezar}kg
+                            </div>
+                            <div className="text-[11px]">Ciężar</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </article>
               )
