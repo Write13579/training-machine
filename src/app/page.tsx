@@ -248,7 +248,7 @@ export default async function Home() {
                           <div className="text-[16px] font-bold text-black">
                             {liczbaPolubienWyniku(grupa.wyniki[0].id)}
                           </div>
-                          <PulubBtn wynikId={grupa.wyniki[0].id} />
+                {user &&          <PulubBtn wynikId={grupa.wyniki[0].id} />}
                         </div>
                       </div>
                     </div>
