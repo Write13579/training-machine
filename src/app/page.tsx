@@ -245,9 +245,9 @@ export default async function Home() {
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <div className="text-[16px] font-bold text-black">
+                          {user && <div className="text-[16px] font-bold text-black">
                             {liczbaPolubienWyniku(grupa.wyniki[0].id)}
-                          </div>
+                          </div>}
                 {user &&          <PulubBtn wynikId={grupa.wyniki[0].id} />}
                         </div>
                       </div>
