@@ -38,6 +38,10 @@ export async function zacznijObserwowac(ja: number, on: string) {
     return { error: 1, info: "Użytkownik nie znaleziony" };
   }
 
+  if (ja == goChceObserwowac.id) {
+    return { error: 1, info: "Nie możesz obserwować samego siebie narcyzie" };
+  }
+
   const existingRelation = await db.query.usersToUsers.findFirst({
     where: and(
       eq(usersToUsers.osobaObserwujacaId, ja),

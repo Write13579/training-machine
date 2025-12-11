@@ -7,7 +7,6 @@ import { db } from "@/lib/database";
 import { eq } from "drizzle-orm";
 import { usersToUsers, wyniki } from "@/lib/database/scheme";
 import { createStringFromDate } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import PulubBtn from "./PolubBtn";
 
 export default async function Home() {
@@ -225,15 +224,20 @@ export default async function Home() {
               (grupa) => (
                 <article
                   key={`${grupa.userId}-${grupa.dataString}`}
-                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4"
-                >
+                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4">
                   <div className="flex flex-row items-start gap-4">
                     <div className="flex-none">
-                      <div className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
-                        {grupa.userName?.split(" ").map(n => n[0]).slice(0,2).join("")}
+                      <div
+                        id={`${grupa.userId}-avatar`}
+                        className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
+                        {grupa.userName
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join("")}
                       </div>
                     </div>
-
+                    {/** username i data */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
                         <div>
@@ -244,12 +248,19 @@ export default async function Home() {
                             {grupa.dataString}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          {user && <div className="text-[16px] font-bold text-black">
-                            {liczbaPolubienWyniku(grupa.wyniki[0].id)}
-                          </div>}
-                {user &&          <PulubBtn wynikId={grupa.wyniki[0].id} />}
-                        </div>
+                        {/** polubienia */}
+                        {user && (
+                          <div className="flex items-center gap-1">
+                            <div className="text-[16px] font-bold text-black">
+                              {liczbaPolubienWyniku(grupa.wyniki[0].id)}
+                            </div>
+
+                            <PulubBtn
+                              wynikId={grupa.wyniki[0].id}
+                              mojeLajki={mojePolubienia}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -257,8 +268,7 @@ export default async function Home() {
                     {grupa.wyniki.map((wynik) => (
                       <div
                         key={wynik.id}
-                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2 gap-2"
-                      >
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2 gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="text-sm sm:text-base font-medium whitespace-normal break-words text-center sm:text-left px-3 py-1">
                             {wynik.cwiczenie}
@@ -295,7 +305,9 @@ export default async function Home() {
             )}
 
             {user && udostepnioneWynikiZnajomych.length === 0 && (
-              <div className="text-gray-500">Brak wyników do wyświetlenia. Zacznij obserwować znajomych!</div>
+              <div className="text-gray-500">
+                Brak wyników do wyświetlenia. Zacznij obserwować znajomych!
+              </div>
             )}
             {!user && ostatnie5Treningow.length === 0 && (
               <div className="text-gray-500">Brak udostępnionych treningów</div>

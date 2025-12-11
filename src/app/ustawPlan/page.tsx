@@ -84,11 +84,6 @@ export default async function UstawPlanPage() {
           listaWszystkichCwiczen={listaWszystkichCwiczen}
           listaPlanowUsera={listaPlanowUsera}
         />
-
-        <div>
-          UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
-          zaległe wyniki, bo po zmianie planu będzie to niemożliwe.
-        </div>
       </div>
     </div>
   );

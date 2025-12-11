@@ -159,7 +159,16 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       )}
-      {!activeInput && <AktywujPlanBtn fullPlanId={idPlanu} />}
+      {!activeInput && (
+        <div>
+          chuj dupa cipa pozdro ~Kajetan
+          <div>
+            UWAGA: jeśli modyfikujesz już aktywowany plan to musisz go ponownie
+            aktywować po zmianach
+          </div>
+          <AktywujPlanBtn fullPlanId={idPlanu} />
+        </div>
+      )}
     </div>
   );
 }

@@ -45,14 +45,21 @@ export const columns = (
   {
     accessorKey: "akcje",
     header: "Akcje",
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <DodajCwiczenieDoPlanu
-          row={row.original}
-          listaCwiczen={listaCwiczen}
-          nazwaFullPlanu={nazwaPlanu}
-        />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const filteredListaCwiczen = listaCwiczen.filter((cwiczenie) => {
+        return !row.original.ćwiczenia
+          .map((c) => c.nazwaCwiczenia)
+          .includes(cwiczenie.nazwa);
+      });
+      return (
+        <div className="flex items-center justify-center">
+          <DodajCwiczenieDoPlanu
+            row={row.original}
+            listaCwiczen={filteredListaCwiczen}
+            nazwaFullPlanu={nazwaPlanu}
+          />
+        </div>
+      );
+    },
   },
 ];
