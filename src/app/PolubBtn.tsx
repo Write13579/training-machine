@@ -25,7 +25,11 @@ export default function PulubBtn({ wynikId }: { wynikId: number }) {
           setNapis(reqest.lubi ? "" : "");
         }}>
         <span className="inline-flex items-center">
-          <Heart className={`${napis === "" ? "text-[#FF4D6D]" : "text-black"} w-8 h-8`} />
+          <Heart
+            className={`${
+              napis === "" ? "text-[#FF4D6D]" : "text-black"
+            } w-8 h-8`}
+          />
           <span className="ml-2">{napis}</span>
         </span>
       </Button>

@@ -49,6 +49,9 @@ export const plans = pgTable("plans", {
     .$onUpdate(() => new Date())
     .notNull(),
   activated: boolean("activated").default(true).notNull(),
+  fullPlanId: integer("fullPlanId")
+    .references(() => fullPlans.id)
+    .notNull(),
 });
 
 export type Plan = typeof plans.$inferSelect;
@@ -58,10 +61,23 @@ export type PlanWithExercise = Plan & {
   wyniki: Wynik[]; // ?
 };
 
+export const fullPlans = pgTable("fullPlans", {
+  id: serial("id").primaryKey(),
+  userId: integer("userId")
+    .references(() => users.id)
+    .notNull(),
+  nazwa: varchar("nazwa", { length: 256 }).notNull(),
+});
+
+export type FullPlan = typeof fullPlans.$inferSelect;
+
 export const wyniki = pgTable("wyniki", {
   id: serial("id").primaryKey(),
-  planId: integer("planId")
+  planId: integer("planId") //wyjebac potem
     .references(() => plans.id)
+    .notNull(),
+  fullPlanId: integer("fullPlanId")
+    .references(() => fullPlans.id)
     .notNull(),
   serie: integer("serie").notNull(),
   powtorzenia: integer("powtorzenia").notNull(),

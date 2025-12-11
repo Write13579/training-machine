@@ -10,26 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-import { dodajCwiczenieDoDnia } from "./actions";
+import { dodajCwiczenieDoDniaIPlanu } from "./actions";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Plus, BicepsFlexed } from "lucide-react";
@@ -38,9 +24,15 @@ import { DzienTreningowy } from "./columns";
 export default function DodajCwiczenieDoPlanu({
   row,
   listaCwiczen,
+  nazwaFullPlanu,
 }: {
   row: DzienTreningowy;
-  listaCwiczen: { id: number; nazwa: string; opis: string }[];
+  listaCwiczen: {
+    id: number;
+    nazwa: string;
+    opis: string;
+  }[];
+  nazwaFullPlanu: string;
 }) {
   const formSchema = z.object({
     cwiczenie: z.string(),
@@ -56,7 +48,11 @@ export default function DodajCwiczenieDoPlanu({
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const errors = await dodajCwiczenieDoDnia(row.dzień, values.cwiczenie);
+    const errors = await dodajCwiczenieDoDniaIPlanu(
+      row.dzień,
+      values.cwiczenie,
+      nazwaFullPlanu
+    );
     if (errors.length > 0) {
       errors.forEach((error) => {
         toast(error.error);
@@ -71,7 +67,8 @@ export default function DodajCwiczenieDoPlanu({
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center
+          <Button
+            className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center
               transition-all
               cursor-pointer 
               duration-500 
@@ -83,7 +80,7 @@ export default function DodajCwiczenieDoPlanu({
               active:text-black
               active:translate-y-[-2px]
               active:duration-[200ms]">
-            <Plus className="w-6 h-6"/>
+            <Plus className="w-6 h-6" />
           </Button>
         </DialogTrigger>
         <DialogContent className="mx-auto mtd-10 min-w-[340px] w-[44%] rounded-[20px] bg-white p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5 ">
@@ -118,13 +115,15 @@ export default function DodajCwiczenieDoPlanu({
                             type="button"
                             key={index}
                             onClick={() => field.onChange(cwiczenie.nazwa)}
-                            className={`w-full flex flex-col p-3 rounded-lg transition-colors text-left ${selected
+                            className={`w-full flex flex-col p-3 rounded-lg transition-colors text-left ${
+                              selected
                                 ? "bg-[#FF4D6D] text-white"
                                 : "hover:bg-[#FFCCD5] bg-transparent text-black"
-                              }`}
-                          >
+                            }`}>
                             <div className="w-full">
-                              <div className="font-medium">{cwiczenie.nazwa}</div>
+                              <div className="font-medium">
+                                {cwiczenie.nazwa}
+                              </div>
                               <div className="text-[12px] text-black mt-1">
                                 {cwiczenie.opis}
                               </div>
@@ -157,11 +156,12 @@ export default function DodajCwiczenieDoPlanu({
               active:bg-white
               active:text-black
               active:translate-y-[-2px]
-              active:duration-[200ms]"
-                  >Cancel
+              active:duration-[200ms]">
+                    Cancel
                   </Button>
                 </DialogClose>
-                <Button type="submit"
+                <Button
+                  type="submit"
                   className="
                 w-full
               py-[17px]
@@ -180,7 +180,8 @@ export default function DodajCwiczenieDoPlanu({
               active:text-black
               active:translate-y-[-2px]
               active:duration-[200ms]
-              ">Dodaj
+              ">
+                  Dodaj
                 </Button>
               </DialogFooter>
             </form>
