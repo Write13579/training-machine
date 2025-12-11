@@ -127,3 +127,26 @@ export async function usunCwiczenieZDnia(
       )
     );
 }
+
+export async function aktywujPlan(fullPlanId: number) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("wypad");
+  }
+
+  if (!fullPlanId) {
+    return [{ error: "Nie wybrano planu do aktywacji" }];
+  }
+
+  await db
+    .update(plans)
+    .set({ activated: false })
+    .where(and(eq(plans.userId, user.id), eq(plans.activated, true)));
+
+  await db
+    .update(plans)
+    .set({ activated: true })
+    .where(and(eq(plans.userId, user.id), eq(plans.fullPlanId, fullPlanId)));
+
+  return [];
+}

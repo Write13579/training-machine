@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AktywujPlanBtn from "./AktywujPlanBtn";
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
@@ -48,6 +49,19 @@ export function DataTable<TData, TValue>({
     TData,
     TValue
   >[];
+
+  const [idPlanu, setIdPlanu] = useState<number | null>(null);
+
+  useEffect(() => {
+    const znalezionyPlan = listaPlanowUsera.find(
+      (plan) => plan.nazwa == namePlan
+    );
+    if (znalezionyPlan) {
+      setIdPlanu(znalezionyPlan.id);
+    } else {
+      setIdPlanu(null);
+    }
+  }, [namePlan]);
 
   const table = useReactTable({
     data,
@@ -145,6 +159,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       )}
+      {!activeInput && <AktywujPlanBtn fullPlanId={idPlanu} />}
     </div>
   );
 }

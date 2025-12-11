@@ -48,7 +48,7 @@ export const plans = pgTable("plans", {
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
-  activated: boolean("activated").default(true).notNull(),
+  activated: boolean("activated").default(false).notNull(),
   fullPlanId: integer("fullPlanId")
     .references(() => fullPlans.id)
     .notNull(),
@@ -76,9 +76,9 @@ export const wyniki = pgTable("wyniki", {
   planId: integer("planId") //wyjebac potem
     .references(() => plans.id)
     .notNull(),
-  fullPlanId: integer("fullPlanId")
-    .references(() => fullPlans.id)
-    .notNull(),
+  // fullPlanId: integer("fullPlanId")
+  //   .references(() => fullPlans.id)
+  //   .notNull(),                                  chyba niepotrzebne
   serie: integer("serie").notNull(),
   powtorzenia: integer("powtorzenia").notNull(),
   ciezar: integer("ciezar").notNull(),

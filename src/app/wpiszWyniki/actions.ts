@@ -4,7 +4,6 @@ import { db } from "@/lib/database";
 import { wyniki } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 import { getMe } from "../authutils";
-import { revalidatePath } from "next/cache";
 
 export async function submitWynik(
   idPlanu: number, // tu jest exerciseId zapisane

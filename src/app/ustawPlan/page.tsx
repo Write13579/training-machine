@@ -5,7 +5,6 @@ import { and, eq } from "drizzle-orm";
 import { fullPlans, plans } from "@/lib/database/scheme";
 import { CircleStar } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 export default async function UstawPlanPage() {
   const user = await getMe();
@@ -15,7 +14,9 @@ export default async function UstawPlanPage() {
 
   const data = await db.query.plans.findMany({
     with: { exercise: true },
-    where: and(eq(plans.userId, user.id), eq(plans.activated, true)),
+    where: and(
+      eq(plans.userId, user.id) //eq(plans.activated, true)
+    ),
   });
 
   const listaWszystkichCwiczen = await db.query.exercises.findMany();
@@ -83,7 +84,7 @@ export default async function UstawPlanPage() {
           listaWszystkichCwiczen={listaWszystkichCwiczen}
           listaPlanowUsera={listaPlanowUsera}
         />
-        <Button className="bg-red-500">AKTYWUJ</Button>
+
         <div>
           UWAGA: przed zmianą tego planu upewnij się, że wpisałeś wszystkie
           zaległe wyniki, bo po zmianie planu będzie to niemożliwe.
