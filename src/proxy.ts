@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { getMe } from "./app/authutils";
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   //podstrony gdzie musisz byc zalogowany, żeby wejść
   const AUTH_PAGES = [
     { url: "/admin", admin: true },
     { url: "/wpiszWyniki", admin: false },
     { url: "/ustawPlan", admin: false },
+    { url: "/profile", admin: false },
   ];
 
   //podstrony widoczne TYLKO dla niezalogowanych
