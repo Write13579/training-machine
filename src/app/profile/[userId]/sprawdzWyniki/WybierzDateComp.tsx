@@ -16,7 +16,7 @@ import { ChevronDownIcon } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { przestanObserwowac, share } from "../actions";
+import { share } from "../actions";
 import { toast } from "sonner";
 
 export default function WybierzDateComp({
@@ -37,7 +37,9 @@ export default function WybierzDateComp({
       exerciseId: number;
       addedAt: Date;
       updatedAt: Date;
-      activated: boolean;
+      activePlan: boolean;
+      addedToPlan: boolean;
+      fullPlanId: number;
       exercise: {
         id: number;
         nazwa: string;
