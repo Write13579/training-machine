@@ -16,7 +16,7 @@ export default async function UstawPlanPage() {
     with: { exercise: true },
     where: and(
       eq(plans.userId, user.id),
-      eq(plans.addedToPlan, true) //, eq(plans.activated, true)
+      eq(plans.addedToPlan, true) //, eq(plans.addedToPlan, true)
     ),
   });
 

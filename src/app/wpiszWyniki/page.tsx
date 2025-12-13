@@ -16,7 +16,7 @@ export default async function WpiszWynikiPage() {
   // stworzyc baze danych na wyniki i ?przekazac do wpisz?
 
   const rawData = await db.query.plans.findMany({
-    where: and(eq(plans.userId, user.id), eq(plans.activated, true)), //to activated z dystansem narazie, bo przeszlosc bedzie niemozliwa do aktualizacji
+    where: and(eq(plans.userId, user.id), eq(plans.activePlan, true)), //to activated z dystansem narazie, bo przeszlosc bedzie niemozliwa do aktualizacji
     with: {
       exercise: true,
       wyniki: true,
@@ -57,8 +57,7 @@ export default async function WpiszWynikiPage() {
       </div>
       <Link
         href="/"
-        className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block"
-      >
+        className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block">
         <span className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
           Powrót
         </span>
@@ -66,21 +65,22 @@ export default async function WpiszWynikiPage() {
       <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="flex flex-col mb-6 items-center">
           <CircleStar
-          className="w-12 h-12 mb-4 mx-auto"
+            className="w-12 h-12 mb-4 mx-auto"
             stroke="url(#loginGradient)"
             strokeWidth={1.8}
             aria-hidden="true"
-             />
-          <h1 className="text-black text-2xl font-bold ">Ustaw plan treningowy</h1>
+          />
+          <h1 className="text-black text-2xl font-bold ">
+            Ustaw plan treningowy
+          </h1>
           <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
             Wybierz ćwiczenia i przypisz do dni tygodnia
           </div>
-      <div className="mt-8">
-        <WpiszComp data={rawData} />
-      </div>
+          <div className="mt-8">
+            <WpiszComp data={rawData} />
+          </div>
         </div>
       </div>
     </div>
-    
   );
 }
