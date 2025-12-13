@@ -5,7 +5,7 @@ import DeleteExComp from "./DeleteExComp";
 import Link from "next/link";
 import { FolderCode, User } from "lucide-react";
 import DeleteUserComp from "./DeleteUserComp";
-import { exercises } from "@/lib/database/scheme";
+import { exercises, users } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
 
 export default async function AdminPage() {
@@ -16,6 +16,7 @@ export default async function AdminPage() {
   });
 
   const allUsers = await db.query.users.findMany({
+    where: eq(users.deleted, false),
     columns: {
       id: true,
       name: true,

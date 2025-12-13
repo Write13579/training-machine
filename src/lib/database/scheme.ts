@@ -21,6 +21,7 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 256 }).unique().notNull(),
   admin: boolean("admin").default(false).notNull(),
   password: varchar("password", { length: 256 }).notNull(),
+  deleted: boolean("deleted").default(false).notNull(),
 });
 
 export type User = typeof users.$inferSelect;

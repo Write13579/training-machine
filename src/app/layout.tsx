@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import AuthProvider from "@/lib/auth";
 import Link from "next/link";
 import { getMe } from "./authutils";
-import { User } from "lucide-react";
+import { House, User } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,9 +55,9 @@ export default async function RootLayout({
           <nav
             id="topNavbar"
             className=" w-full bg-gray-300 p-4 items-center justify-between flex mb-4">
-            {/* <MenuBar /> */}
+            <div>{/**pusty div zeby home sie ladnie ustawil xd */}</div>
             <h1 id="title" className="text-xl font-semibold animate-Shake">
-              <Link href="/">pulpit</Link>
+              <Link href="/">HOME</Link>
             </h1>
             {/* <ProfileBar/> */}
             {user && (
