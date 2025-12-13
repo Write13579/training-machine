@@ -2,7 +2,7 @@ import { db } from "@/lib/database";
 import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
 import { and, eq } from "drizzle-orm";
-import { fullPlans, plans } from "@/lib/database/scheme";
+import { exercises, fullPlans, plans } from "@/lib/database/scheme";
 import { CircleStar } from "lucide-react";
 import Link from "next/link";
 
@@ -15,11 +15,15 @@ export default async function UstawPlanPage() {
   const data = await db.query.plans.findMany({
     with: { exercise: true },
     where: and(
-      eq(plans.userId, user.id) //eq(plans.activated, true)
+      eq(plans.userId, user.id),
+      eq(plans.addedToPlan, true) //, eq(plans.activated, true)
     ),
   });
 
-  const listaWszystkichCwiczen = await db.query.exercises.findMany();
+  const listaWszystkichCwiczen = await db.query.exercises.findMany({
+    where: eq(exercises.deleted, false),
+    with: { plans: true },
+  });
 
   const listaPlanowUsera = await db.query.fullPlans.findMany({
     where: eq(fullPlans.userId, user.id),
@@ -52,8 +56,6 @@ export default async function UstawPlanPage() {
     dzień: day,
     ćwiczenia: list,
   }));
-
-  console.log(parsedData);
 
   return (
     <div>

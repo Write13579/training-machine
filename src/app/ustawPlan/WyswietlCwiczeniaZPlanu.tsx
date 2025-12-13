@@ -29,8 +29,6 @@ export default function WyswietlCwiczeniaZPlanu({
     ),
   };
 
-  console.log(filteredRow);
-
   return (
     <Popover>
       <PopoverTrigger asChild>

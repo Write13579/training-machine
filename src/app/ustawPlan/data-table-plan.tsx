@@ -30,7 +30,22 @@ import AktywujPlanBtn from "./AktywujPlanBtn";
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
-  listaWszystkichCwiczen: { id: number; nazwa: string; opis: string }[];
+  listaWszystkichCwiczen: {
+    id: number;
+    nazwa: string;
+    opis: string;
+    deleted: boolean;
+    plans: {
+      id: number;
+      userId: number;
+      dzienTygodnia: number;
+      exerciseId: number;
+      addedAt: Date;
+      updatedAt: Date;
+      activePlan: boolean;
+      fullPlanId: number;
+    }[];
+  }[];
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[];
 }
 
@@ -45,10 +60,11 @@ export function DataTable<TData, TValue>({
   const [switchBeetwenSelectAndInput, setSwitchBeetwenSelectAndInput] =
     useState<boolean>(true);
 
-  const cols = columns(listaWszystkichCwiczen, namePlan) as ColumnDef<
-    TData,
-    TValue
-  >[];
+  const cols = columns(
+    listaWszystkichCwiczen,
+    namePlan,
+    listaPlanowUsera
+  ) as ColumnDef<TData, TValue>[];
 
   const [idPlanu, setIdPlanu] = useState<number | null>(null);
 

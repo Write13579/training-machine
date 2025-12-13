@@ -115,15 +115,19 @@ export async function usunCwiczenieZDnia(
     where: and(eq(fullPlans.userId, user.id), eq(fullPlans.nazwa, nazwaPlanu)),
   });
 
+  if (!znajdzFullPlan) {
+    throw new Error("Plan nie istnieje");
+  }
+
   await db
     .update(plans)
-    .set({ activated: false })
+    .set({ addedToPlan: false })
     .where(
       and(
         eq(plans.dzienTygodnia, dzien),
         eq(plans.userId, user.id),
         eq(plans.exerciseId, cwiczenie.id),
-        eq(plans.fullPlanId, znajdzFullPlan!.id)
+        eq(plans.fullPlanId, znajdzFullPlan.id)
       )
     );
 }
@@ -140,13 +144,19 @@ export async function aktywujPlan(fullPlanId: number) {
 
   await db
     .update(plans)
-    .set({ activated: false })
-    .where(and(eq(plans.userId, user.id), eq(plans.activated, true)));
+    .set({ activePlan: false })
+    .where(and(eq(plans.userId, user.id), eq(plans.activePlan, true)));
 
   await db
     .update(plans)
-    .set({ activated: true })
-    .where(and(eq(plans.userId, user.id), eq(plans.fullPlanId, fullPlanId)));
+    .set({ activePlan: true })
+    .where(
+      and(
+        eq(plans.userId, user.id),
+        eq(plans.fullPlanId, fullPlanId),
+        eq(plans.addedToPlan, true)
+      )
+    );
 
   return [];
 }

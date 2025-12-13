@@ -17,8 +17,20 @@ export const columns = (
     id: number;
     nazwa: string;
     opis: string;
+    deleted: boolean;
+    plans: {
+      id: number;
+      userId: number;
+      dzienTygodnia: number;
+      exerciseId: number;
+      addedAt: Date;
+      updatedAt: Date;
+      activePlan: boolean;
+      fullPlanId: number;
+    }[];
   }[],
-  nazwaPlanu: string
+  nazwaPlanu: string,
+  listaPlanowUsera: { id: number; userId: number; nazwa: string }[]
 ): ColumnDef<DzienTreningowy>[] => [
   {
     accessorKey: "dzień",
@@ -28,8 +40,15 @@ export const columns = (
   {
     accessorKey: "ćwiczenia",
     header: "Ćwiczenia",
-    cell: ({ row }) =>
-      row.original.ćwiczenia.length !== 0 ? (
+    cell: ({ row }) => {
+      const wyswietlaneCwiczenia = {
+        ...row,
+        ćwiczenia: row.original.ćwiczenia.filter(
+          (cwiczenie) => cwiczenie.nazwaPlanu === nazwaPlanu
+        ),
+      };
+
+      return wyswietlaneCwiczenia.ćwiczenia.length !== 0 ? (
         <div>
           <WyswietlCwiczeniaZPlanu
             row={row.original}
@@ -40,17 +59,27 @@ export const columns = (
         <Button className="inline-flex items-center justify-center w-full h-full min-w-0">
           rest day
         </Button>
-      ),
+      );
+    },
   },
   {
     accessorKey: "akcje",
     header: "Akcje",
     cell: ({ row }) => {
       const filteredListaCwiczen = listaCwiczen.filter((cwiczenie) => {
-        return !row.original.ćwiczenia
-          .map((c) => c.nazwaCwiczenia)
-          .includes(cwiczenie.nazwa);
+        const cwiczeniaDlaWybranegoPlanu = row.original.ćwiczenia.filter(
+          (c) => c.nazwaPlanu === nazwaPlanu //tu musi być po id ale powiedzmy ze dziala
+        );
+
+        const cwiczeniaNazwy = cwiczeniaDlaWybranegoPlanu.map(
+          (c) => c.nazwaCwiczenia
+        );
+
+        const nieMaCwiczenia = !cwiczeniaNazwy.includes(cwiczenie.nazwa);
+
+        return nieMaCwiczenia;
       });
+
       return (
         <div className="flex items-center justify-center">
           <DodajCwiczenieDoPlanu

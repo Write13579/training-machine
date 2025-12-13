@@ -29,6 +29,7 @@ export const exercises = pgTable("exercises", {
   id: serial("id").primaryKey(),
   nazwa: varchar("nazwa", { length: 256 }).unique().notNull(),
   opis: varchar("opis", { length: 700 }).notNull(),
+  deleted: boolean("deleted").default(false).notNull(),
 });
 
 export type Exercise = typeof exercises.$inferSelect;
@@ -48,7 +49,8 @@ export const plans = pgTable("plans", {
     .defaultNow()
     .$onUpdate(() => new Date())
     .notNull(),
-  activated: boolean("activated").default(false).notNull(),
+  activePlan: boolean("activePlan").default(false).notNull(),
+  addedToPlan: boolean("addedToPlan").default(true).notNull(),
   fullPlanId: integer("fullPlanId")
     .references(() => fullPlans.id)
     .notNull(),
