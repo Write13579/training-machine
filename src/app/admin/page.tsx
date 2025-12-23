@@ -45,7 +45,7 @@ export default async function AdminPage() {
           <CreateExComp />
         </div>
 
-        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full">
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
           <div className="flex flex-col items-center mb-6 mt-10">
             <FolderCode
               className="w-12 h-12 mb-4"
@@ -64,7 +64,7 @@ export default async function AdminPage() {
             {allExercises.map((ex) => (
               <div
                 key={ex.id}
-                className="flex items-center justify-between py-1">
+                className="flex items-center justify-between py-1 min-w-0">
                 <div
                   id="cwiczenie"
                   className="text-black truncate text-1xl md:text-1xl font-bold">
@@ -112,25 +112,7 @@ export default async function AdminPage() {
         <Link href="/" className="block w-full">
           <button
             type="button"
-            className="
-              w-full
-              py-[8.75px]
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-[#FF4D6D]
-              uppercase
-              text-[15px]
-              text-black
-              font-bold
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-            ">
+            className=" w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
             Powrót
           </button>
         </Link>

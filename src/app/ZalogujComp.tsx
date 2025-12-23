@@ -57,8 +57,7 @@ export default function ZalogujPage() {
   return (
     <div
       id="obramowowka tego gownoforma"
-      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
-                 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+      className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 m-6">
           <FormField
@@ -89,16 +88,7 @@ export default function ZalogujPage() {
                       {...field}
                       placeholder="Wpisz login"
                       aria-label="login"
-                      className="
-                        w-full
-                        bg-transparent
-                        border-0
-                        outline-none
-                        focus:outline-none
-                        focus:ring-0
-                        transition-none
-                        placeholder-gray-500
-                        py-2"
+                      className=" w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
                     />
                   </FormControl>
 
@@ -127,18 +117,7 @@ export default function ZalogujPage() {
                       type="password"
                       placeholder="Wpisz hasło"
                       aria-label="haslo"
-                      className="
-                        w-full
-                        bg-transparent
-                        border-0
-                        outline-none
-                        focus:outline-none
-                        focus:ring-0
-                        transition-none
-                        placeholder-gray-500
-                        py-2
-                      "
-                    />
+                      className=" w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"/>
                   </FormControl>
 
                   <div
@@ -158,7 +137,7 @@ export default function ZalogujPage() {
             control={form.control}
             name="zapamietajHaslo"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+              <FormItem className="flex flex-row items-center space-x-1 space-y-0 text-black">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -177,25 +156,7 @@ export default function ZalogujPage() {
             <Button
               type="submit"
               loading={form.formState.isSubmitting}
-              className="
-                w-full
-              py-[17px]
-              my-4
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+              className="w-full py-[17px] my-4 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
               Zaloguj
             </Button>
           </div>
@@ -203,27 +164,7 @@ export default function ZalogujPage() {
             <Link href="/rejestracja">
               <button
                 type="button"
-                className="
-                  w-full 
-                  pt-[8.75px] 
-                  mt-4 
-                  rounded-full 
-                  cursor-pointer 
-                  border-0 
-                  bg-[#ffffff] 
-                  uppercase 
-                  text-[15px]
-                  text-black 
-                  transition-y 
-                  duration-500 
-                  ease-in-out 
-                  hover:tracking-[1px] 
-                  hover:text-black 
-                  active:tracking-[3px] 
-                  active:bg-white 
-                  active:text-black 
-                  active:translate-y-[-2px] 
-                  active:duration-[300ms] ">
+                className="w-full pt-[8.75px] rounded-full cursor-pointer border-0 bg-[#ffffff] uppercase text-[15px]text-black transition-y duration-500 ease-in-out hover:tracking-[1px] hover:text-black active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[300ms] ">
                 Rejestracja
               </button>
             </Link>

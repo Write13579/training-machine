@@ -107,8 +107,7 @@ export default async function Home() {
       )}
       {user && (
         <div
-          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
-                 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
               className="w-12 h-12 mb-10"
@@ -131,28 +130,18 @@ export default async function Home() {
             Stwórz swój plan treningowy i śledź postępy!
           </div>
 
+          <Link href={`/profile/${user.id}`}>
+            <button
+              type="button"
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
+              Profil treningowy
+            </button>
+          </Link>
+
           <Link href="/ustawPlan">
             <button
               type="button"
-              className="
-                w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
               Stwórz trening
             </button>
           </Link>
@@ -160,25 +149,7 @@ export default async function Home() {
           <Link href="/wpiszWyniki">
             <button
               type="button"
-              className="
-                w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
               Wpisz wyniki treningu
             </button>
           </Link>
@@ -189,24 +160,7 @@ export default async function Home() {
             <Link href="/admin">
               <button
                 type="button"
-                className="w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-[#FF4D6D]
-              uppercase
-              text-[15px]
-              text-black
-              font-bold
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]">
+                className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
                 Panel administratora
               </button>
             </Link>
@@ -250,7 +204,7 @@ export default async function Home() {
                         </div>
                         {/** polubienia */}
                         {user && (
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center">
                             <div className="text-[16px] font-bold text-black">
                               {liczbaPolubienWyniku(grupa.wyniki[0].id)}
                             </div>
@@ -268,7 +222,7 @@ export default async function Home() {
                     {grupa.wyniki.map((wynik) => (
                       <div
                         key={wynik.id}
-                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2 gap-2">
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 ">
                         <div className="flex-1 min-w-0">
                           <div className="text-sm sm:text-base font-medium whitespace-normal break-words text-center sm:text-left px-3 py-1">
                             {wynik.cwiczenie}
@@ -305,12 +259,12 @@ export default async function Home() {
             )}
 
             {user && udostepnioneWynikiZnajomych.length === 0 && (
-              <div className="text-gray-500">
+              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5">
                 Brak wyników do wyświetlenia. Zacznij obserwować znajomych!
               </div>
             )}
             {!user && ostatnie5Treningow.length === 0 && (
-              <div className="text-gray-500">Brak udostępnionych treningów</div>
+              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5"/>
             )}
           </div>
         </div>
