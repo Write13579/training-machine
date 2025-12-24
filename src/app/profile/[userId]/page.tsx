@@ -62,8 +62,8 @@ export default async function ProfilePage({
               </Link>
             </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-      <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
-        <div className="flex flex-col items-center mb-6 mt-5">
+      <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col items-center min-h-[360px] w-full text-center">
+        <div className="flex flex-col items-center mb-2 mt-5">
         <Dumbbell
           className="w-12 h-12 mb-4"
           stroke="url(#loginGradient)"
@@ -73,21 +73,29 @@ export default async function ProfilePage({
         <div className="text-black text-2xl md:text-3xl font-bold">
           Profil
         </div>
-        <div className="font-MySerif mt-5 mb-10 text-[12px] text-[#858383] font-bold">
-          Coś tu można napisać o profilu
-        </div>
       </div>
-      <div className="text-[#FF4D6D] inline-block text-4xl md:text-4xl font-bold leading-tight">{user.name}</div>
-      <div className="text-[#C9184A] inline-block text-4xl md:text-4xl font-bold leading-tight">{user.login}</div>
-
+      
+      <div className="text-[#FF4D6D] text-2xl md:text-2xl font-bold leading-tight">{user.name}</div>
+      <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          Imię i nazwisko
+        </div>
+      <div className="text-[#C9184A] text-2xl md:text-2xl font-bold leading-tight">{user.login}</div>
+      <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          Pseudonim
+        </div>
+        <div className="bg-[#FF4D6D] rounded-3xl p-1 flex items-center justify-center border-[#FF4D6D] min-w-max px-4">
+          <div className="text-white text-2xl md:text-2xl font-bold leading-tight">{moiObserwatorzy.length}</div>
+        </div>
+        <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          Liczba obserwujących
+        </div>
       <div id="znajdz wynik treningu po dacie"
-      className=" w-full py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
+      className=" w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
         <Link href={`/profile/${userId}/sprawdzWyniki`}>
           Sprawdz {userId == ja.id && "swoje"} wyniki{" "}
           {userId != ja.id && "użytkownika"}
         </Link>
       </div>
-      <div>liczba obserwatorów: {moiObserwatorzy.length}</div>
       {moiObserwatorzy.length > 0 && (
         <div id="kto mnie obserwuje">
           <div>obserwują mnie:</div>
@@ -155,13 +163,28 @@ export default async function ProfilePage({
         <div className="text-black text-2xl md:text-3xl font-bold">
           Wyszukaj
         </div>
-        <div className="font-MySerif mt-5 mb-10 text-[12px] text-[#858383] font-bold">
+        <div className="font-MySerif mt-5 mb-0 text-[12px] text-[#858383] font-bold">
           Dodaj nowych znajomych
         </div>
       </div>
       {userId == ja.id && (
         <div id="dodajZnajomego w sensie ze obserwuj wiesz jak jest byku eszkere">
           <DodajZnajomegoComp ja={userId} />
+        </div>
+      )}
+      {moiObserwatorzy.length > 0 && (
+        <div id="kto mnie obserwuje">
+          <div>obserwują mnie:</div>
+          <div>
+            {moiObserwatorzy.map((relacja) => (
+              <div
+                key={`${relacja.osobaObserwowanaId}-${relacja.osobaObserwujacaId}`}>
+                <Link href={`/profile/${relacja.obserwatorzy.id}`}>
+                  {relacja.obserwatorzy.name}
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
