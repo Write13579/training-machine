@@ -75,7 +75,7 @@ export default async function UstawPlanPage() {
             aria-hidden="true"
           />
           <h1 className="text-center text-black text-2xl font-bold">
-            Edytuj/utwórz plan treningowy
+            Modyfikuj plan treningowy
           </h1>
           <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
             wybierz plan do edycji

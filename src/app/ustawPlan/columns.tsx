@@ -35,12 +35,14 @@ export const columns = (
   {
     accessorKey: "dzień",
     header: "Dzień",
-    cell: ({ row }) => <div>{numerTygodniaNaString(row.original.dzień)}</div>,
+    cell: ({ row }) => <div className="w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+      {numerTygodniaNaString(row.original.dzień)}
+      </div>,
   },
   {
     accessorKey: "ćwiczenia",
     header: "Ćwiczenia",
-    cell: ({ row }) => {
+    cell: ({ row }) =>  {
       const wyswietlaneCwiczenia = {
         ...row,
         ćwiczenia: row.original.ćwiczenia.filter(
@@ -48,17 +50,21 @@ export const columns = (
         ),
       };
 
-      return wyswietlaneCwiczenia.ćwiczenia.length !== 0 ? (
-        <div>
-          <WyswietlCwiczeniaZPlanu
-            row={row.original}
-            nazwaFullPlanu={nazwaPlanu}
-          />
+      return (
+        <div className="w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+          {wyswietlaneCwiczenia.ćwiczenia.length !== 0 ? (
+            <WyswietlCwiczeniaZPlanu
+              row={row.original}
+              nazwaFullPlanu={nazwaPlanu}
+            />
+          ) : (
+            <div className="w-full">
+              <Button className="inline-flex items-center justify-center w-full h-full min-w-0">
+                rest day
+              </Button>
+            </div>
+          )}
         </div>
-      ) : (
-        <Button className="inline-flex items-center justify-center w-full h-full min-w-0">
-          rest day
-        </Button>
       );
     },
   },

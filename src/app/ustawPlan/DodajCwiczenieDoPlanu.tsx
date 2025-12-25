@@ -68,18 +68,7 @@ export default function DodajCwiczenieDoPlanu({
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center
-              transition-all
-              cursor-pointer 
-              duration-500 
-              ease-in-out
-              hover:rotate-90
-              hover:bg-[#FFCCD5]
-              active:tracking-[3px]
-              active:bg-[#FF758F]
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]">
+            className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center transition-all cursor-pointer  duration-500  ease-in-out hover:rotate-90 hover:bg-[#FFCCD5] active:tracking-[3px] active:bg-[#FF758F] active:text-black active:translate-y-[-2px] active:duration-[200ms]">
             <Plus className="w-6 h-6" />
           </Button>
         </DialogTrigger>
@@ -140,47 +129,13 @@ export default function DodajCwiczenieDoPlanu({
               <DialogFooter>
                 <DialogClose asChild>
                   <Button
-                    className="w-full
-              py-[8.75px]
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-[#FF4D6D]
-              uppercase
-              text-[15px]
-              text-black
-              font-bold
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]">
-                    Cancel
+                    className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+                    Wyjdź
                   </Button>
                 </DialogClose>
                 <Button
                   type="submit"
-                  className="
-                w-full
-              py-[17px]
-              my-4
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+                  className="w-full py-[17px] my-4 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
                   Dodaj
                 </Button>
               </DialogFooter>
