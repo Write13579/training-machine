@@ -134,14 +134,23 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
+                  const headerWidths = {
+                    'dzień': 'w-[45%]',
+                    'ćwiczenia': 'w-[38%]',
+                    'akcje': 'w-[17%]'
+                  };
+                  const headerWidth = headerWidths[header.column.id as keyof typeof headerWidths] || 'w-auto';
+                  
                   return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                    <TableHead key={header.id} className={headerWidth}>
+                      <div className="text-center font-MySerif text-sm text-black">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -155,14 +164,31 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell) => {
+                    const columnColors = {
+                      'dzień': 'text-[8px] font-MySerif leading-tight text-center bg-[#FF4D6D] rounded-[20px] py-[3px] px-2 md:py-[5px] md:px-3 items-center shadow-md shadow-black/40 ring-black/5',
+                      'ćwiczenia': 'text-[10px] font-MySerif leading-tight text-center bg-black rounded-[20px] py-[3px] px-2 md:py-[5px] md:px-3 items-center shadow-md shadow-black/40 ring-black/5 transition-all duration-500 ease-in-out cursor-pointer hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]',
+                      'akcje': 'text-sm font-MySerif flex justify-center items-center py-[4px] px-2 md:py-[6px] md:px-2'
+                    };
+                    const cellWidths = {
+                      'dzień': 'w-[45%]',
+                    'ćwiczenia': 'w-[38%]',
+                    'akcje': 'w-[17%]'
+                    };
+                    const bgColor = columnColors[cell.column.id as keyof typeof columnColors] || 'bg-[#FF4D6D]';
+                    const cellWidth = cellWidths[cell.column.id as keyof typeof cellWidths] || '';
+                    
+                    return (
+                      <TableCell key={cell.id} className={cellWidth}>
+                        <div className={`${bgColor}`}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                        </div>
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             ) : (

@@ -12,7 +12,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn("w-full caption-bottom", className)}
         {...props}
       />
     </div>
@@ -70,7 +70,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
 }
 
 function TableCell({ className, ...props }: React.ComponentProps<"td">) {
-  return <td className={cn("px-4 py-2 align-top", className)} {...props} />
+  return <td className={cn("", className)} {...props} />
 }
 
 function TableCaption({
