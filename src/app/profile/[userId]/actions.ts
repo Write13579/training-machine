@@ -2,8 +2,7 @@
 
 import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
-import { plans, users, usersToUsers, wyniki } from "@/lib/database/scheme";
-import { info } from "console";
+import { users, usersToUsers, wyniki } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 
 export async function przestanObserwowac(ja: number, on: number) {
