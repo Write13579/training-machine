@@ -164,7 +164,7 @@ export default function ZalogujPage() {
             <Link href="/rejestracja">
               <button
                 type="button"
-                className="w-full pt-[8.75px] rounded-full cursor-pointer border-0 bg-[#ffffff] uppercase text-[15px]text-black transition-y duration-500 ease-in-out hover:tracking-[1px] hover:text-black active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[300ms] ">
+                className="w-full pt-[8.75px] rounded-full cursor-pointer border-0 bg-[#ffffff] uppercase text-[15px] text-black transition-y duration-500 ease-in-out hover:tracking-[1px] hover:text-black active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[300ms] ">
                 Rejestracja
               </button>
             </Link>
