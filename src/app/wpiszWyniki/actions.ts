@@ -21,6 +21,10 @@ export async function submitWynik(
     return "Wyniki nie mogą być ujemne";
   }
 
+  if (!Number.isInteger(serie) || !Number.isInteger(powtorzenia)) {
+    return "Serie i Powtorzenia muszą być liczbą calkowitą";
+  }
+
   if (serie === 0 && (powtorzenia > 0 || ciezar > 0)) {
     return "Jak mogłeś zrobić zero serii i wpisać powtórzenia lub ciężar?";
   }
