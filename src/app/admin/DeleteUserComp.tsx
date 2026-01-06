@@ -39,7 +39,6 @@ export default function DeleteUserComp({ userId }: { userId: number }) {
         {/* Ikona przycisku */}
         <Button variant="outline">
           <Ban />
-          123
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
