@@ -107,7 +107,7 @@ export default async function Home() {
       )}
       {user && (
         <div
-          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
               className="w-12 h-12 mb-10"
@@ -168,7 +168,7 @@ export default async function Home() {
         </div>
       )}
       <section className="w-full px-4 flex justify-center">
-        <div className="w-[34%] min-w-[340px]">
+        <div className="w-[54%] min-w-[340px]">
           <h2 className="text-black font-bold items-center bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4 mt-10 mb-4">
             {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
           </h2>

@@ -62,7 +62,7 @@ export default async function ProfilePage({
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col items-center min-h-[360px] w-full text-center">
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col items-center min-h-[460px] w-full text-center">
           <div className="flex flex-col items-center mb-2 mt-5">
             <Dumbbell
               className="w-12 h-12 mb-4"
@@ -74,18 +74,19 @@ export default async function ProfilePage({
             <div className="text-black text-2xl md:text-3xl font-bold">
               Profil
             </div>
+            <div className="font-MySerif mt-5 mb-4 text-[12px] text-[#858383] font-bold"> Informacje o koncie</div>
           </div>
 
           <div className="text-[#FF4D6D] text-2xl md:text-2xl font-bold leading-tight">
             {user.name}
           </div>
-          <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
             Imię i nazwisko
           </div>
           <div className="text-[#C9184A] text-2xl md:text-2xl font-bold leading-tight">
             {user.login}
           </div>
-          <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
             Pseudonim
           </div>
           <div className="bg-[#FF4D6D] rounded-3xl p-1 flex items-center justify-center border-[#FF4D6D] min-w-max px-4">
@@ -93,7 +94,7 @@ export default async function ProfilePage({
               {moiObserwatorzy.length}
             </div>
           </div>
-          <div className="font-MySerif mt-0 mb-1 text-[12px] text-[#858383] font-bold">
+          <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
             Liczba obserwujących
           </div>
           <div
@@ -104,24 +105,9 @@ export default async function ProfilePage({
               {userId != ja.id && "użytkownika"}
             </Link>
           </div>
-          {moiObserwatorzy.length > 0 && (
-            <div id="kto mnie obserwuje">
-              <div>obserwują mnie:</div>
-              <div>
-                {moiObserwatorzy.map((relacja) => (
-                  <div
-                    key={`${relacja.osobaObserwowanaId}-${relacja.osobaObserwujacaId}`}>
-                    <Link href={`/profile/${relacja.obserwatorzy.id}`}>
-                      {relacja.obserwatorzy.name}
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
         <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
-          <div className="flex flex-col items-center mt-10">
+          <div className="flex flex-col items-center mt-5">
             <BadgeCheck
               className="w-12 h-12 mb-4"
               stroke="url(#loginGradient)"
@@ -167,7 +153,7 @@ export default async function ProfilePage({
         </div>
         {userId == ja.id && (
           <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
-            <div className="flex flex-col items-center mb-6 mt-5">
+            <div className="flex flex-col items-center mb-2 mt-5">
               <Clipboard
                 className="w-12 h-12 mb-4"
                 stroke="url(#loginGradient)"
@@ -189,12 +175,15 @@ export default async function ProfilePage({
 
             {userId == ja.id && moiObserwatorzy.length > 0 && (
               <div id="kto mnie obserwuje">
-                <div>obserwują mnie:</div>
-                <div>
+                <div className="font-MySerif mt-5 text-[12px] text-[#858383] font-bold text-center">Obserwują mnie</div>
+                <div className="overflow-y-auto max-h-[200px]">
                   {moiObserwatorzy.map((relacja) => (
                     <div
+                    className="flex items-center justify-between p-1"
+                    id="wrapper"
                       key={`${relacja.osobaObserwowanaId}-${relacja.osobaObserwujacaId}`}>
-                      <Link href={`/profile/${relacja.obserwatorzy.id}`}>
+                      <Link href={`/profile/${relacja.obserwatorzy.id}`}
+                      className="text-black truncate text-1xl md:text-1xl font-bold">
                         {relacja.obserwatorzy.name}
                       </Link>
                     </div>
