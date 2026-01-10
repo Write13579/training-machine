@@ -106,11 +106,10 @@ export default async function Home() {
         </div>
       )}
       {user && (
-        <div
-          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+        <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
-              className="w-12 h-12 mb-10"
+              className="w-12 h-12 mb-10 mt-5"
               stroke="url(#loginGradient)"
               strokeWidth={1.8}
               aria-hidden="true"

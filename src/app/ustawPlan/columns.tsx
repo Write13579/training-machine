@@ -35,7 +35,7 @@ export const columns = (
   {
     accessorKey: "dzień",
     header: "Dzień",
-    cell: ({ row }) => <div className="w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+    cell: ({ row }) => <div className="w-full text-center py-2 uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px]">
       {numerTygodniaNaString(row.original.dzień)}
       </div>,
   },
@@ -51,18 +51,14 @@ export const columns = (
       };
 
       return (
-        <div className="w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+        <div className="w-full text-center py-2 rounded-full cursor-pointer border-0 bg-black  text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] whitespace-nowrap overflow-hidden text-ellipsis">
           {wyswietlaneCwiczenia.ćwiczenia.length !== 0 ? (
             <WyswietlCwiczeniaZPlanu
               row={row.original}
               nazwaFullPlanu={nazwaPlanu}
             />
           ) : (
-            <div className="w-full">
-              <Button className="inline-flex items-center justify-center w-full h-full min-w-0">
-                rest day
-              </Button>
-            </div>
+            "rest day"
           )}
         </div>
       );

@@ -86,8 +86,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <Button
+    <div className="text-center">
+      <Button className="font-MySerif text-[12px] text-[#858383] font-bold"
         disabled={!activeInput}
         onClick={() => {
           setSwitchBeetwenSelectAndInput(!switchBeetwenSelectAndInput);
@@ -100,13 +100,15 @@ export function DataTable<TData, TValue>({
       {switchBeetwenSelectAndInput ? (
         <Select
           disabled={!activeInput}
-          onValueChange={(value) => setNamePlan(value)}>
-          <SelectTrigger className="w-[180px]">
+          onValueChange={(value) => setNamePlan(value)}
+          >
+          <SelectTrigger className=" w-[180px] mx-auto flex items-center justify-center gap-2 border-0 bg-[#FF4D6D] rounded-[14px] px-4 shadow-md shadow-black/40 ring-0 hover:shadow-lg transition-shadow duration-200">
             <SelectValue placeholder="wybierz" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="w-[min(95vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-0 ring-black/0 text-black">
             {listaPlanowUsera.map((plan) => (
-              <SelectItem key={plan.id} value={plan.nazwa}>
+              <SelectItem key={plan.id} value={plan.nazwa}
+              className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] text-black">
                 {plan.nazwa}
               </SelectItem>
             ))}
@@ -121,7 +123,7 @@ export function DataTable<TData, TValue>({
           }}
         />
       )}
-      <Button
+      <Button className="my-5 w-[180px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
         disabled={!namePlan}
         onClick={() => {
           setActiveInput(!activeInput);
@@ -135,9 +137,9 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   const headerWidths = {
-                    'dzień': 'w-[45%]',
-                    'ćwiczenia': 'w-[38%]',
-                    'akcje': 'w-[17%]'
+                    'dzień': 'flex-none w-[44%] min-w-[80px]',
+                    'ćwiczenia': 'flex-1',
+                    'akcje': 'flex-none w-[29%] min-w-[60px]'
                   };
                   const headerWidth = headerWidths[header.column.id as keyof typeof headerWidths] || 'w-auto';
                   
@@ -163,17 +165,20 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}>
+                  data-state={row.getIsSelected() && "selected"}
+                  className="align-center">
+                  <td colSpan={cols.length} className="py-1">
+                    <div className="bg-[#FF4D6D] rounded-[20px] m-2 p-4 flex flex-row items-center gap-2 shadow-md shadow-black/40 ring-1 ring-black/5">
                   {row.getVisibleCells().map((cell) => {
                     const columnColors = {
-                      'dzień': 'text-[8px] font-MySerif leading-tight text-center bg-[#FF4D6D] rounded-[20px] py-[3px] px-2 md:py-[5px] md:px-3 items-center shadow-md shadow-black/40 ring-black/5',
+                      'dzień': 'font-MySerif leading-tight text-center bg-[#FF4D6D] rounded-[20px] py-[3px] md:py-[5px] md:px-3 items-center shadow-md shadow-black/40 ring-black/5',
                       'ćwiczenia': 'text-[10px] font-MySerif leading-tight text-center bg-black rounded-[20px] py-[3px] px-2 md:py-[5px] md:px-3 items-center shadow-md shadow-black/40 ring-black/5 transition-all duration-500 ease-in-out cursor-pointer hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]',
-                      'akcje': 'text-sm font-MySerif flex justify-center items-center py-[4px] px-2 md:py-[6px] md:px-2'
+                      'akcje': 'text-sm font-MySerif flex justify-center items-center md:py-[6px]'
                     };
                     const cellWidths = {
-                      'dzień': 'w-[45%]',
-                    'ćwiczenia': 'w-[38%]',
-                    'akcje': 'w-[17%]'
+                    'dzień': 'flex-none w-[37%] min-w-[80px]',
+                    'ćwiczenia': 'flex-none w-[40%]',
+                    'akcje': 'flex-none w-[12%] min-w-[60px]'
                     };
                     const bgColor = columnColors[cell.column.id as keyof typeof columnColors] || 'bg-[#FF4D6D]';
                     const cellWidth = cellWidths[cell.column.id as keyof typeof cellWidths] || '';
@@ -189,6 +194,8 @@ export function DataTable<TData, TValue>({
                       </TableCell>
                     );
                   })}
+                    </div>
+                  </td>
                 </TableRow>
               ))
             ) : (

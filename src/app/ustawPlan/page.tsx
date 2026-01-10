@@ -67,7 +67,7 @@ export default async function UstawPlanPage() {
         </span>
       </Link>
       <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] py-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
-        <div className="flex flex-col items-center mb-6">
+        <div className="flex flex-col items-center">
           <CircleStar
             className="w-12 h-12 mb-4"
             stroke="url(#loginGradient)"
@@ -77,9 +77,6 @@ export default async function UstawPlanPage() {
           <h1 className="text-center text-black text-2xl font-bold">
             Modyfikuj plan treningowy
           </h1>
-          <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
-            wybierz plan do edycji
-          </div>
         </div>
         <DataTable
           data={parsedData}

@@ -37,7 +37,8 @@ export default function DeleteUserComp({ userId }: { userId: number }) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         {/* Ikona przycisku */}
-        <Button variant="outline">
+        <Button variant="outline"
+         className="cursor-pointer inline-flex items-center px-2 py-2 bg-black transition ease-in-out delay-75 hover:bg-[#FF4D6D] active:bg-[#C9184A] text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110">
           <Ban />
         </Button>
       </AlertDialogTrigger>
