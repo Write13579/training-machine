@@ -87,7 +87,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="text-center">
-      <Button className="font-MySerif text-[12px] text-[#858383] font-bold"
+      <Button className="my-5 w-[240px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
         disabled={!activeInput}
         onClick={() => {
           setSwitchBeetwenSelectAndInput(!switchBeetwenSelectAndInput);
@@ -115,13 +115,21 @@ export function DataTable<TData, TValue>({
           </SelectContent>
         </Select>
       ) : (
-        <Input
-          disabled={!activeInput}
-          value={namePlan}
-          onChange={(e) => {
-            setNamePlan(e.target.value);
-          }}
-        />
+        <div className="w-[75%] mx-auto">
+          <Input
+            disabled={!activeInput}
+            value={namePlan}
+            onChange={(e) => {
+              setNamePlan(e.target.value);
+            }}
+            placeholder="Wpisz nazwę planu"
+            className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+          />
+          <div
+            className="h-[2px] bg-black w-full mt-0"
+            aria-hidden="true"
+          />
+        </div>
       )}
       <Button className="my-5 w-[180px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
         disabled={!namePlan}
@@ -210,10 +218,9 @@ export function DataTable<TData, TValue>({
       )}
       {!activeInput && (
         <div>
-          chuj dupa cipa pozdro ~Kajetan
-          <div>
-            UWAGA: jeśli modyfikujesz już aktywowany plan to musisz go ponownie
-            aktywować po zmianach
+          <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold mb-2">
+            Jeżeli kolejny raz edytujesz ten sam plan,
+            kliknij poniżej przycisk do aktualizacji planu treningowego.
           </div>
           <AktywujPlanBtn fullPlanId={idPlanu} />
         </div>

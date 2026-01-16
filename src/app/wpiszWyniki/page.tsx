@@ -76,7 +76,7 @@ export default async function WpiszWynikiPage() {
           <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
             Wybierz ćwiczenia i przypisz do dni tygodnia
           </div>
-          <div className="mt-8">
+          <div className="mt-3">
             <WpiszComp data={rawData} />
           </div>
         </div>

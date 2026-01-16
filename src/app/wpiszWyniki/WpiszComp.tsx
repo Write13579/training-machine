@@ -39,8 +39,9 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
   }, [selectedDay, columns]);
 
   return (
-    <div>
-      <div id="select" className="flex justify-center w-full">
+    <div className="text-center">
+        <h2 className="text-[#C9184A] text-2xl md:text-2xl font-bold">{dataWybranegoDnia.toDateString()}</h2>
+      <div id="select" className="flex justify-center w-full mb-5">
         <Select
           value={selectedDay.toString()}
           onValueChange={(newVal) => setSelectedDay(Number(newVal))}>
@@ -62,7 +63,6 @@ export default function WpiszComp({ data }: { data: PlanWithExercise[] }) {
           </SelectContent>
         </Select>
       </div>
-      <h2>Wybrana data: {dataWybranegoDnia.toDateString()}</h2>
 
       <div>
         <DataTable columns={columns} data={chosenData} />

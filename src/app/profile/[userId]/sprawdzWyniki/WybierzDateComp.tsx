@@ -109,7 +109,8 @@ export default function WybierzDateComp({
 
   return (
     <div>
-      <div>
+      <div >
+        <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="flex text-xl justify-center align-center">
           Sprawdz wyniki z dnia
         </div>
@@ -197,6 +198,7 @@ export default function WybierzDateComp({
               </Button>
             </div>
           )}
+        </div>
         </div>
 
         <div className="mt-10">

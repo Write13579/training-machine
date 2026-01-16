@@ -63,89 +63,84 @@ export const columns: ColumnDef<PlanWithExercise>[] = [
 
       return (
         <div>
-          <div className="w-full min-w-0 bg-[#FF4D6D] rounded-[20px] p-4 md:p-6 flex flex-col gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
-            <div className="flex flex-col md:flex-row items-center gap-4 w-full min-w-0">
-              <div className="flex-none md:basis-[60%] basis-full min-w-0">
-                <div className="grid grid-rows-2 gap-2 items-center py-3 md:py-8 m-0 md:m-4 bg-[#FFB3C1] rounded-[14px] shadow-md shadow-black/40 ring-1 ring-black/5">
-                  <div className="flex items-center justify-center w-full">
-                    <span className="inline-flex items-center justify-center text-center text-white font-MySerif bg-black rounded-[14px] px-4 py-3 max-w-full break-words">
-                      {row.original.exercise.nazwa}
-                    </span>
+          <div className="w-full min-w-0 bg-[#FF4D6D] rounded-[20px] p-4 md:p-6 flex flex-col gap-4 shadow-md shadow-black/40 ring-1 ring-black/5 mb-5">
+            {/* Pierwszy wiersz: nazwa zadania */}
+            <div className="flex w-full">
+              <span className="inline-flex items-center justify-center text-center text-white font-MySerif bg-black rounded-[14px] px-4 py-3 w-full break-words">
+                {row.original.exercise.nazwa}
+              </span>
+            </div>
+
+            {/* Drugi wiersz: serie, powtórzenia, kg */}
+            <div className="bg-[#FFB3C1] rounded-[14px] p-4 shadow-md shadow-black/40 ring-1 ring-black/5">
+              {current.id === -1 ? (
+                <div className="grid grid-cols-3 gap-3 w-full">
+                  <div className="flex flex-col">
+                    <label className="text-[12px] text-black mb-2 font-semibold">serie:</label>
+                    <Input
+                      className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
+                      value={serie}
+                      type="number"
+                      onChange={(e) => setSerie(Number(e.target.value))}
+                    />
                   </div>
-                  <div className="flex items-center justify-center w-full px-2">
-                    {current.id === -1 ? (
-                      <ZapiszWynikBtn
-                        id={row.original.id}
-                        serie={serie}
-                        powtorzenia={powtorzenia}
-                        ciezar={ciezar}
-                        targetDate={targetDate}
-                      />
-                    ) : (
-                      <UsunZapisanyWynikBtn
-                        id={current.id}
-                      />
-                    )}
+
+                  <div className="flex flex-col">
+                    <label className="text-[12px] text-black mb-2 font-semibold">powtórzenia:</label>
+                    <Input
+                      className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
+                      value={powtorzenia}
+                      type="number"
+                      onChange={(e) => setPowtorzenia(Number(e.target.value))}
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label className="text-[12px] text-black mb-2 font-semibold">kg:</label>
+                    <Input
+                      className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
+                      value={ciezar}
+                      type="number"
+                      onChange={(e) => setCiezar(Number(e.target.value))}
+                    />
                   </div>
                 </div>
-              </div>
-
-              {/* right block: inputs — pozwól mu się łamać na małych ekranach */}
-              <div className="flex-1 min-w-0">
-                {current.id === -1 ? (
-                  <div className="grid grid-cols-1 gap-3 w-full">
-                    <div className="flex flex-col">
-                      <label className="text-[13px] text-black mb-1">serie:</label>
-                      <Input
-                        className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
-                        value={serie}
-                        type="number"
-                        onChange={(e) => setSerie(Number(e.target.value))}
-                      />
+              ) : (
+                <div className="text-black">
+                  <div className="font-medium text-sm mb-3">Wynik zapisany!</div>
+                  <div className="grid grid-cols-3 gap-3 text-sm">
+                    <div className="text-center">
+                      <div className="font-medium mb-1">Serie</div>
+                      <div className="font-semibold bg-white rounded p-2">{current.serie}</div>
                     </div>
-
-                    <div className="flex flex-col">
-                      <label className="text-[13px] text-black mb-1">powtórzenia:</label>
-                      <Input
-                        className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
-                        value={powtorzenia}
-                        type="number"
-                        onChange={(e) => setPowtorzenia(Number(e.target.value))}
-                      />
+                    <div className="text-center">
+                      <div className="font-medium mb-1">Powtórzenia</div>
+                      <div className="font-semibold bg-white rounded p-2">{current.powtorzenia}</div>
                     </div>
-
-                    <div className="flex flex-col">
-                      <label className="text-[13px] text-black mb-1">kg:</label>
-                      <Input
-                        className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
-                        value={ciezar}
-                        type="number"
-                        onChange={(e) => setCiezar(Number(e.target.value))}
-                      />
+                    <div className="text-center">
+                      <div className="font-medium mb-1">Ciężar</div>
+                      <div className="font-semibold bg-white rounded p-2">{current.ciezar}kg</div>
                     </div>
                   </div>
-                ) : (
-                  <div className="flex flex-col justify-center text-[13px]">
-                    <div className="text-black">
-                      <div className="font-medium text-sm mb-2">Wynik zapisany!</div>
-                      <div className="space-y-1 text-sm">
-                        <div>
-                          <span className="font-medium">Serie</span>{" "}
-                          <span className="font-semibold">{current.serie}</span>
-                        </div>
-                        <div>
-                          <span className="font-medium">Powtórzenia</span>{" "}
-                          <span className="font-semibold">{current.powtorzenia}</span>
-                        </div>
-                        <div>
-                          <span className="font-medium">Ciężar</span>{" "}
-                          <span className="font-semibold">{current.ciezar}kg</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
+            </div>
+
+            {/* Trzeci wiersz: przycisk zapisu/usunięcia */}
+            <div className="w-full flex justify-center">
+              {current.id === -1 ? (
+                <ZapiszWynikBtn
+                  id={row.original.id}
+                  serie={serie}
+                  powtorzenia={powtorzenia}
+                  ciezar={ciezar}
+                  targetDate={targetDate}
+                />
+              ) : (
+                <UsunZapisanyWynikBtn
+                  id={current.id}
+                />
+              )}
             </div>
           </div>
          </div>
