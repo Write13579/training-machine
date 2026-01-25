@@ -48,13 +48,6 @@ export default async function WpiszWynikiPage() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div>
-        wg selecta wyswietla sie wszystko z dnia z najnowsze unique exerciseId
-        (filter albo reduce) ; narazie chyba nie trzeba bo jest status
-        activated, gorzej bedzie jak plan sie zmieni i bedziesz chcial zmienic
-        plan z przeszlosci: zeby zmieniac przeszlosc trzeba dowalic sort wg
-        updatedAt + unique exerciseId
-      </div>
       <Link
         href="/"
         className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block">

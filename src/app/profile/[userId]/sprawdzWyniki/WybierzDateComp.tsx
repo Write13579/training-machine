@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronDownIcon, CircleStar } from "lucide-react";
+import { ChevronLeft, CircleStar } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
@@ -111,6 +111,15 @@ export default function WybierzDateComp({
     <div
       id="tlo"
       className="relative items-center justify-center min-h-[100vh] min-w-[320px]">
+        
+      <div className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block">
+          <Button
+            variant="outline"
+            onClick={() => router.back()}
+            className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+            Powrót
+          </Button>
+        </div>
       <div className="relative z-20 mx-auto mt-10 h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="text-center">
           <CircleStar

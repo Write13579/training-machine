@@ -3,9 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import AuthProvider from "@/lib/auth";
-import Link from "next/link";
 import { getMe } from "./authutils";
-import { House, User } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,22 +50,6 @@ export default async function RootLayout({
         </svg>
 
         <AuthProvider user={user}>
-          <nav
-            id="topNavbar"
-            className=" w-full bg-gray-300 p-4 items-center justify-between flex mb-4">
-            <div>{/**pusty div zeby home sie ladnie ustawil xd */}</div>
-            <h1 id="title" className="text-xl font-semibold animate-Shake">
-              <Link href="/">HOME</Link>
-            </h1>
-            {/* <ProfileBar/> */}
-            {user && (
-              <div>
-                <Link href={`/profile/${user.id}`}>
-                  <User />
-                </Link>
-              </div>
-            )}
-          </nav>
           <main>{children}</main> <Toaster />
         </AuthProvider>
       </body>

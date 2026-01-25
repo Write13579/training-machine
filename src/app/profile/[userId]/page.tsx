@@ -51,7 +51,7 @@ export default async function ProfilePage({
   //console.log(userId, ja.id); //ty ja nwm czemu userId to string a ja.id to number wg servera xddd
 
   return (
-    <div className="w-[84%] mx-auto max-w-[100%]">
+    <div className="w-[84%] mx-auto max-w-[100%] mt-10">
       <div className="mb-4 w-full block lg:hidden">
         <Link href="/" className="block w-full">
           <button
