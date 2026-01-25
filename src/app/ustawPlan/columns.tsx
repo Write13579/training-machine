@@ -30,23 +30,25 @@ export const columns = (
     }[];
   }[],
   nazwaPlanu: string,
-  listaPlanowUsera: { id: number; userId: number; nazwa: string }[]
+  listaPlanowUsera: { id: number; userId: number; nazwa: string }[],
 ): ColumnDef<DzienTreningowy>[] => [
   {
     accessorKey: "dzień",
     header: "Dzień",
-    cell: ({ row }) => <div className="w-full text-center py-2 text-[#FF4D6D] text-[15px]">
-      {numerTygodniaNaString(row.original.dzień)}
-      </div>,
+    cell: ({ row }) => (
+      <div className="w-full text-center py-2 text-[#FF4D6D] text-[15px]">
+        {numerTygodniaNaString(row.original.dzień)}
+      </div>
+    ),
   },
   {
     accessorKey: "ćwiczenia",
     header: "Ćwiczenia",
-    cell: ({ row }) =>  {
+    cell: ({ row }) => {
       const wyswietlaneCwiczenia = {
         ...row,
         ćwiczenia: row.original.ćwiczenia.filter(
-          (cwiczenie) => cwiczenie.nazwaPlanu === nazwaPlanu
+          (cwiczenie) => cwiczenie.nazwaPlanu === nazwaPlanu,
         ),
       };
 
@@ -70,11 +72,11 @@ export const columns = (
     cell: ({ row }) => {
       const filteredListaCwiczen = listaCwiczen.filter((cwiczenie) => {
         const cwiczeniaDlaWybranegoPlanu = row.original.ćwiczenia.filter(
-          (c) => c.nazwaPlanu === nazwaPlanu //tu musi być po id ale powiedzmy ze dziala
+          (c) => c.nazwaPlanu === nazwaPlanu, //tu musi być po id ale powiedzmy ze dziala
         );
 
         const cwiczeniaNazwy = cwiczeniaDlaWybranegoPlanu.map(
-          (c) => c.nazwaCwiczenia
+          (c) => c.nazwaCwiczenia,
         );
 
         const nieMaCwiczenia = !cwiczeniaNazwy.includes(cwiczenie.nazwa);
