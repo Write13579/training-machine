@@ -35,7 +35,7 @@ export const columns = (
   {
     accessorKey: "dzień",
     header: "Dzień",
-    cell: ({ row }) => <div className="w-full text-center py-2 uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px]">
+    cell: ({ row }) => <div className="w-full text-center py-2 text-[#FF4D6D] text-[15px]">
       {numerTygodniaNaString(row.original.dzień)}
       </div>,
   },
