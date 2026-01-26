@@ -29,7 +29,7 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="w-[84%] mx-auto max-w-[100%]">
+    <div className="w-[84%] mx-auto max-w-[100%] mt-10">
       <div className="mb-4 w-full block lg:hidden">
         <Link href="/" className="block w-full">
           <button
