@@ -60,7 +60,7 @@ export default async function Home() {
           ciezar: number;
         }>;
       }
-    >
+    >,
   );
 
   // 5 ostatnich treningów od kogokolwiek
@@ -75,24 +75,24 @@ export default async function Home() {
     : [];
 
   const kogoJaObserwuje = kogoJaObserwujeQuery.map(
-    (relacja) => relacja.osobaObserwowanaId
+    (relacja) => relacja.osobaObserwowanaId,
   );
 
   const udostepnioneWynikiZnajomych = user
     ? Object.values(udostepnioneWynikiWszystkie).filter((wynik) =>
-        kogoJaObserwuje.includes(wynik.userId)
+        kogoJaObserwuje.includes(wynik.userId),
       )
     : [];
 
   const polubieniaWszystkie = await db.query.polubienia.findMany();
 
   const mojePolubienia = await polubieniaWszystkie.filter(
-    (polubienie) => polubienie.osobaLubiacaId === user?.id
+    (polubienie) => polubienie.osobaLubiacaId === user?.id,
   );
 
   function liczbaPolubienWyniku(wynikId: number) {
     return polubieniaWszystkie.filter(
-      (polubienie) => polubienie.wynikId === wynikId
+      (polubienie) => polubienie.wynikId === wynikId,
     ).length;
   }
 
@@ -254,7 +254,7 @@ export default async function Home() {
                     ))}
                   </div>
                 </article>
-              )
+              ),
             )}
 
             {user && udostepnioneWynikiZnajomych.length === 0 && (
@@ -263,7 +263,7 @@ export default async function Home() {
               </div>
             )}
             {!user && ostatnie5Treningow.length === 0 && (
-              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5"/>
+              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5" />
             )}
           </div>
         </div>

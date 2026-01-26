@@ -33,6 +33,7 @@ export default function PulubBtn({
   return (
     <div>
       <Button
+        className="cursor-pointer"
         loading={loading}
         disabled={!user}
         onClick={async () => {
