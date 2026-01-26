@@ -97,14 +97,13 @@ export default async function ProfilePage({
           <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
             Liczba obserwujących
           </div>
-          <div
+          <Link
+            href={`/profile/${userId}/sprawdzWyniki`}
             id="znajdz wynik treningu po dacie"
-            className=" w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
-            <Link href={`/profile/${userId}/sprawdzWyniki`}>
-              Sprawdz {userId == ja.id && "swoje"} wyniki{" "}
-              {userId != ja.id && "użytkownika"}
-            </Link>
-          </div>
+            className="flex items-center justify-center w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black text-white uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
+            Sprawdz {userId == ja.id && "swoje"} wyniki{" "}
+            {userId != ja.id && "użytkownika"}
+          </Link>
         </div>
         <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
           <div className="flex flex-col items-center mt-5">

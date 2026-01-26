@@ -66,31 +66,45 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
     throw new Error("Nieautoryzowany");
   }
 
-  const znajdzWyniki = await db.query.wyniki.findMany({
+  const wszystkieWynikiZDaty = await db.query.wyniki.findMany({
     where: eq(wyniki.dataWykonania, dataWynikow),
+    with: {
+      plan: true, 
+    },
   });
 
-  if (znajdzWyniki.length === 0) {
-    return { error: 1, info: "Brak wyników do podjecia akcji" };
+  const mojeWyniki = wszystkieWynikiZDaty.filter(
+    (w) => w.plan.userId === user.id
+  );
+
+  if (mojeWyniki.length === 0) {
+    return { error: 1, info: "Brak Twoich wyników do podjęcia akcji" };
   }
 
   if (przestanUdostepniac) {
-    await db
-      .update(wyniki)
-      .set({ udostepniony: false })
-      .where(eq(wyniki.dataWykonania, dataWynikow));
+    await Promise.all(
+      mojeWyniki.map((wynik) =>
+        db
+          .update(wyniki)
+          .set({ udostepniony: false })
+          .where(eq(wyniki.id, wynik.id))
+      )
+    );
     return { error: 0, info: "Przestałeś udostępniać te wyniki" };
   }
 
-  if (znajdzWyniki[0].udostepniony) {
+  if (mojeWyniki[0].udostepniony) {
     return { error: 1, info: "Wyniki zostały już udostępnione" };
   }
 
-  znajdzWyniki.forEach(async (wynik) => {
-    await db
-      .update(wyniki)
-      .set({ udostepniony: true })
-      .where(eq(wyniki.id, wynik.id));
-  });
+  await Promise.all(
+    mojeWyniki.map((wynik) =>
+      db
+        .update(wyniki)
+        .set({ udostepniony: true })
+        .where(eq(wyniki.id, wynik.id))
+    )
+  );
+
   return { error: 0, info: "Wyniki zostały udostępnione" };
 }
