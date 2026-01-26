@@ -202,18 +202,18 @@ export default async function Home() {
                           </div>
                         </div>
                         {/** polubienia */}
-                        {user && (
-                          <div className="flex items-center">
-                            <div className="text-[16px] font-bold text-black">
-                              {liczbaPolubienWyniku(grupa.wyniki[0].id)}
-                            </div>
 
-                            <PulubBtn
-                              wynikId={grupa.wyniki[0].id}
-                              mojeLajki={mojePolubienia}
-                            />
+                        <div className="flex items-center">
+                          <div className="text-[16px] font-bold text-black">
+                            {liczbaPolubienWyniku(grupa.wyniki[0].id)}
                           </div>
-                        )}
+
+                          <PulubBtn
+                            user={user}
+                            wynikId={grupa.wyniki[0].id}
+                            mojeLajki={mojePolubienia ?? []}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

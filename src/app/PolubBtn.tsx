@@ -6,14 +6,16 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
-import { Polubienie } from "@/lib/database/scheme";
+import { Polubienie, User } from "@/lib/database/scheme";
 
 export default function PulubBtn({
   wynikId,
   mojeLajki,
+  user,
 }: {
   wynikId: number;
   mojeLajki: Polubienie[];
+  user: User | null;
 }) {
   const router = useRouter();
   const [napis, setNapis] = useState<boolean>();
@@ -32,7 +34,9 @@ export default function PulubBtn({
     <div>
       <Button
         loading={loading}
+        disabled={!user}
         onClick={async () => {
+          if (!user) return;
           setLoading(true);
           const reqest = await polubTrening(wynikId);
           toast(reqest.message);
@@ -42,9 +46,10 @@ export default function PulubBtn({
         }}>
         <span className="inline-flex items-center">
           <Heart
-            className={`${napis ? "text-[#FF4D6D]" : "text-black"} w-8 h-8`}
+            className={`${
+              napis && user ? "text-[#FF4D6D]" : "text-black"
+            } w-8 h-8`}
           />
-          <span className="ml-2">{napis}</span>
         </span>
       </Button>
     </div>
