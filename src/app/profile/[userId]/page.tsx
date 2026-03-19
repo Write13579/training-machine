@@ -6,6 +6,7 @@ import DodajZnajomegoComp from "./DodajZnajomegoComp";
 import Link from "next/link";
 import { getMe } from "@/app/authutils";
 import { BadgeCheck, Clipboard, Dumbbell } from "lucide-react";
+import MyNameComp from "./MyNameComp";
 
 export default async function ProfilePage({
   params,
@@ -56,7 +57,8 @@ export default async function ProfilePage({
         <Link href="/" className="block w-full">
           <button
             type="button"
-            className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+            className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]"
+          >
             Powrót
           </button>
         </Link>
@@ -74,20 +76,25 @@ export default async function ProfilePage({
             <div className="text-black text-2xl md:text-3xl font-bold">
               Profil
             </div>
-            <div className="font-MySerif mt-5 mb-4 text-[12px] text-[#858383] font-bold"> Informacje o koncie</div>
+            <div className="font-MySerif mt-5 mb-4 text-[12px] text-[#858383] font-bold">
+              {" "}
+              Informacje o koncie
+            </div>
           </div>
-
-          <div className="text-[#FF4D6D] text-2xl md:text-2xl font-bold leading-tight">
-            {user.name}
-          </div>
-          <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
-            Imię i nazwisko
-          </div>
+          {userId == ja.id ? (
+            <MyNameComp name={user.name} userId={userId} />
+          ) : (
+            <div>
+              <div className="text-[#FF4D6D] text-2xl md:text-2xl font-bold leading-tight">
+                {user.name}
+              </div>
+            </div>
+          )}
           <div className="text-[#C9184A] text-2xl md:text-2xl font-bold leading-tight">
             {user.login}
           </div>
           <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
-            Pseudonim
+            Login
           </div>
           <div className="bg-[#FF4D6D] rounded-3xl p-1 flex items-center justify-center border-[#FF4D6D] min-w-max px-4">
             <div className="text-white text-2xl md:text-2xl font-bold leading-tight">
@@ -100,7 +107,8 @@ export default async function ProfilePage({
           <Link
             href={`/profile/${userId}/sprawdzWyniki`}
             id="znajdz wynik treningu po dacie"
-            className="flex items-center justify-center w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black text-white uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
+            className="flex items-center justify-center w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black text-white uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
+          >
             Sprawdz {userId == ja.id && "swoje"} wyniki{" "}
             {userId != ja.id && "użytkownika"}
           </Link>
@@ -130,10 +138,12 @@ export default async function ProfilePage({
                   <div
                     className="flex items-center justify-between p-1"
                     id="wrapper"
-                    key={`${relacja.osobaObserwujacaId}-${relacja.osobaObserwowanaId}`}>
+                    key={`${relacja.osobaObserwujacaId}-${relacja.osobaObserwowanaId}`}
+                  >
                     <Link
                       href={`/profile/${relacja.obserwujacy.id}`}
-                      className="text-black truncate text-1xl md:text-1xl font-bold">
+                      className="text-black truncate text-1xl md:text-1xl font-bold"
+                    >
                       {relacja.obserwujacy.name}
                     </Link>
                     {userId == ja.id && (
@@ -174,15 +184,20 @@ export default async function ProfilePage({
 
             {userId == ja.id && moiObserwatorzy.length > 0 && (
               <div id="kto mnie obserwuje">
-                <div className="font-MySerif mt-5 text-[12px] text-[#858383] font-bold text-center">Obserwują mnie</div>
+                <div className="font-MySerif mt-5 text-[12px] text-[#858383] font-bold text-center">
+                  Obserwują mnie
+                </div>
                 <div className="overflow-y-auto max-h-[200px]">
                   {moiObserwatorzy.map((relacja) => (
                     <div
-                    className="flex items-center justify-between p-1"
-                    id="wrapper"
-                      key={`${relacja.osobaObserwowanaId}-${relacja.osobaObserwujacaId}`}>
-                      <Link href={`/profile/${relacja.obserwatorzy.id}`}
-                      className="text-black truncate text-1xl md:text-1xl font-bold">
+                      className="flex items-center justify-between p-1"
+                      id="wrapper"
+                      key={`${relacja.osobaObserwowanaId}-${relacja.osobaObserwujacaId}`}
+                    >
+                      <Link
+                        href={`/profile/${relacja.obserwatorzy.id}`}
+                        className="text-black truncate text-1xl md:text-1xl font-bold"
+                      >
                         {relacja.obserwatorzy.name}
                       </Link>
                     </div>
@@ -197,7 +212,8 @@ export default async function ProfilePage({
         <Link href="/" className="block w-full">
           <button
             type="button"
-            className=" w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+            className=" w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]"
+          >
             Powrót
           </button>
         </Link>

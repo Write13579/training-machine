@@ -18,6 +18,7 @@ export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   login: varchar("login", { length: 256 }).unique().notNull(),
   name: varchar("name", { length: 256 }).unique().notNull(),
+  //surname: varchar("surname", { length: 256 }).unique().notNull(),
   email: varchar("email", { length: 256 }).unique().notNull(),
   admin: boolean("admin").default(false).notNull(),
   password: varchar("password", { length: 256 }).notNull(),
@@ -55,6 +56,7 @@ export const plans = pgTable("plans", {
   fullPlanId: integer("fullPlanId")
     .references(() => fullPlans.id)
     .notNull(),
+  //order: integer("order").notNull(),
 });
 
 export type Plan = typeof plans.$inferSelect;
@@ -117,6 +119,17 @@ export const polubienia = pgTable("polubienia", {
 
 export type Polubienie = typeof polubienia.$inferSelect;
 
+export const zgloszenia = pgTable("zgloszenia", {
+  id: serial("id").primaryKey(),
+  tresc: varchar("tresc", { length: 700 }).notNull(),
+  zglaszajacyId: integer("zglaszajacyId")
+    .references(() => users.id)
+    .notNull(),
+  zgloszonyId: integer("zgloszonyId")
+    .references(() => users.id)
+    .notNull(),
+});
+
 // RELACJE
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -128,6 +141,12 @@ export const usersRelations = relations(users, ({ many }) => ({
     relationName: "obserwujacy",
   }),
   polubienia: many(polubienia),
+  zglaszajacy: many(zgloszenia, {
+    relationName: "zglaszajacy",
+  }),
+  zgloszeni: many(zgloszenia, {
+    relationName: "zgloszeni",
+  }),
 }));
 
 export const polubieniaRelations = relations(polubienia, ({ one }) => ({

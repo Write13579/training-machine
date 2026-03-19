@@ -25,7 +25,7 @@ export default function WyswietlCwiczeniaZPlanu({
   const filteredRow: DzienTreningowy = {
     ...row,
     ćwiczenia: row.ćwiczenia.filter(
-      (cwiczenie) => cwiczenie.nazwaPlanu === nazwaFullPlanu
+      (cwiczenie) => cwiczenie.nazwaPlanu === nazwaFullPlanu,
     ),
   };
 
@@ -42,7 +42,8 @@ export default function WyswietlCwiczeniaZPlanu({
           {filteredRow.ćwiczenia.map((cwiczenie, index) => (
             <div
               key={index}
-              className="flex items-center justify-between gap-3 p-1 rounded-lg bg-transparent">
+              className="flex items-center justify-between gap-3 p-1 rounded-lg bg-transparent"
+            >
               <span className="text-black">{cwiczenie.nazwaCwiczenia}</span>
               <button
                 type="button"
@@ -50,13 +51,14 @@ export default function WyswietlCwiczeniaZPlanu({
                   usunCwiczenieZDnia(
                     filteredRow.dzień,
                     cwiczenie.nazwaCwiczenia,
-                    nazwaFullPlanu
+                    nazwaFullPlanu,
                   );
                   toast("Usunięto ćwiczenie z dnia");
                   router.refresh();
                 }}
                 className="inline-flex items-center justify-center px-2 py-2 bg-black text-white text-sm font-medium rounded-md transition-transform transform hover:bg-[#FF4D6D] active:bg-[#C9184A] hover:-translate-y-0.5"
-                aria-label={`Usuń ${cwiczenie.nazwaCwiczenia}`}>
+                aria-label={`Usuń ${cwiczenie.nazwaCwiczenia}`}
+              >
                 <Trash2 className="cursor-pointer" />
               </button>
             </div>

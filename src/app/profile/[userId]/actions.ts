@@ -16,8 +16,8 @@ export async function przestanObserwowac(ja: number, on: number) {
     .where(
       and(
         eq(usersToUsers.osobaObserwujacaId, ja),
-        eq(usersToUsers.osobaObserwowanaId, on)
-      )
+        eq(usersToUsers.osobaObserwowanaId, on),
+      ),
     );
 
   return "Przestałeś obserwować tego użytkownika";
@@ -44,7 +44,7 @@ export async function zacznijObserwowac(ja: number, on: string) {
   const existingRelation = await db.query.usersToUsers.findFirst({
     where: and(
       eq(usersToUsers.osobaObserwujacaId, ja),
-      eq(usersToUsers.osobaObserwowanaId, goChceObserwowac.id)
+      eq(usersToUsers.osobaObserwowanaId, goChceObserwowac.id),
     ),
   });
   if (existingRelation) {
@@ -69,12 +69,12 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
   const wszystkieWynikiZDaty = await db.query.wyniki.findMany({
     where: eq(wyniki.dataWykonania, dataWynikow),
     with: {
-      plan: true, 
+      plan: true,
     },
   });
 
   const mojeWyniki = wszystkieWynikiZDaty.filter(
-    (w) => w.plan.userId === user.id
+    (w) => w.plan.userId === user.id,
   );
 
   if (mojeWyniki.length === 0) {
@@ -87,8 +87,8 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
         db
           .update(wyniki)
           .set({ udostepniony: false })
-          .where(eq(wyniki.id, wynik.id))
-      )
+          .where(eq(wyniki.id, wynik.id)),
+      ),
     );
     return { error: 0, info: "Przestałeś udostępniać te wyniki" };
   }
@@ -102,9 +102,19 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
       db
         .update(wyniki)
         .set({ udostepniony: true })
-        .where(eq(wyniki.id, wynik.id))
-    )
+        .where(eq(wyniki.id, wynik.id)),
+    ),
   );
 
   return { error: 0, info: "Wyniki zostały udostępnione" };
+}
+
+export async function editName(newName: string, idUser: number) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("Nieautoryzowany");
+  }
+
+  if (user.id == idUser)
+    await db.update(users).set({ name: newName }).where(eq(users.id, user.id));
 }

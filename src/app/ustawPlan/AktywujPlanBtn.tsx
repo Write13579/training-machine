@@ -12,7 +12,7 @@ export default function AktywujPlanBtn({
   return (
     <div>
       <Button
-        className="bg-red-500"
+        className="bg-red-500 cursor-pointer"
         onClick={async () => {
           if (!fullPlanId) {
             toast("Nie wybrano planu do aktywacji");
@@ -24,7 +24,8 @@ export default function AktywujPlanBtn({
           } else {
             toast("Plan został aktywowany");
           }
-        }}>
+        }}
+      >
         AKTYWUJ
       </Button>
     </div>
