@@ -35,16 +35,6 @@ interface DataTableProps<TData, TValue> {
     nazwa: string;
     opis: string;
     deleted: boolean;
-    plans: {
-      id: number;
-      userId: number;
-      dzienTygodnia: number;
-      exerciseId: number;
-      addedAt: Date;
-      updatedAt: Date;
-      activePlan: boolean;
-      fullPlanId: number;
-    }[];
   }[];
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[];
 }
@@ -63,14 +53,14 @@ export function DataTable<TData, TValue>({
   const cols = columns(
     listaWszystkichCwiczen,
     namePlan,
-    listaPlanowUsera
+    listaPlanowUsera,
   ) as ColumnDef<TData, TValue>[];
 
   const [idPlanu, setIdPlanu] = useState<number | null>(null);
 
   useEffect(() => {
     const znalezionyPlan = listaPlanowUsera.find(
-      (plan) => plan.nazwa == namePlan
+      (plan) => plan.nazwa == namePlan,
     );
     if (znalezionyPlan) {
       setIdPlanu(znalezionyPlan.id);
@@ -88,7 +78,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="text-center">
       <Button
-        className = "my-5 w-[240px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
+        className="my-5 w-[240px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
         disabled={!activeInput}
         onClick={() => {
           setSwitchBeetwenSelectAndInput(!switchBeetwenSelectAndInput);
@@ -107,8 +97,10 @@ export function DataTable<TData, TValue>({
           </SelectTrigger>
           <SelectContent className="w-[min(55vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-0 ring-black/0 text-black">
             {listaPlanowUsera.map((plan) => (
-              <SelectItem key={plan.id} value={plan.nazwa}
-              className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] text-black">
+              <SelectItem
+                key={plan.id}
+                value={plan.nazwa}
+                className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] text-black">
                 {plan.nazwa}
               </SelectItem>
             ))}
@@ -125,14 +117,11 @@ export function DataTable<TData, TValue>({
             placeholder="Wpisz nazwę planu"
             className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
           />
-          <div
-            className="h-[2px] bg-black w-full mt-0"
-            aria-hidden="true"
-          />
+          <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
         </div>
       )}
       <Button
-      className= "my-5 w-[180px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
+        className="my-5 w-[180px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
         disabled={!namePlan}
         onClick={() => {
           setActiveInput(!activeInput);
@@ -148,13 +137,13 @@ export function DataTable<TData, TValue>({
                   return (
                     <TableHead key={header.id}>
                       <div className="text-center font-MySerif text-sm text-black">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          </div>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -172,7 +161,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

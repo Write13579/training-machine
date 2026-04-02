@@ -18,16 +18,6 @@ export const columns = (
     nazwa: string;
     opis: string;
     deleted: boolean;
-    plans: {
-      id: number;
-      userId: number;
-      dzienTygodnia: number;
-      exerciseId: number;
-      addedAt: Date;
-      updatedAt: Date;
-      activePlan: boolean;
-      fullPlanId: number;
-    }[];
   }[],
   nazwaPlanu: string,
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[],

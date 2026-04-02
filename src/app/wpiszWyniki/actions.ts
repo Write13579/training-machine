@@ -1,60 +1,67 @@
 "use server";
 
 import { db } from "@/lib/database";
-import { wyniki } from "@/lib/database/scheme";
+import { cwiczeniaZDnia, wyniki } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 import { getMe } from "../authutils";
 
 export async function submitWynik(
-  idPlanu: number, // tu jest exerciseId zapisane
-  serie: number,
-  powtorzenia: number,
-  ciezar: number,
-  dataWykonania: Date
+  idCwiczeniaDnia: number,
+  serieDane: Array<{ powtorzenia: number; ciezar: number }>,
+  dataWykonania: Date,
 ) {
   const user = await getMe();
   if (!user) {
     throw new Error("Nieautoryzowany");
   }
 
-  if (serie < 0 || powtorzenia < 0 || ciezar < 0) {
+  if (!serieDane.length) {
+    return "Dodaj przynajmniej jedną serię";
+  }
+
+  if (
+    serieDane.some(
+      (s) =>
+        s.powtorzenia < 0 ||
+        s.ciezar < 0 ||
+        !Number.isInteger(s.powtorzenia) ||
+        !Number.isFinite(s.ciezar),
+    )
+  ) {
     return "Wyniki nie mogą być ujemne";
   }
 
-  if (!Number.isInteger(serie) || !Number.isInteger(powtorzenia)) {
-    return "Serie i Powtorzenia muszą być liczbą calkowitą";
-  }
-
-  if (serie === 0 && (powtorzenia > 0 || ciezar > 0)) {
-    return "Jak mogłeś zrobić zero serii i wpisać powtórzenia lub ciężar?";
-  }
-
-  const existingRecord = await db.query.wyniki.findFirst({
-    where: and(
-      eq(wyniki.planId, idPlanu),
-      eq(wyniki.dataWykonania, dataWykonania)
-    ),
+  const cwiczenieDnia = await db.query.cwiczeniaZDnia.findFirst({
+    where: eq(cwiczeniaZDnia.id, idCwiczeniaDnia),
   });
 
-  if (existingRecord) {
-    await db
-      .update(wyniki)
-      .set({
-        serie: serie,
-        powtorzenia: powtorzenia,
-        ciezar: ciezar,
-      })
-      .where(eq(wyniki.id, existingRecord.id));
-    return "Wynik zaktualizowany";
+  if (!cwiczenieDnia) {
+    return "Nie znaleziono ćwiczenia w planie";
   }
 
-  await db.insert(wyniki).values({
-    planId: idPlanu,
-    serie: serie,
-    powtorzenia: powtorzenia,
-    ciezar: ciezar,
-    dataWykonania: dataWykonania,
-  });
+  await db
+    .delete(wyniki)
+    .where(
+      and(
+        eq(wyniki.planId, cwiczenieDnia.dzienPlanId),
+        eq(wyniki.exerciseId, cwiczenieDnia.exerciseId),
+        eq(wyniki.userId, user.id),
+        eq(wyniki.dataWykonania, dataWykonania),
+      ),
+    );
+
+  await db.insert(wyniki).values(
+    serieDane.map((s, idx) => ({
+      planId: cwiczenieDnia.dzienPlanId,
+      userId: user.id,
+      exerciseId: cwiczenieDnia.exerciseId,
+      serie: idx + 1,
+      powtorzenia: s.powtorzenia,
+      ciezar: s.ciezar,
+      dataWykonania,
+    })),
+  );
+
   return "Wynik zapisany";
 }
 
@@ -64,6 +71,24 @@ export async function usunZapisanyWynik(idWyniku: number) {
     throw new Error("Nieautoryzowany");
   }
 
-  await db.delete(wyniki).where(eq(wyniki.id, idWyniku));
+  const rekord = await db.query.wyniki.findFirst({
+    where: and(eq(wyniki.id, idWyniku), eq(wyniki.userId, user.id)),
+  });
+
+  if (!rekord) {
+    return "Wynik nie istnieje";
+  }
+
+  await db
+    .delete(wyniki)
+    .where(
+      and(
+        eq(wyniki.planId, rekord.planId),
+        eq(wyniki.userId, rekord.userId),
+        eq(wyniki.exerciseId, rekord.exerciseId),
+        eq(wyniki.dataWykonania, rekord.dataWykonania),
+      ),
+    );
+
   return "Wynik usunięty";
 }

@@ -2,13 +2,18 @@
 
 import { db } from "@/lib/database";
 import { getMe } from "../authutils";
-import { exercises, fullPlans, plans } from "@/lib/database/scheme";
-import { and, eq } from "drizzle-orm";
+import {
+  cwiczeniaZDnia,
+  daysOfPlans,
+  exercises,
+  fullPlans,
+} from "@/lib/database/scheme";
+import { and, desc, eq } from "drizzle-orm";
 
 export async function dodajCwiczenieDoDniaIPlanu(
   dzien: number,
   nazwaCwiczenia: string,
-  nazwaPlanu: string
+  nazwaPlanu: string,
 ) {
   const user = await getMe();
 
@@ -17,7 +22,7 @@ export async function dodajCwiczenieDoDniaIPlanu(
   }
 
   if (dzien < 0 || dzien > 6) {
-    throw new Error("Nieprawidłowy dzień tygodnia");
+    throw new Error("Nieprawidlowy dzien tygodnia");
   }
 
   const znajdzCwiczeniePoNazwie = await db.query.exercises.findFirst({
@@ -25,7 +30,7 @@ export async function dodajCwiczenieDoDniaIPlanu(
   });
 
   if (!znajdzCwiczeniePoNazwie) {
-    return [{ error: "Ćwiczenie o podanej nazwie nie istnieje" }];
+    return [{ error: "Cwiczenie o podanej nazwie nie istnieje" }];
   }
 
   const istniejePelnyPlan = await db.query.fullPlans.findFirst({
@@ -39,55 +44,55 @@ export async function dodajCwiczenieDoDniaIPlanu(
     });
   }
 
-  const istniejeCwiczenie = await db.query.plans.findFirst({
+  const pelnyPlan =
+    istniejePelnyPlan ||
+    (await db.query.fullPlans.findFirst({
+      where: and(
+        eq(fullPlans.userId, user.id),
+        eq(fullPlans.nazwa, nazwaPlanu),
+      ),
+    }));
+
+  if (!pelnyPlan) {
+    throw new Error("Nie udalo sie utworzyc planu");
+  }
+
+  const dzienPlanu = await db.query.daysOfPlans.findFirst({
     where: and(
-      eq(plans.dzienTygodnia, dzien),
-      eq(plans.userId, user.id),
-      eq(plans.exerciseId, znajdzCwiczeniePoNazwie.id),
-      eq(
-        plans.fullPlanId,
-        istniejePelnyPlan?.id ||
-          (await db.query.fullPlans.findFirst({
-            where: and(eq(fullPlans.userId, user.id)),
-          }))!.id
-      )
+      eq(daysOfPlans.dzienTygodnia, dzien),
+      eq(daysOfPlans.fullPlanId, pelnyPlan.id),
     ),
   });
 
-  // if (istniejeCwiczenie && istniejeCwiczenie.activated) {
-  //   return [{ error: "Ćwiczenie o podanej nazwie już istnieje" }];
-  // }
+  const dayId =
+    dzienPlanu?.id ||
+    (
+      await db
+        .insert(daysOfPlans)
+        .values({ dzienTygodnia: dzien, fullPlanId: pelnyPlan.id })
+        .returning({ id: daysOfPlans.id })
+    )[0].id;
 
-  // if (istniejeCwiczenie && !istniejeCwiczenie.activated) {
-  //   await db
-  //     .update(plans)
-  //     .set({ activated: true })
-  //     .where(eq(plans.id, istniejeCwiczenie.id));
-  // } else {
-  //   await db.insert(plans).values({
-  //     userId: user.id,
-  //     dzienTygodnia: dzien,
-  //     exerciseId: znajdzCwiczeniePoNazwie.id,
-  //     fullPlanId: 1, //tymczasowo
-  //   });
-  // }
+  const istniejeCwiczenie = await db.query.cwiczeniaZDnia.findFirst({
+    where: and(
+      eq(cwiczeniaZDnia.dzienPlanId, dayId),
+      eq(cwiczeniaZDnia.exerciseId, znajdzCwiczeniePoNazwie.id),
+    ),
+  });
 
   if (istniejeCwiczenie) {
-    return [{ error: "Ćwiczenie o podanej nazwie już istnieje w tym planie" }];
+    return [{ error: "Cwiczenie o podanej nazwie juz istnieje w tym planie" }];
   }
 
-  await db.insert(plans).values({
-    userId: user.id,
-    dzienTygodnia: dzien,
+  const ostatnie = await db.query.cwiczeniaZDnia.findFirst({
+    where: eq(cwiczeniaZDnia.dzienPlanId, dayId),
+    orderBy: [desc(cwiczeniaZDnia.kolejnosc)],
+  });
+
+  await db.insert(cwiczeniaZDnia).values({
+    dzienPlanId: dayId,
     exerciseId: znajdzCwiczeniePoNazwie.id,
-    fullPlanId:
-      istniejePelnyPlan?.id ||
-      (await db.query.fullPlans.findFirst({
-        where: and(
-          eq(fullPlans.userId, user.id),
-          eq(fullPlans.nazwa, nazwaPlanu)
-        ),
-      }))!.id,
+    kolejnosc: (ostatnie?.kolejnosc ?? 0) + 1,
   });
 
   return [];
@@ -96,7 +101,7 @@ export async function dodajCwiczenieDoDniaIPlanu(
 export async function usunCwiczenieZDnia(
   dzien: number,
   nazwaCwiczenia: string,
-  nazwaPlanu: string
+  nazwaPlanu: string,
 ) {
   const user = await getMe();
   if (!user) {
@@ -108,7 +113,7 @@ export async function usunCwiczenieZDnia(
   });
 
   if (!cwiczenie) {
-    throw new Error("Ćwiczenie nie istnieje");
+    throw new Error("Cwiczenie nie istnieje");
   }
 
   const znajdzFullPlan = await db.query.fullPlans.findFirst({
@@ -119,16 +124,24 @@ export async function usunCwiczenieZDnia(
     throw new Error("Plan nie istnieje");
   }
 
+  const day = await db.query.daysOfPlans.findFirst({
+    where: and(
+      eq(daysOfPlans.dzienTygodnia, dzien),
+      eq(daysOfPlans.fullPlanId, znajdzFullPlan.id),
+    ),
+  });
+
+  if (!day) {
+    return;
+  }
+
   await db
-    .update(plans)
-    .set({ addedToPlan: false })
+    .delete(cwiczeniaZDnia)
     .where(
       and(
-        eq(plans.dzienTygodnia, dzien),
-        eq(plans.userId, user.id),
-        eq(plans.exerciseId, cwiczenie.id),
-        eq(plans.fullPlanId, znajdzFullPlan.id)
-      )
+        eq(cwiczeniaZDnia.dzienPlanId, day.id),
+        eq(cwiczeniaZDnia.exerciseId, cwiczenie.id),
+      ),
     );
 }
 
@@ -142,21 +155,23 @@ export async function aktywujPlan(fullPlanId: number) {
     return [{ error: "Nie wybrano planu do aktywacji" }];
   }
 
-  await db
-    .update(plans)
-    .set({ activePlan: false })
-    .where(and(eq(plans.userId, user.id), eq(plans.activePlan, true)));
+  const planUsera = await db.query.fullPlans.findFirst({
+    where: and(eq(fullPlans.id, fullPlanId), eq(fullPlans.userId, user.id)),
+  });
+
+  if (!planUsera) {
+    return [{ error: "Nie znaleziono planu uzytkownika" }];
+  }
 
   await db
-    .update(plans)
+    .update(fullPlans)
+    .set({ activePlan: false })
+    .where(eq(fullPlans.userId, user.id));
+
+  await db
+    .update(fullPlans)
     .set({ activePlan: true })
-    .where(
-      and(
-        eq(plans.userId, user.id),
-        eq(plans.fullPlanId, fullPlanId),
-        eq(plans.addedToPlan, true)
-      )
-    );
+    .where(and(eq(fullPlans.userId, user.id), eq(fullPlans.id, fullPlanId)));
 
   return [];
 }

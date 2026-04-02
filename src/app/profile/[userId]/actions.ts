@@ -67,15 +67,13 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
   }
 
   const wszystkieWynikiZDaty = await db.query.wyniki.findMany({
-    where: eq(wyniki.dataWykonania, dataWynikow),
-    with: {
-      plan: true,
-    },
+    where: and(
+      eq(wyniki.dataWykonania, dataWynikow),
+      eq(wyniki.userId, user.id),
+    ),
   });
 
-  const mojeWyniki = wszystkieWynikiZDaty.filter(
-    (w) => w.plan.userId === user.id,
-  );
+  const mojeWyniki = wszystkieWynikiZDaty;
 
   if (mojeWyniki.length === 0) {
     return { error: 1, info: "Brak Twoich wyników do podjęcia akcji" };

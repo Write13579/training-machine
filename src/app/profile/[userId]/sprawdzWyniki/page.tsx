@@ -1,7 +1,7 @@
 import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
-import { plans, wyniki } from "@/lib/database/scheme";
-import { and, eq, exists } from "drizzle-orm";
+import { wyniki } from "@/lib/database/scheme";
+import { eq } from "drizzle-orm";
 import WybierzDateComp from "./WybierzDateComp";
 
 export default async function ProfilePage({
@@ -25,16 +25,9 @@ export default async function ProfilePage({
   //   });
 
   const wynikiUzytkownika = await db.query.wyniki.findMany({
-    where: exists(
-      db
-        .select()
-        .from(plans)
-        .where(and(eq(plans.id, wyniki.planId), eq(plans.userId, userId)))
-    ),
+    where: eq(wyniki.userId, userId),
     with: {
-      plan: {
-        with: { exercise: true },
-      },
+      exercise: true,
     },
   });
 

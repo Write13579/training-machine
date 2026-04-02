@@ -25,26 +25,17 @@ export default function WybierzDateComp({
   wynikiUsera: {
     id: number;
     planId: number;
+    userId: number;
+    exerciseId: number;
     serie: number;
     powtorzenia: number;
     ciezar: number;
     dataWykonania: Date;
     udostepniony: boolean;
-    plan: {
+    exercise: {
       id: number;
-      userId: number;
-      dzienTygodnia: number;
-      exerciseId: number;
-      addedAt: Date;
-      updatedAt: Date;
-      activePlan: boolean;
-      addedToPlan: boolean;
-      fullPlanId: number;
-      exercise: {
-        id: number;
-        nazwa: string;
-        opis: string;
-      };
+      nazwa: string;
+      opis: string;
     };
   }[];
 }) {
@@ -68,7 +59,7 @@ export default function WybierzDateComp({
       params.set(name, value);
       return params.toString();
     },
-    [searchParams]
+    [searchParams],
   );
 
   // Filtruj wyniki dla wybranej daty
@@ -85,25 +76,39 @@ export default function WybierzDateComp({
   }, [wynikiUsera, date]);
 
   // Grupowanie wyników po ćwiczeniach - przechowuj cały obiekt
-  const chartsWithOverallData = wynikiUsera.reduce((acc, wynik) => {
-    const cwiczenie = wynik.plan.exercise.nazwa;
+  const chartsWithOverallData = wynikiUsera.reduce(
+    (acc, wynik) => {
+      const cwiczenie = wynik.exercise.nazwa;
 
-    if (!acc[cwiczenie]) {
-      acc[cwiczenie] = {
-        cwiczenie: cwiczenie,
-        wyniki: [],
-      };
-    }
+      if (!acc[cwiczenie]) {
+        acc[cwiczenie] = {
+          cwiczenie: cwiczenie,
+          wyniki: [],
+        };
+      }
 
-    acc[cwiczenie].wyniki.push({
-      ciezar: wynik.ciezar,
-      data: wynik.dataWykonania,
-      serie: wynik.serie,
-      powtorzenia: wynik.powtorzenia,
-    });
+      acc[cwiczenie].wyniki.push({
+        ciezar: wynik.ciezar,
+        data: wynik.dataWykonania,
+        serie: wynik.serie,
+        powtorzenia: wynik.powtorzenia,
+      });
 
-    return acc;
-  }, {} as Record<string, { cwiczenie: string; wyniki: Array<{ ciezar: number; data: Date; serie: number; powtorzenia: number }> }>);
+      return acc;
+    },
+    {} as Record<
+      string,
+      {
+        cwiczenie: string;
+        wyniki: Array<{
+          ciezar: number;
+          data: Date;
+          serie: number;
+          powtorzenia: number;
+        }>;
+      }
+    >,
+  );
 
   const chartsArray = Object.values(chartsWithOverallData);
 
@@ -111,15 +116,14 @@ export default function WybierzDateComp({
     <div
       id="tlo"
       className="relative items-center justify-center min-h-[100vh] min-w-[320px]">
-        
       <div className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block">
-          <Button
-            variant="outline"
-            onClick={() => router.back()}
-            className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
-            Powrót
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          onClick={() => router.back()}
+          className="inline-block w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold text-center transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+          Powrót
+        </Button>
+      </div>
       <div className="relative z-20 mx-auto mt-10 h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
         <div className="text-center">
           <CircleStar
@@ -128,9 +132,7 @@ export default function WybierzDateComp({
             strokeWidth={1.8}
             aria-hidden="true"
           />
-          <div className="text-black text-2xl font-bold">
-            Wyniki z dnia
-          </div>
+          <div className="text-black text-2xl font-bold">Wyniki z dnia</div>
           <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
             Wybierz datę
           </div>
@@ -161,8 +163,8 @@ export default function WybierzDateComp({
                         "data",
                         `${date.getDate()}-${
                           date.getMonth() + 1
-                        }-${date.getFullYear()}`
-                      )
+                        }-${date.getFullYear()}`,
+                      ),
                   );
               }}
             />
@@ -184,7 +186,7 @@ export default function WybierzDateComp({
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="text-sm sm:text-base font-medium whitespace-normal break-words text-center sm:text-left px-3 py-1">
-                      {wynik.plan.exercise.nazwa}
+                      {wynik.exercise.nazwa}
                     </div>
                   </div>
 
@@ -226,7 +228,7 @@ export default function WybierzDateComp({
                 <Button
                   onClick={async () => {
                     const response = await share(
-                      wynikiDoWyswietlenia[0].dataWykonania
+                      wynikiDoWyswietlenia[0].dataWykonania,
                     );
                     toast(response.info);
                     router.refresh();
@@ -244,7 +246,7 @@ export default function WybierzDateComp({
                       const przestanUdostepniac = true;
                       const response = await share(
                         wynikiDoWyswietlenia[0].dataWykonania,
-                        przestanUdostepniac
+                        przestanUdostepniac,
                       );
                       toast(response.info);
                       router.refresh();

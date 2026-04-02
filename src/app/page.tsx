@@ -4,8 +4,8 @@ import Link from "next/link";
 import ZalogujPage from "./ZalogujComp";
 import { Dumbbell } from "lucide-react";
 import { db } from "@/lib/database";
-import { eq } from "drizzle-orm";
-import { usersToUsers, wyniki } from "@/lib/database/scheme";
+import { eq, inArray } from "drizzle-orm";
+import { users, usersToUsers, wyniki } from "@/lib/database/scheme";
 import { createStringFromDate } from "@/lib/utils";
 import PulubBtn from "./PolubBtn";
 
@@ -14,21 +14,38 @@ export default async function Home() {
 
   const udostepnioneWynikiWszystkieQuery = await db.query.wyniki.findMany({
     with: {
-      plan: { with: { exercise: true, user: true } },
+      exercise: true,
     },
     where: eq(wyniki.udostepniony, true),
   });
 
+  const userIds = Array.from(
+    new Set(udostepnioneWynikiWszystkieQuery.map((w) => w.userId)),
+  );
+
+  const usersData =
+    userIds.length > 0
+      ? await db.query.users.findMany({ where: inArray(users.id, userIds) })
+      : [];
+
+  const userIdToName = new Map(usersData.map((u) => [u.id, u.name] as const));
+
   const udostepnioneWynikiWszystkie = udostepnioneWynikiWszystkieQuery.reduce(
     (acc, wynik) => {
-      const userId = wynik.plan.userId;
+      const userId = wynik.userId;
+
+      const userName = userIdToName.get(userId);
+      if (!userName) {
+        return acc;
+      }
+
       const dataKey = createStringFromDate(wynik.dataWykonania);
       const key = `${userId}-${dataKey}`;
 
       if (!acc[key]) {
         acc[key] = {
           userId: userId,
-          userName: wynik.plan.user.name,
+          userName,
           data: wynik.dataWykonania,
           dataString: dataKey,
           wyniki: [],
@@ -37,7 +54,7 @@ export default async function Home() {
 
       acc[key].wyniki.push({
         id: wynik.id,
-        cwiczenie: wynik.plan.exercise.nazwa,
+        cwiczenie: wynik.exercise.nazwa,
         serie: wynik.serie,
         powtorzenia: wynik.powtorzenia,
         ciezar: wynik.ciezar,

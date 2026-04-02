@@ -1,5 +1,3 @@
-import { WynikType } from "@/app/wpiszWyniki/columns";
-import { id } from "date-fns/locale";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -8,8 +6,6 @@ import {
   varchar,
   integer,
   date,
-  timestamp,
-  primaryKey,
 } from "drizzle-orm/pg-core";
 
 // TABELE
@@ -36,59 +32,75 @@ export const exercises = pgTable("exercises", {
 
 export type Exercise = typeof exercises.$inferSelect;
 
-//  w zasadzie to dzien z planu tygodniowego
-export const plans = pgTable("plans", {
-  id: serial("id").primaryKey(),
-  userId: integer("userId")
-    .references(() => users.id)
-    .notNull(),
-  dzienTygodnia: integer("dzienTygodnia").notNull(), // 0 - poniedziałek, 6 - niedziela
-  exerciseId: integer("exerciseId")
-    .references(() => exercises.id)
-    .notNull(),
-  addedAt: timestamp("addedAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  activePlan: boolean("activePlan").default(false).notNull(),
-  addedToPlan: boolean("addedToPlan").default(true).notNull(),
-  fullPlanId: integer("fullPlanId")
-    .references(() => fullPlans.id)
-    .notNull(),
-  //order: integer("order").notNull(),
-});
-
-export type Plan = typeof plans.$inferSelect;
-
-export type PlanWithExercise = Plan & {
-  exercise: Exercise;
-  wyniki: Wynik[]; // ?
-};
-
 export const fullPlans = pgTable("fullPlans", {
   id: serial("id").primaryKey(),
   userId: integer("userId")
     .references(() => users.id)
     .notNull(),
   nazwa: varchar("nazwa", { length: 256 }).notNull(),
+  activePlan: boolean("activePlan").default(false).notNull(),
 });
 
 export type FullPlan = typeof fullPlans.$inferSelect;
 
+//  w zasadzie to dzien z planu tygodniowego
+export const daysOfPlans = pgTable("daysOfPlans", {
+  id: serial("id").primaryKey(),
+  dzienTygodnia: integer("dzienTygodnia").notNull(), // 0 - poniedziałek, 6 - niedziela
+  fullPlanId: integer("fullPlanId")
+    .references(() => fullPlans.id)
+    .notNull(),
+});
+
+// Alias kompatybilności dla istniejącego kodu aplikacji.
+export const plans = daysOfPlans;
+
+export type Plan = typeof daysOfPlans.$inferSelect;
+
+export type PlanWithExercise = Plan & {
+  exercise: Exercise;
+  wyniki: Wynik[]; // ?
+};
+
+export const cwiczeniaZDnia = pgTable("cwiczeniaZDnia", {
+  id: serial("id").primaryKey(),
+  dzienPlanId: integer("dzienPlanId")
+    .references(() => daysOfPlans.id)
+    .notNull(),
+  exerciseId: integer("exerciseId")
+    .references(() => exercises.id)
+    .notNull(),
+  kolejnosc: integer("kolejnosc").notNull(),
+});
+
+export const serieCwiczenia = pgTable("serieCwiczenia", {
+  id: serial("id").primaryKey(),
+  cwiczeniaZDniaId: integer("cwiczeniaZDniaId")
+    .references(() => cwiczeniaZDnia.id)
+    .notNull(),
+  serie: integer("serie").notNull(),
+  powtorzenia: integer("powtorzenia").notNull(),
+  ciezar: integer("ciezar").notNull(),
+  kolejnosc: integer("kolejnosc").generatedAlwaysAsIdentity(),
+});
+
 export const wyniki = pgTable("wyniki", {
   id: serial("id").primaryKey(),
-  planId: integer("planId") //wyjebac potem
-    .references(() => plans.id)
+  planId: integer("planId")
+    .references(() => daysOfPlans.id)
     .notNull(),
-  // fullPlanId: integer("fullPlanId")
-  //   .references(() => fullPlans.id)
-  //   .notNull(),                                  chyba niepotrzebne
+  userId: integer("userId")
+    .references(() => users.id)
+    .notNull(),
+  exerciseId: integer("exerciseId")
+    .references(() => exercises.id)
+    .notNull(),
   serie: integer("serie").notNull(),
   powtorzenia: integer("powtorzenia").notNull(),
   ciezar: integer("ciezar").notNull(),
   dataWykonania: date("dataWykonania", { mode: "date" }).notNull(),
   udostepniony: boolean("udostepniony").default(false).notNull(),
+  opisUdostepnienia: varchar("opisUdostepnienia", { length: 700 }),
 });
 
 export type Wynik = typeof wyniki.$inferSelect;
@@ -133,7 +145,8 @@ export const zgloszenia = pgTable("zgloszenia", {
 // RELACJE
 
 export const usersRelations = relations(users, ({ many }) => ({
-  plans: many(plans),
+  fullPlans: many(fullPlans),
+  wyniki: many(wyniki),
   obserwatorzy: many(usersToUsers, {
     relationName: "obserwatorzy",
   }),
@@ -147,6 +160,11 @@ export const usersRelations = relations(users, ({ many }) => ({
   zgloszeni: many(zgloszenia, {
     relationName: "zgloszeni",
   }),
+}));
+
+export const fullPlansRelations = relations(fullPlans, ({ one, many }) => ({
+  user: one(users, { fields: [fullPlans.userId], references: [users.id] }),
+  daysOfPlans: many(daysOfPlans),
 }));
 
 export const polubieniaRelations = relations(polubienia, ({ one }) => ({
@@ -170,20 +188,58 @@ export const usersToUsersRelations = relations(usersToUsers, ({ one }) => ({
   }),
 }));
 
-export const plansRelations = relations(plans, ({ one, many }) => ({
-  user: one(users, { fields: [plans.userId], references: [users.id] }),
-  exercise: one(exercises, {
-    fields: [plans.exerciseId],
-    references: [exercises.id],
+export const daysOfPlansRelations = relations(daysOfPlans, ({ one, many }) => ({
+  fullPlan: one(fullPlans, {
+    fields: [daysOfPlans.fullPlanId],
+    references: [fullPlans.id],
   }),
+  cwiczeniaZDnia: many(cwiczeniaZDnia),
   wyniki: many(wyniki),
 }));
 
+// Alias kompatybilności dla istniejącego kodu aplikacji.
+export const plansRelations = daysOfPlansRelations;
+
+export const cwiczeniaZDniaRelations = relations(
+  cwiczeniaZDnia,
+  ({ one, many }) => ({
+    dzien: one(daysOfPlans, {
+      fields: [cwiczeniaZDnia.dzienPlanId],
+      references: [daysOfPlans.id],
+    }),
+    exercise: one(exercises, {
+      fields: [cwiczeniaZDnia.exerciseId],
+      references: [exercises.id],
+    }),
+    serie: many(serieCwiczenia),
+  }),
+);
+
+export const serieCwiczeniaRelations = relations(serieCwiczenia, ({ one }) => ({
+  cwiczenieZDnia: one(cwiczeniaZDnia, {
+    fields: [serieCwiczenia.cwiczeniaZDniaId],
+    references: [cwiczeniaZDnia.id],
+  }),
+}));
+
 export const exercisesRelations = relations(exercises, ({ many }) => ({
-  plans: many(plans),
+  daysOfPlans: many(daysOfPlans),
+  cwiczeniaZDnia: many(cwiczeniaZDnia),
+  wyniki: many(wyniki),
 }));
 
 export const wynikiRelations = relations(wyniki, ({ one, many }) => ({
-  plan: one(plans, { fields: [wyniki.planId], references: [plans.id] }),
+  plan: one(daysOfPlans, {
+    fields: [wyniki.planId],
+    references: [daysOfPlans.id],
+  }),
+  user: one(users, {
+    fields: [wyniki.userId],
+    references: [users.id],
+  }),
+  exercise: one(exercises, {
+    fields: [wyniki.exerciseId],
+    references: [exercises.id],
+  }),
   polubienia: many(polubienia),
 }));

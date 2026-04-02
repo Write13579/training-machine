@@ -1,7 +1,7 @@
 import { db } from "@/lib/database";
 import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { exercises, fullPlans, plans } from "@/lib/database/scheme";
 import { CircleStar } from "lucide-react";
 import Link from "next/link";
@@ -12,26 +12,27 @@ export default async function UstawPlanPage() {
     return <div>wypad</div>;
   }
 
-  const data = await db.query.plans.findMany({
-    with: { exercise: true },
-    where: and(
-      eq(plans.userId, user.id),
-      eq(plans.addedToPlan, true) //, eq(plans.addedToPlan, true)
-    ),
-  });
-
   const listaWszystkichCwiczen = await db.query.exercises.findMany({
     where: eq(exercises.deleted, false),
-    with: { plans: true },
   });
 
   const listaPlanowUsera = await db.query.fullPlans.findMany({
     where: eq(fullPlans.userId, user.id),
   });
 
+  const fullPlanIds = listaPlanowUsera.map((p) => p.id);
+
+  const data =
+    fullPlanIds.length > 0
+      ? await db.query.plans.findMany({
+          with: { cwiczeniaZDnia: { with: { exercise: true } } },
+          where: inArray(plans.fullPlanId, fullPlanIds),
+        })
+      : [];
+
   // załóżmy że masz listaPlanowUsera z wcześniejszego zapytania
   const planMap = new Map<number, string>(
-    listaPlanowUsera.map((p) => [p.id, p.nazwa])
+    listaPlanowUsera.map((p) => [p.id, p.nazwa]),
   );
 
   // Map: dzień → lista ćwiczeń (obiekty)
@@ -46,10 +47,12 @@ export default async function UstawPlanPage() {
 
     const nazwaPlanu = planMap.get(p.fullPlanId) ?? "Brak nazwy";
 
-    byDay.get(day)!.push({
-      nazwaCwiczenia: p.exercise.nazwa,
-      nazwaPlanu,
-    });
+    for (const cw of p.cwiczeniaZDnia) {
+      byDay.get(day)!.push({
+        nazwaCwiczenia: cw.exercise.nazwa,
+        nazwaPlanu,
+      });
+    }
   }
 
   const parsedData = Array.from(byDay.entries()).map(([day, list]) => ({

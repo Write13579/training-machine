@@ -9,15 +9,11 @@ import { useRouter } from "next/navigation";
 
 export default function ZapiszWynikBtn({
   id,
-  serie,
-  powtorzenia,
-  ciezar,
+  serieDane,
   targetDate,
 }: {
   id: number;
-  serie: number;
-  powtorzenia: number;
-  ciezar: number;
+  serieDane: Array<{ powtorzenia: number; ciezar: number }>;
   targetDate: Date;
 }) {
   const [loading, setLoading] = useState(false);
@@ -45,18 +41,12 @@ export default function ZapiszWynikBtn({
       onClick={async () => {
         setLoading(true);
         try {
-          const result = await submitWynik(
-            id,
-            serie,
-            powtorzenia,
-            ciezar,
-            fixDate(targetDate)
-          );
-          
+          const result = await submitWynik(id, serieDane, fixDate(targetDate));
+
           toast(result);
 
-          if (result === "Wynik zapisany" || result === "Wynik zaktualizowany") {
-            router.refresh(); 
+          if (result === "Wynik zapisany") {
+            router.refresh();
           } else {
             setLoading(false);
           }

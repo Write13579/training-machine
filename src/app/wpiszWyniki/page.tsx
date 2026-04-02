@@ -1,5 +1,5 @@
 import { db } from "@/lib/database";
-import { plans } from "@/lib/database/scheme";
+import { fullPlans, plans } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 import { getMe } from "../authutils";
 import WpiszComp from "./WpiszComp";
@@ -15,13 +15,29 @@ export default async function WpiszWynikiPage() {
 
   // stworzyc baze danych na wyniki i ?przekazac do wpisz?
 
-  const rawData = await db.query.plans.findMany({
-    where: and(eq(plans.userId, user.id), eq(plans.activePlan, true)), //to activated z dystansem narazie, bo przeszlosc bedzie niemozliwa do aktualizacji
-    with: {
-      exercise: true,
-      wyniki: true,
-    },
+  const aktywnyPlan = await db.query.fullPlans.findFirst({
+    where: and(eq(fullPlans.userId, user.id), eq(fullPlans.activePlan, true)),
   });
+
+  const rawData = aktywnyPlan
+    ? await db.query.plans.findMany({
+        where: eq(plans.fullPlanId, aktywnyPlan.id),
+        with: {
+          cwiczeniaZDnia: { with: { exercise: true } },
+          wyniki: true,
+        },
+      })
+    : [];
+
+  const data = rawData.flatMap((dayPlan) =>
+    dayPlan.cwiczeniaZDnia.map((cw) => ({
+      id: cw.id,
+      dzienTygodnia: dayPlan.dzienTygodnia,
+      exerciseId: cw.exerciseId,
+      exercise: cw.exercise,
+      wyniki: dayPlan.wyniki.filter((w) => w.exerciseId === cw.exerciseId),
+    })),
+  );
 
   // dodanie miejsca na wyniki
   // const data = rawData.map((plan) => ({
@@ -70,7 +86,7 @@ export default async function WpiszWynikiPage() {
             Wybierz ćwiczenia i przypisz do dni tygodnia
           </div>
           <div className="mt-3">
-            <WpiszComp data={rawData} />
+            <WpiszComp data={data} />
           </div>
         </div>
       </div>
