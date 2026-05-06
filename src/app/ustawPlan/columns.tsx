@@ -9,37 +9,80 @@ import WyswietlCwiczeniaZPlanu from "./WyswietlCwiczeniaZPlanu";
 
 export type DzienTreningowy = {
   dzień: number;
-  ćwiczenia: string[];
+  ćwiczenia: { nazwaCwiczenia: string; nazwaPlanu: string }[];
 };
 
 export const columns = (
-  listaCwiczen: { id: number; nazwa: string; opis: string }[]
+  listaCwiczen: {
+    id: number;
+    nazwa: string;
+    opis: string;
+    deleted: boolean;
+  }[],
+  nazwaPlanu: string,
+  listaPlanowUsera: { id: number; userId: number; nazwa: string }[],
 ): ColumnDef<DzienTreningowy>[] => [
   {
     accessorKey: "dzień",
     header: "Dzień",
-    cell: ({ row }) => numerTygodniaNaString(row.original.dzień),
-    meta: { cellClass: "w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]" },
+    cell: ({ row }) => (
+      <div className="w-full text-center py-2 text-[#FF4D6D] text-[15px]">
+        {numerTygodniaNaString(row.original.dzień)}
+      </div>
+    ),
   },
   {
     accessorKey: "ćwiczenia",
     header: "Ćwiczenia",
-    cell: ({ row }) =>
-      row.original.ćwiczenia.length !== 0 ? (
-        <WyswietlCwiczeniaZPlanu row={row.original} />
-      ) : (
-        <Button className="inline-flex items-center justify-center w-full h-full min-w-0">rest day</Button>
-      ),
-    meta: { cellClass: "w-full text-center py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]" },
+    cell: ({ row }) => {
+      const wyswietlaneCwiczenia = {
+        ...row,
+        ćwiczenia: row.original.ćwiczenia.filter(
+          (cwiczenie) => cwiczenie.nazwaPlanu === nazwaPlanu,
+        ),
+      };
+
+      return (
+        <div className="w-full text-center py-2 rounded-full cursor-pointer border-0 bg-black  text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] whitespace-nowrap overflow-hidden text-ellipsis">
+          {wyswietlaneCwiczenia.ćwiczenia.length !== 0 ? (
+            <WyswietlCwiczeniaZPlanu
+              row={row.original}
+              nazwaFullPlanu={nazwaPlanu}
+            />
+          ) : (
+            "rest day"
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "akcje",
     header: "Akcje",
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <DodajCwiczenieDoPlanu row={row.original} listaCwiczen={listaCwiczen} />
-      </div>
-    ),
-    meta: { cellClass: "flex items-center justify-center min-w-0" },
+    cell: ({ row }) => {
+      const filteredListaCwiczen = listaCwiczen.filter((cwiczenie) => {
+        const cwiczeniaDlaWybranegoPlanu = row.original.ćwiczenia.filter(
+          (c) => c.nazwaPlanu === nazwaPlanu, //tu musi być po id ale powiedzmy ze dziala
+        );
+
+        const cwiczeniaNazwy = cwiczeniaDlaWybranegoPlanu.map(
+          (c) => c.nazwaCwiczenia,
+        );
+
+        const nieMaCwiczenia = !cwiczeniaNazwy.includes(cwiczenie.nazwa);
+
+        return nieMaCwiczenia;
+      });
+
+      return (
+        <div className="flex items-center justify-center">
+          <DodajCwiczenieDoPlanu
+            row={row.original}
+            listaCwiczen={filteredListaCwiczen}
+            nazwaFullPlanu={nazwaPlanu}
+          />
+        </div>
+      );
+    },
   },
 ];

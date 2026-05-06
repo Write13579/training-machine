@@ -16,21 +16,58 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { columns } from "./columns";
-import { numerTygodniaNaString } from "@/lib/utils"; // <-- do wyświetlenia dnia
-import WyswietlCwiczeniaZPlanu from "./WyswietlCwiczeniaZPlanu";
-import DodajCwiczenieDoPlanu from "./DodajCwiczenieDoPlanu";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import AktywujPlanBtn from "./AktywujPlanBtn";
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
-  listaCwiczen: { id: number; nazwa: string; opis: string }[];
+  listaWszystkichCwiczen: {
+    id: number;
+    nazwa: string;
+    opis: string;
+    deleted: boolean;
+  }[];
+  listaPlanowUsera: { id: number; userId: number; nazwa: string }[];
 }
 
 export function DataTable<TData, TValue>({
   data,
-  listaCwiczen,
+  listaWszystkichCwiczen,
+  listaPlanowUsera,
 }: DataTableProps<TData, TValue>) {
-  const cols = columns(listaCwiczen) as ColumnDef<TData, TValue>[];
+  const [namePlan, setNamePlan] = useState<string>("");
+  const [activeInput, setActiveInput] = useState<boolean>(true);
+
+  const [switchBeetwenSelectAndInput, setSwitchBeetwenSelectAndInput] =
+    useState<boolean>(true);
+
+  const cols = columns(
+    listaWszystkichCwiczen,
+    namePlan,
+    listaPlanowUsera,
+  ) as ColumnDef<TData, TValue>[];
+
+  const [idPlanu, setIdPlanu] = useState<number | null>(null);
+
+  useEffect(() => {
+    const znalezionyPlan = listaPlanowUsera.find(
+      (plan) => plan.nazwa == namePlan,
+    );
+    if (znalezionyPlan) {
+      setIdPlanu(znalezionyPlan.id);
+    } else {
+      setIdPlanu(null);
+    }
+  }, [namePlan]);
 
   const table = useReactTable({
     data,
@@ -39,82 +76,116 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <Table className="w-full table-fixed rounded-md overflow-hidden">
-      <TableHeader>
-        <TableRow>
-          <TableHead colSpan={cols.length} className=" px-8 py-2">
-            <div className="flex flex-row flex-wrap items-center gap-4">
-              <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
-                Dzień
-              </div>
-              <div className="flex-1 w-[56%] text-center font-MySerif text-sm text-black">
-                Ćwiczenia
-              </div>
-              <div className="flex-none w-[22%] min-w-[72px] text-center font-MySerif text-sm text-black">
-                Akcje
-              </div>
-            </div>
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-
-      <TableBody>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-              className="align-center"
-            >
-              <TableCell colSpan={cols.length} className="py-1">
-                <div className="bg-[#FF4D6D] rounded-[20px] p-4 flex flex-row flex-wrap items-center gap-4 shadow-md shadow-black/40 ring-1 ring-black/5">
-                   {/* lewa kolumna: Dzień */}
-                  <div className="flex-none w-[22%] min-w-[72px] text-center">
-                    <div className="text-black font-MySerif font-medium">
-                       {numerTygodniaNaString((row.original as any).dzień)}
-                     </div>
-                   </div>
- 
-                   {/* środkowa kolumna: Ćwiczenia */}
-                  <div className="flex-1 min-w-[100px] py-2 bg-black rounded-full text-center
-                  transition-all 
-                  duration-500 
-                  ease-in-out
-                  cursor-pointer 
-                  hover:tracking-[1px]
-                  active:tracking-[3px]
-                active:bg-white
-                active:text-black
-                  active:translate-y-[-2px]
-                  active:duration-[200ms]">
-                    {(row.original as any).ćwiczenia?.length ? (
-                      <WyswietlCwiczeniaZPlanu row={(row.original as any)} />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white font-MySerif font-medium">
-                        rest day
+    <div className="text-center">
+      <Button
+        className="my-5 w-[240px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
+        disabled={!activeInput}
+        onClick={() => {
+          setSwitchBeetwenSelectAndInput(!switchBeetwenSelectAndInput);
+          setNamePlan("");
+        }}>
+        {switchBeetwenSelectAndInput
+          ? "Stworz nowy plan"
+          : "Edytuj istniejący plan"}
+      </Button>
+      {switchBeetwenSelectAndInput ? (
+        <Select
+          disabled={!activeInput}
+          onValueChange={(value) => setNamePlan(value)}>
+          <SelectTrigger className=" w-[180px] mx-auto flex items-center justify-center gap-2 border-0 bg-[#FF4D6D] rounded-[14px] px-4 shadow-md shadow-black/40 ring-0 hover:shadow-lg transition-shadow duration-200">
+            <SelectValue placeholder="wybierz" />
+          </SelectTrigger>
+          <SelectContent className="w-[min(55vw,720px)] max-h-[60vh] overflow-y-auto bg-[#ffffff] rounded-[14px] p-4 shadow-2xl shadow-black/40 ring-0 ring-black/0 text-black">
+            {listaPlanowUsera.map((plan) => (
+              <SelectItem
+                key={plan.id}
+                value={plan.nazwa}
+                className="py-2 px-3 rounded-md hover:bg-[#FFCCD5] text-black">
+                {plan.nazwa}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : (
+        <div className="w-[75%] mx-auto">
+          <Input
+            disabled={!activeInput}
+            value={namePlan}
+            onChange={(e) => {
+              setNamePlan(e.target.value);
+            }}
+            placeholder="Wpisz nazwę planu"
+            className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
+          />
+          <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+        </div>
+      )}
+      <Button
+        className="my-5 w-[180px] py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
+        disabled={!namePlan}
+        onClick={() => {
+          setActiveInput(!activeInput);
+        }}>
+        {activeInput ? "Dalej" : "Wstecz"}
+      </Button>
+      {!activeInput && (
+        <Table className="w-full table-fixed rounded-md overflow-hidden">
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      <div className="text-center font-MySerif text-sm text-black">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
                       </div>
-                    )}
-                  </div>
- 
-                   {/* prawa kolumna: Akcje */}
-                  <div className="flex-none w-[22%] min-w-[72px] flex justify-center items-center">
-                     <DodajCwiczenieDoPlanu
-                       row={(row.original as any)}
-                       listaCwiczen={listaCwiczen}
-                     />
-                   </div>
-                 </div>
-               </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={cols.length} className="h-24 text-center">
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={cols.length} className="h-24 text-center">
+                  Brak danych do wyświetlenia.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+      {!activeInput && (
+        <div>
+          <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold mb-2">
+            UWAGA: jeśli modyfikujesz już aktywowany plan to musisz go ponownie
+            aktywować po zmianach
+          </div>
+          <AktywujPlanBtn fullPlanId={idPlanu} />
+        </div>
+      )}
+    </div>
   );
 }

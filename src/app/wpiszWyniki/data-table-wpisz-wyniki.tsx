@@ -67,8 +67,8 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+              <TableCell colSpan={columns.length} className="text-[#C9184A] text-2xl md:text-2xl font-bold leading-tight">
+                Brak ćwiczeń
               </TableCell>
             </TableRow>
           )}

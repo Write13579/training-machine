@@ -51,9 +51,10 @@ export async function deleteExercise(exerciseId: number) {
     throw new Error("Access Denied");
   }
 
-  await db.delete(plans).where(eq(plans.exerciseId, exerciseId));
-
-  await db.delete(exercises).where(eq(exercises.id, exerciseId));
+  await db
+    .update(exercises)
+    .set({ deleted: true })
+    .where(eq(exercises.id, exerciseId));
 }
 
 export async function deleteUser(userId: number) {
@@ -63,7 +64,5 @@ export async function deleteUser(userId: number) {
     throw new Error("Access Denied");
   }
 
-  await db.delete(plans).where(eq(plans.userId, userId));
-
-  await db.delete(users).where(eq(users.id, userId));
+  await db.update(users).set({ deleted: true }).where(eq(users.id, userId));
 }

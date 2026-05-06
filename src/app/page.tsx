@@ -4,10 +4,9 @@ import Link from "next/link";
 import ZalogujPage from "./ZalogujComp";
 import { Dumbbell } from "lucide-react";
 import { db } from "@/lib/database";
-import { eq } from "drizzle-orm";
-import { usersToUsers, wyniki } from "@/lib/database/scheme";
+import { eq, inArray } from "drizzle-orm";
+import { users, usersToUsers, wyniki } from "@/lib/database/scheme";
 import { createStringFromDate } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import PulubBtn from "./PolubBtn";
 
 export default async function Home() {
@@ -15,21 +14,38 @@ export default async function Home() {
 
   const udostepnioneWynikiWszystkieQuery = await db.query.wyniki.findMany({
     with: {
-      plan: { with: { exercise: true, user: true } },
+      exercise: true,
     },
     where: eq(wyniki.udostepniony, true),
   });
 
+  const userIds = Array.from(
+    new Set(udostepnioneWynikiWszystkieQuery.map((w) => w.userId)),
+  );
+
+  const usersData =
+    userIds.length > 0
+      ? await db.query.users.findMany({ where: inArray(users.id, userIds) })
+      : [];
+
+  const userIdToName = new Map(usersData.map((u) => [u.id, u.name] as const));
+
   const udostepnioneWynikiWszystkie = udostepnioneWynikiWszystkieQuery.reduce(
     (acc, wynik) => {
-      const userId = wynik.plan.userId;
+      const userId = wynik.userId;
+
+      const userName = userIdToName.get(userId);
+      if (!userName) {
+        return acc;
+      }
+
       const dataKey = createStringFromDate(wynik.dataWykonania);
       const key = `${userId}-${dataKey}`;
 
       if (!acc[key]) {
         acc[key] = {
           userId: userId,
-          userName: wynik.plan.user.name,
+          userName,
           data: wynik.dataWykonania,
           dataString: dataKey,
           wyniki: [],
@@ -38,7 +54,7 @@ export default async function Home() {
 
       acc[key].wyniki.push({
         id: wynik.id,
-        cwiczenie: wynik.plan.exercise.nazwa,
+        cwiczenie: wynik.exercise.nazwa,
         serie: wynik.serie,
         powtorzenia: wynik.powtorzenia,
         ciezar: wynik.ciezar,
@@ -61,7 +77,7 @@ export default async function Home() {
           ciezar: number;
         }>;
       }
-    >
+    >,
   );
 
   // 5 ostatnich treningów od kogokolwiek
@@ -76,24 +92,24 @@ export default async function Home() {
     : [];
 
   const kogoJaObserwuje = kogoJaObserwujeQuery.map(
-    (relacja) => relacja.osobaObserwowanaId
+    (relacja) => relacja.osobaObserwowanaId,
   );
 
   const udostepnioneWynikiZnajomych = user
     ? Object.values(udostepnioneWynikiWszystkie).filter((wynik) =>
-        kogoJaObserwuje.includes(wynik.userId)
+        kogoJaObserwuje.includes(wynik.userId),
       )
     : [];
 
   const polubieniaWszystkie = await db.query.polubienia.findMany();
 
   const mojePolubienia = await polubieniaWszystkie.filter(
-    (polubienie) => polubienie.osobaLubiacaId === user?.id
+    (polubienie) => polubienie.osobaLubiacaId === user?.id,
   );
 
   function liczbaPolubienWyniku(wynikId: number) {
     return polubieniaWszystkie.filter(
-      (polubienie) => polubienie.wynikId === wynikId
+      (polubienie) => polubienie.wynikId === wynikId,
     ).length;
   }
 
@@ -107,12 +123,10 @@ export default async function Home() {
         </div>
       )}
       {user && (
-        <div
-          className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-8
-                 shadow-2xl shadow-black/40 ring-1 ring-black/5">
+        <div className="relative z-20 mx-auto mt-10 min-h-[360px] h-auto w-[34%] rounded-[20px] bg-[#ffffff] min-w-[340px] p-4 shadow-2xl shadow-black/40 ring-1 ring-black/5">
           <div className="flex flex-col items-center">
             <Dumbbell
-              className="w-12 h-12 mb-10"
+              className="w-12 h-12 mb-10 mt-5"
               stroke="url(#loginGradient)"
               strokeWidth={1.8}
               aria-hidden="true"
@@ -132,28 +146,18 @@ export default async function Home() {
             Stwórz swój plan treningowy i śledź postępy!
           </div>
 
+          <Link href={`/profile/${user.id}`}>
+            <button
+              type="button"
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
+              Profil treningowy
+            </button>
+          </Link>
+
           <Link href="/ustawPlan">
             <button
               type="button"
-              className="
-                w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
               Stwórz trening
             </button>
           </Link>
@@ -161,25 +165,7 @@ export default async function Home() {
           <Link href="/wpiszWyniki">
             <button
               type="button"
-              className="
-                w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]
-              ">
+              className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms] ">
               Wpisz wyniki treningu
             </button>
           </Link>
@@ -190,24 +176,7 @@ export default async function Home() {
             <Link href="/admin">
               <button
                 type="button"
-                className="w-full
-              py-[8.75px]
-              my-2
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-[#FF4D6D]
-              uppercase
-              text-[15px]
-              text-black
-              font-bold
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[200ms]">
+                className="w-full py-[8.75px] my-2 rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
                 Panel administratora
               </button>
             </Link>
@@ -215,7 +184,7 @@ export default async function Home() {
         </div>
       )}
       <section className="w-full px-4 flex justify-center">
-        <div className="w-[34%] min-w-[340px]">
+        <div className="w-[54%] min-w-[340px]">
           <h2 className="text-black font-bold items-center bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4 mt-10 mb-4">
             {user ? "Treningi znajomych" : "Ostatnie udostępnione treningi"}
           </h2>
@@ -225,15 +194,20 @@ export default async function Home() {
               (grupa) => (
                 <article
                   key={`${grupa.userId}-${grupa.dataString}`}
-                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4"
-                >
+                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4">
                   <div className="flex flex-row items-start gap-4">
                     <div className="flex-none">
-                      <div className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
-                        {grupa.userName?.split(" ").map(n => n[0]).slice(0,2).join("")}
+                      <div
+                        id={`${grupa.userId}-avatar`}
+                        className="w-12 h-12 rounded-full bg-[#FF4D6D] flex items-center justify-center text-white font-bold">
+                        {grupa.userName
+                          ?.split(" ")
+                          .map((n) => n[0])
+                          .slice(0, 2)
+                          .join("")}
                       </div>
                     </div>
-
+                    {/** username i data */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
                         <div>
@@ -244,11 +218,18 @@ export default async function Home() {
                             {grupa.dataString}
                           </div>
                         </div>
-                        <div className="flex items-center gap-1">
+                        {/** polubienia */}
+
+                        <div className="flex items-center">
                           <div className="text-[16px] font-bold text-black">
                             {liczbaPolubienWyniku(grupa.wyniki[0].id)}
                           </div>
-                {user &&          <PulubBtn wynikId={grupa.wyniki[0].id} />}
+
+                          <PulubBtn
+                            user={user}
+                            wynikId={grupa.wyniki[0].id}
+                            mojeLajki={mojePolubienia ?? []}
+                          />
                         </div>
                       </div>
                     </div>
@@ -257,8 +238,7 @@ export default async function Home() {
                     {grupa.wyniki.map((wynik) => (
                       <div
                         key={wynik.id}
-                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[10px] px-3 py-2 gap-2"
-                      >
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 ">
                         <div className="flex-1 min-w-0">
                           <div className="text-sm sm:text-base font-medium whitespace-normal break-words text-center sm:text-left px-3 py-1">
                             {wynik.cwiczenie}
@@ -291,14 +271,16 @@ export default async function Home() {
                     ))}
                   </div>
                 </article>
-              )
+              ),
             )}
 
             {user && udostepnioneWynikiZnajomych.length === 0 && (
-              <div className="text-gray-500">Brak wyników do wyświetlenia. Zacznij obserwować znajomych!</div>
+              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5">
+                Brak wyników do wyświetlenia. Zacznij obserwować znajomych!
+              </div>
             )}
             {!user && ostatnie5Treningow.length === 0 && (
-              <div className="text-gray-500">Brak udostępnionych treningów</div>
+              <div className="flex justify-center bg-[#FF4D6D] text-white rounded-[20px] px-3 py-2 gap-2 text-sm sm:text-base font-medium whitespace-normal break-words text-center shadow-md shadow-black/40 ring-1 ring-black/5" />
             )}
           </div>
         </div>

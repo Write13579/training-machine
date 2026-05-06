@@ -2,8 +2,7 @@
 
 import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
-import { plans, users, usersToUsers, wyniki } from "@/lib/database/scheme";
-import { info } from "console";
+import { users, usersToUsers, wyniki } from "@/lib/database/scheme";
 import { and, eq } from "drizzle-orm";
 
 export async function przestanObserwowac(ja: number, on: number) {
@@ -17,8 +16,8 @@ export async function przestanObserwowac(ja: number, on: number) {
     .where(
       and(
         eq(usersToUsers.osobaObserwujacaId, ja),
-        eq(usersToUsers.osobaObserwowanaId, on)
-      )
+        eq(usersToUsers.osobaObserwowanaId, on),
+      ),
     );
 
   return "Przestałeś obserwować tego użytkownika";
@@ -38,10 +37,14 @@ export async function zacznijObserwowac(ja: number, on: string) {
     return { error: 1, info: "Użytkownik nie znaleziony" };
   }
 
+  if (ja == goChceObserwowac.id) {
+    return { error: 1, info: "Nie możesz obserwować samego siebie narcyzie" };
+  }
+
   const existingRelation = await db.query.usersToUsers.findFirst({
     where: and(
       eq(usersToUsers.osobaObserwujacaId, ja),
-      eq(usersToUsers.osobaObserwowanaId, goChceObserwowac.id)
+      eq(usersToUsers.osobaObserwowanaId, goChceObserwowac.id),
     ),
   });
   if (existingRelation) {
@@ -63,31 +66,53 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
     throw new Error("Nieautoryzowany");
   }
 
-  const znajdzWyniki = await db.query.wyniki.findMany({
-    where: eq(wyniki.dataWykonania, dataWynikow),
+  const wszystkieWynikiZDaty = await db.query.wyniki.findMany({
+    where: and(
+      eq(wyniki.dataWykonania, dataWynikow),
+      eq(wyniki.userId, user.id),
+    ),
   });
 
-  if (znajdzWyniki.length === 0) {
-    return { error: 1, info: "Brak wyników do podjecia akcji" };
+  const mojeWyniki = wszystkieWynikiZDaty;
+
+  if (mojeWyniki.length === 0) {
+    return { error: 1, info: "Brak Twoich wyników do podjęcia akcji" };
   }
 
   if (przestanUdostepniac) {
-    await db
-      .update(wyniki)
-      .set({ udostepniony: false })
-      .where(eq(wyniki.dataWykonania, dataWynikow));
+    await Promise.all(
+      mojeWyniki.map((wynik) =>
+        db
+          .update(wyniki)
+          .set({ udostepniony: false })
+          .where(eq(wyniki.id, wynik.id)),
+      ),
+    );
     return { error: 0, info: "Przestałeś udostępniać te wyniki" };
   }
 
-  if (znajdzWyniki[0].udostepniony) {
+  if (mojeWyniki[0].udostepniony) {
     return { error: 1, info: "Wyniki zostały już udostępnione" };
   }
 
-  znajdzWyniki.forEach(async (wynik) => {
-    await db
-      .update(wyniki)
-      .set({ udostepniony: true })
-      .where(eq(wyniki.id, wynik.id));
-  });
+  await Promise.all(
+    mojeWyniki.map((wynik) =>
+      db
+        .update(wyniki)
+        .set({ udostepniony: true })
+        .where(eq(wyniki.id, wynik.id)),
+    ),
+  );
+
   return { error: 0, info: "Wyniki zostały udostępnione" };
+}
+
+export async function editName(newName: string, idUser: number) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("Nieautoryzowany");
+  }
+
+  if (user.id == idUser)
+    await db.update(users).set({ name: newName }).where(eq(users.id, user.id));
 }

@@ -81,7 +81,10 @@ export default function CreateExComp() {
                     className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder-gray-500 py-2"
                   />
                 </FormControl>
-                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div
+                  className="h-[2px] bg-black w-full mt-0"
+                  aria-hidden="true"
+                />
 
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
@@ -103,7 +106,10 @@ export default function CreateExComp() {
                   />
                 </FormControl>
 
-                <div className="h-[2px] bg-black w-full mt-0" aria-hidden="true" />
+                <div
+                  className="h-[2px] bg-black w-full mt-0"
+                  aria-hidden="true"
+                />
 
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
@@ -114,31 +120,11 @@ export default function CreateExComp() {
 
           <Button
             type="submit"
-            className="
-              w-full
-              py-[17px]
-              rounded-full
-              cursor-pointer
-              border-0
-              bg-black
-              uppercase
-              text-[15px]
-              transition-all duration-500 ease-in-out
-              hover:tracking-[1px]
-              hover:text-white
-              active:tracking-[3px]
-              active:bg-white
-              active:text-black
-              active:translate-y-[-2px]
-              active:duration-[100ms]
-            "
-          >
+            className=" w-full py-[17px] rounded-full cursor-pointer border-0 bg-black uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]">
             Utwórz
           </Button>
         </form>
-
       </Form>
-
     </div>
   );
 }
