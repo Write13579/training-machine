@@ -98,6 +98,85 @@ export async function dodajCwiczenieDoDniaIPlanu(
   return [];
 }
 
+export async function dodajWlasneCwiczenieDoDniaIPlanu(
+  dzien: number,
+  nazwaCwiczenia: string,
+  opisCwiczenia: string,
+  nazwaPlanu: string,
+) {
+  const user = await getMe();
+
+  if (!user) {
+    throw new Error("wypad");
+  }
+
+  if (dzien < 0 || dzien > 6) {
+    throw new Error("Nieprawidlowy dzien tygodnia");
+  }
+
+  const istniejePelnyPlan = await db.query.fullPlans.findFirst({
+    where: and(eq(fullPlans.userId, user.id), eq(fullPlans.nazwa, nazwaPlanu)),
+  });
+
+  if (!istniejePelnyPlan) {
+    await db.insert(fullPlans).values({
+      userId: user.id,
+      nazwa: nazwaPlanu,
+    });
+  }
+
+  const pelnyPlan =
+    istniejePelnyPlan ||
+    (await db.query.fullPlans.findFirst({
+      where: and(
+        eq(fullPlans.userId, user.id),
+        eq(fullPlans.nazwa, nazwaPlanu),
+      ),
+    }));
+
+  if (!pelnyPlan) {
+    throw new Error("Nie udalo sie utworzyc planu");
+  }
+
+  const dzienPlanu = await db.query.daysOfPlans.findFirst({
+    where: and(
+      eq(daysOfPlans.dzienTygodnia, dzien),
+      eq(daysOfPlans.fullPlanId, pelnyPlan.id),
+    ),
+  });
+
+  const dayId =
+    dzienPlanu?.id ||
+    (
+      await db
+        .insert(daysOfPlans)
+        .values({ dzienTygodnia: dzien, fullPlanId: pelnyPlan.id })
+        .returning({ id: daysOfPlans.id })
+    )[0].id;
+
+  const dodajWlasneCwiczenie = await db
+    .insert(exercises)
+    .values({
+      nazwa: nazwaCwiczenia,
+      opis: opisCwiczenia,
+      createdByUserId: user.id,
+    })
+    .returning({ id: exercises.id });
+
+  const ostatnie = await db.query.cwiczeniaZDnia.findFirst({
+    where: eq(cwiczeniaZDnia.dzienPlanId, dayId),
+    orderBy: [desc(cwiczeniaZDnia.kolejnosc)],
+  });
+
+  await db.insert(cwiczeniaZDnia).values({
+    dzienPlanId: dayId,
+    exerciseId: dodajWlasneCwiczenie[0].id,
+    kolejnosc: (ostatnie?.kolejnosc ?? 0) + 1,
+  });
+
+  return [];
+}
+
 export async function usunCwiczenieZDnia(
   dzien: number,
   nazwaCwiczenia: string,

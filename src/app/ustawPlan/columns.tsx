@@ -1,11 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { numerTygodniaNaString } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 import DodajCwiczenieDoPlanu from "./DodajCwiczenieDoPlanu";
 import WyswietlCwiczeniaZPlanu from "./WyswietlCwiczeniaZPlanu";
+import DodajWlasneCwiczenieDoPlanu from "./DodajWlasneCwiczenieDoPlanu";
+import { useAuth } from "@/lib/auth";
 
 export type DzienTreningowy = {
   dzień: number;
@@ -18,6 +19,7 @@ export const columns = (
     nazwa: string;
     opis: string;
     deleted: boolean;
+    createdByUserId: number;
   }[],
   nazwaPlanu: string,
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[],
@@ -60,25 +62,37 @@ export const columns = (
     accessorKey: "akcje",
     header: "Akcje",
     cell: ({ row }) => {
-      const filteredListaCwiczen = listaCwiczen.filter((cwiczenie) => {
-        const cwiczeniaDlaWybranegoPlanu = row.original.ćwiczenia.filter(
-          (c) => c.nazwaPlanu === nazwaPlanu, //tu musi być po id ale powiedzmy ze dziala
-        );
+      const user = useAuth();
+      const filteredListaCwiczen = listaCwiczen
+        .filter((cwiczenie) => {
+          const cwiczeniaDlaWybranegoPlanu = row.original.ćwiczenia.filter(
+            (c) => c.nazwaPlanu === nazwaPlanu, //tu musi być po id ale powiedzmy ze dziala
+          );
 
-        const cwiczeniaNazwy = cwiczeniaDlaWybranegoPlanu.map(
-          (c) => c.nazwaCwiczenia,
-        );
+          const cwiczeniaNazwy = cwiczeniaDlaWybranegoPlanu.map(
+            (c) => c.nazwaCwiczenia,
+          );
 
-        const nieMaCwiczenia = !cwiczeniaNazwy.includes(cwiczenie.nazwa);
+          const nieMaCwiczenia = !cwiczeniaNazwy.includes(cwiczenie.nazwa);
 
-        return nieMaCwiczenia;
-      });
+          return nieMaCwiczenia;
+        })
+        .filter((cwiczenie) => {
+          return (
+            cwiczenie.createdByUserId === user!.id ||
+            cwiczenie.createdByUserId === null
+          );
+        });
 
       return (
         <div className="flex items-center justify-center">
           <DodajCwiczenieDoPlanu
             row={row.original}
             listaCwiczen={filteredListaCwiczen}
+            nazwaFullPlanu={nazwaPlanu}
+          />
+          <DodajWlasneCwiczenieDoPlanu
+            row={row.original}
             nazwaFullPlanu={nazwaPlanu}
           />
         </div>
