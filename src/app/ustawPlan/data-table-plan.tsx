@@ -34,7 +34,7 @@ interface DataTableProps<TData, TValue> {
     id: number;
     nazwa: string;
     opis: string;
-    createdByUserId: number;
+    createdByUserId: number | null;
     deleted: boolean;
   }[];
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[];

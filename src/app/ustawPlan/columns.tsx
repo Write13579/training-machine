@@ -19,7 +19,7 @@ export const columns = (
     nazwa: string;
     opis: string;
     deleted: boolean;
-    createdByUserId: number;
+    createdByUserId: number | null;
   }[],
   nazwaPlanu: string,
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[],
