@@ -81,7 +81,6 @@ export async function deleteWynik(wynikId: number) {
     throw new Error("Access Denied");
   }
 
-  // find the target wynik to determine user and date
   const target = await db.query.wyniki.findFirst({
     where: eq(wyniki.id, wynikId),
     columns: { id: true, userId: true, dataWykonania: true },
@@ -91,26 +90,33 @@ export async function deleteWynik(wynikId: number) {
     return { message: "Wynik nie istnieje" };
   }
 
-  // find all wyniki for that user and date
-  const dayWyniki = await db.query.wyniki.findMany({
-    where: and(
-      eq(wyniki.userId, target.userId),
-      eq(wyniki.dataWykonania, target.dataWykonania),
-    ),
-    columns: { id: true },
-  });
+  await db
+    .update(wyniki)
+    .set({ udostepniony: false })
+    .where(eq(wyniki.id, wynikId));
 
-  const ids = dayWyniki.map((w) => w.id);
+  await db.delete(zgloszenia).where(eq(zgloszenia.zgloszonyWynikId, wynikId));
 
-  if (ids.length > 0) {
-    await db.delete(polubienia).where(inArray(polubienia.wynikId, ids));
-    await db
-      .delete(zgloszenia)
-      .where(inArray(zgloszenia.zgloszonyWynikId, ids));
-    await db.delete(wyniki).where(inArray(wyniki.id, ids));
-  }
+  // const dayWyniki = await db.query.wyniki.findMany({
+  //   where: and(
+  //     eq(wyniki.userId, target.userId),
+  //     eq(wyniki.dataWykonania, target.dataWykonania),
+  //   ),
+  //   columns: { id: true },
+  // });
 
-  return { message: `Usunięto ${ids.length} wyników z dnia` };
+  // const ids = dayWyniki.map((w) => w.id);
+
+  // if (ids.length > 0) {
+  //   await db.delete(polubienia).where(inArray(polubienia.wynikId, ids));
+  //   await db
+  //     .delete(zgloszenia)
+  //     .where(inArray(zgloszenia.zgloszonyWynikId, ids));
+  //   await db.delete(wyniki).where(inArray(wyniki.id, ids));
+  // }
+
+  // return { message: `Usunięto ${ids.length} wyników z dnia` };
+  return { message: "Wynik przestał być udostępniany" };
 }
 
 export async function deleteReport(reportId: number) {
