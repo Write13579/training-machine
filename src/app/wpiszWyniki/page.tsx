@@ -80,10 +80,11 @@ export default async function WpiszWynikiPage() {
             aria-hidden="true"
           />
           <h1 className="text-black text-2xl font-bold ">
-            Ustaw plan treningowy
+            Wpisz wyniki treningów
           </h1>
           <div className="font-MySerif mt-3 text-[12px] text-[#858383] font-bold">
-            Wybierz ćwiczenia i przypisz do dni tygodnia
+            Uzupełnij wyniki swojego treningu, aby śledzić postępy i analizować
+            swoje osiągnięcia.
           </div>
           <div className="mt-3">
             <WpiszComp data={data} />

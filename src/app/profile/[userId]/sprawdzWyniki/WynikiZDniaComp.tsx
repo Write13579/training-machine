@@ -2,24 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ChevronLeft, CircleStar } from "lucide-react";
+import { CircleStar } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { share } from "../actions";
-import { toast } from "sonner";
 
-export default function WybierzDateComp({
+import UdostepnijComp from "./UdostepnijComp";
+
+export default function WynikiZDniaComp({
   wynikiUsera,
 }: {
   wynikiUsera: {
@@ -41,13 +36,6 @@ export default function WybierzDateComp({
 }) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
-
-  const chartConfig = {
-    ciezar: {
-      label: "Ciężar",
-      color: "#FF4D6D",
-    },
-  };
 
   const router = useRouter();
   const pathname = usePathname();
@@ -75,47 +63,10 @@ export default function WybierzDateComp({
     });
   }, [wynikiUsera, date]);
 
-  // Grupowanie wyników po ćwiczeniach - przechowuj cały obiekt
-  const chartsWithOverallData = wynikiUsera.reduce(
-    (acc, wynik) => {
-      const cwiczenie = wynik.exercise.nazwa;
-
-      if (!acc[cwiczenie]) {
-        acc[cwiczenie] = {
-          cwiczenie: cwiczenie,
-          wyniki: [],
-        };
-      }
-
-      acc[cwiczenie].wyniki.push({
-        ciezar: wynik.ciezar,
-        data: wynik.dataWykonania,
-        serie: wynik.serie,
-        powtorzenia: wynik.powtorzenia,
-      });
-
-      return acc;
-    },
-    {} as Record<
-      string,
-      {
-        cwiczenie: string;
-        wyniki: Array<{
-          ciezar: number;
-          data: Date;
-          serie: number;
-          powtorzenia: number;
-        }>;
-      }
-    >,
-  );
-
-  const chartsArray = Object.values(chartsWithOverallData);
-
   return (
     <div
       id="tlo"
-      className="relative items-center justify-center min-h-[100vh] min-w-[320px]">
+      className="relative items-center justify-center min-w-[320px]">
       <div className="relative z-20 mx-auto mt-6 w-[34%] min-w-[340px] block">
         <Button
           variant="outline"
@@ -195,7 +146,7 @@ export default function WybierzDateComp({
                       <div className="text-lg sm:text-xl font-bold leading-none">
                         {wynik.serie}
                       </div>
-                      <div className="text-[11px]">Serie</div>
+                      <div className="text-[11px]">Seria</div>
                     </div>
 
                     <div className="flex flex-col items-center px-2">
@@ -222,83 +173,7 @@ export default function WybierzDateComp({
           </div>
 
           <div className="mt-10">
-            <div>
-              {wynikiDoWyswietlenia.length > 0 &&
-              !wynikiDoWyswietlenia[0].udostepniony ? (
-                <Button
-                  onClick={async () => {
-                    const response = await share(
-                      wynikiDoWyswietlenia[0].dataWykonania,
-                    );
-                    toast(response.info);
-                    router.refresh();
-                  }}
-                  className="w-full my-2 py-[8.75px] rounded-full cursor-pointer border-0 bg-black text-white uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
-                  Udostępnij swoje wyniki
-                </Button>
-              ) : wynikiDoWyswietlenia.length > 0 ? (
-                <div>
-                  <div className="text-black font-bold items-center bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4 mb-2">
-                    Wyniki zostały już udostępnione
-                  </div>
-                  <Button
-                    onClick={async () => {
-                      const przestanUdostepniac = true;
-                      const response = await share(
-                        wynikiDoWyswietlenia[0].dataWykonania,
-                        przestanUdostepniac,
-                      );
-                      toast(response.info);
-                      router.refresh();
-                    }}
-                    className="w-full my-2 py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
-                    Przestań udostępniać
-                  </Button>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="w-full px-4 flex justify-center">
-        <div className="w-[54%] min-w-[340px]">
-          <h2 className="text-black font-bold items-center bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4 mb-4">
-            Wszystkie ćwiczenia - postęp
-          </h2>
-
-          <div className="space-y-4">
-            {chartsArray.map((item) => {
-              const chartData = item.wyniki.map((wynik) => ({
-                data: wynik.data.toLocaleDateString(),
-                ciezar: wynik.ciezar,
-              }));
-
-              return (
-                <article
-                  key={item.cwiczenie}
-                  className="bg-white rounded-[20px] shadow-md shadow-black/40 ring-1 ring-black/5 p-4 flex flex-col gap-4">
-                  <h3 className="text-black font-bold text-base">
-                    {item.cwiczenie}
-                  </h3>
-
-                  <ChartContainer
-                    config={chartConfig}
-                    className="min-h-[200px] w-full">
-                    <BarChart data={chartData} className="max-h-[300px]">
-                      <XAxis dataKey="data" stroke="#000" />
-                      <YAxis stroke="#000" />
-                      <Bar
-                        dataKey="ciezar"
-                        fill={chartConfig.ciezar.color}
-                        radius={4}
-                      />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                    </BarChart>
-                  </ChartContainer>
-                </article>
-              );
-            })}
+            <UdostepnijComp wynikiDoWyswietlenia={wynikiDoWyswietlenia} />
           </div>
         </div>
       </section>

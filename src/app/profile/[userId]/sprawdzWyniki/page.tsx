@@ -2,7 +2,7 @@ import { getMe } from "@/app/authutils";
 import { db } from "@/lib/database";
 import { wyniki } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
-import WybierzDateComp from "./WybierzDateComp";
+import ProfileContent from "./ProfileContent";
 
 export default async function ProfilePage({
   params,
@@ -16,24 +16,16 @@ export default async function ProfilePage({
     throw new Error("Nieautoryzowany");
   }
 
-  //   const wszystkieWyniki = await db.query.wyniki.findMany({
-  //     with: { plan: true },
-  //   });
-
-  //   const wynikiUzytkownika = wszystkieWyniki.filter((wynik) => {
-  //     return wynik.plan.userId == userId;
-  //   });
-
-  const wynikiUzytkownika = await db.query.wyniki.findMany({
+  const wynikiUsera = await db.query.wyniki.findMany({
     where: eq(wyniki.userId, userId),
     with: {
       exercise: true,
     },
+    orderBy: (wyniki, { desc, asc }) => [
+      desc(wyniki.exerciseId),
+      asc(wyniki.serie),
+    ],
   });
 
-  return (
-    <div>
-      <WybierzDateComp wynikiUsera={wynikiUzytkownika} />
-    </div>
-  );
+  return <ProfileContent wynikiUsera={wynikiUsera} />;
 }

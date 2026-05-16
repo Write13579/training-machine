@@ -25,7 +25,7 @@ export type User = typeof users.$inferSelect;
 
 export const exercises = pgTable("exercises", {
   id: serial("id").primaryKey(),
-  nazwa: varchar("nazwa", { length: 256 }).unique().notNull(),
+  nazwa: varchar("nazwa", { length: 256 }).notNull(),
   opis: varchar("opis", { length: 700 }).notNull(),
   deleted: boolean("deleted").default(false).notNull(),
   createdByUserId: integer("createdByUserId").references(() => users.id),

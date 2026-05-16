@@ -60,7 +60,11 @@ export async function zacznijObserwowac(ja: number, on: string) {
   };
 }
 
-export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
+export async function share(
+  dataWynikow: Date,
+  opis: string,
+  przestanUdostepniac?: boolean,
+) {
   const user = await getMe();
   if (!user) {
     throw new Error("Nieautoryzowany");
@@ -84,7 +88,7 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
       mojeWyniki.map((wynik) =>
         db
           .update(wyniki)
-          .set({ udostepniony: false })
+          .set({ udostepniony: false, opisUdostepnienia: "" })
           .where(eq(wyniki.id, wynik.id)),
       ),
     );
@@ -99,7 +103,7 @@ export async function share(dataWynikow: Date, przestanUdostepniac?: boolean) {
     mojeWyniki.map((wynik) =>
       db
         .update(wyniki)
-        .set({ udostepniony: true })
+        .set({ udostepniony: true, opisUdostepnienia: opis })
         .where(eq(wyniki.id, wynik.id)),
     ),
   );

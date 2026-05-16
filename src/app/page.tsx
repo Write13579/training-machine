@@ -48,6 +48,7 @@ export default async function Home() {
           userName,
           data: wynik.dataWykonania,
           dataString: dataKey,
+          opisUdostepnienia: wynik.opisUdostepnienia || "",
           wyniki: [],
         };
       }
@@ -69,6 +70,7 @@ export default async function Home() {
         userName: string;
         data: Date;
         dataString: string;
+        opisUdostepnienia: string;
         wyniki: Array<{
           id: number;
           cwiczenie: string;
@@ -232,6 +234,13 @@ export default async function Home() {
                           />
                         </div>
                       </div>
+                      {grupa.opisUdostepnienia && (
+                        <div
+                          id="opis udostepnienia"
+                          className="text-black my-5">
+                          opis: {grupa.opisUdostepnienia}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="space-y-2 w-full">
@@ -250,7 +259,7 @@ export default async function Home() {
                             <div className="text-lg sm:text-xl font-bold leading-none">
                               {wynik.serie}
                             </div>
-                            <div className="text-[11px]">Serie</div>
+                            <div className="text-[11px]">Seria</div>
                           </div>
 
                           <div className="flex flex-col items-center px-2">
