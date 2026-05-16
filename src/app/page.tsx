@@ -8,6 +8,7 @@ import { eq, inArray } from "drizzle-orm";
 import { users, usersToUsers, wyniki } from "@/lib/database/scheme";
 import { createStringFromDate } from "@/lib/utils";
 import PulubBtn from "./PolubBtn";
+import ZglosBtn from "./ZglosBtn";
 
 export default async function Home() {
   const user = await getMe();
@@ -17,6 +18,10 @@ export default async function Home() {
       exercise: true,
     },
     where: eq(wyniki.udostepniony, true),
+    orderBy: (wyniki, { desc, asc }) => [
+      desc(wyniki.exerciseId),
+      asc(wyniki.serie),
+    ],
   });
 
   const userIds = Array.from(
@@ -278,6 +283,9 @@ export default async function Home() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                  <div className="text-black flex justify-end mr-5">
+                    <ZglosBtn wynikId={grupa.wyniki[0].id} />
                   </div>
                 </article>
               ),

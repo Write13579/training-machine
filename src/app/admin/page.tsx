@@ -5,8 +5,13 @@ import DeleteExComp from "./DeleteExComp";
 import Link from "next/link";
 import { FolderCode, User } from "lucide-react";
 import DeleteUserComp from "./DeleteUserComp";
-import { exercises, users } from "@/lib/database/scheme";
+import { exercises, users, wyniki } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
+import { formatujSlowoCwiczenieWgLiczby } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { deleteWynik } from "./adminActions";
+import UsunZgloszonyWynikBtn from "./UsunZgloszonyWynikBtn";
+import UsunZgloszenieBtn from "./UsunZgloszenieBtn";
 
 export default async function AdminPage() {
   const user = await getMe();
@@ -23,6 +28,84 @@ export default async function AdminPage() {
       login: true,
     },
   });
+
+  type Report = {
+    id: number;
+    tresc: string;
+    zglaszajacy: {
+      id: number;
+      name: string;
+      login: string;
+    };
+    zgloszonyWynik: {
+      id: number;
+      opisUdostepnienia: string | null;
+      dataWykonania: Date;
+      wyniki: {
+        id: number;
+        exercise: {
+          id: number;
+          nazwa: string;
+        };
+        serie: number;
+        powtorzenia: number;
+        ciezar: number;
+      }[];
+    };
+  };
+
+  const allReportsRaw = await db.query.zgloszenia.findMany({
+    columns: {
+      id: true,
+      tresc: true,
+    },
+    with: {
+      zglaszajacy: {
+        columns: {
+          id: true,
+          name: true,
+          login: true,
+        },
+      },
+      zgloszonyWynik: {
+        columns: {
+          id: true,
+          opisUdostepnienia: true,
+          dataWykonania: true,
+        },
+      },
+    },
+  });
+
+  const allReports: Report[] = await Promise.all(
+    allReportsRaw.map(async (report) => {
+      const wynikiZDnia = await db.query.wyniki.findMany({
+        where: eq(wyniki.dataWykonania, report.zgloszonyWynik.dataWykonania),
+        columns: {
+          id: true,
+          serie: true,
+          powtorzenia: true,
+          ciezar: true,
+        },
+        with: {
+          exercise: {
+            columns: {
+              id: true,
+              nazwa: true,
+            },
+          },
+        },
+      });
+
+      return {
+        ...report,
+        zgloszonyWynik: {
+          ...report.zgloszonyWynik,
+          wyniki: wynikiZDnia,
+        },
+      };
+    }),
+  );
 
   if (!user || !user.admin) {
     return <h1>Access Denied</h1>; // tu nic nie rob w ui bo i tak tego nie bedzie widac
@@ -102,6 +185,62 @@ export default async function AdminPage() {
                   {u.name} ({u.login})
                 </div>
                 <DeleteUserComp userId={u.id} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
+          <div className="flex flex-col items-center mb-6 mt-10">
+            <FolderCode
+              className="w-12 h-12 mb-4"
+              stroke="url(#loginGradient)"
+              strokeWidth={1.8}
+              aria-hidden="true"
+            />
+            <div className="text-black text-2xl md:text-3xl font-bold">
+              Zgłoszenia
+            </div>
+            <div className="font-MySerif mt-5 mb-1 text-[12px] text-[#858383] font-bold">
+              Lista wszystkich zgłoszeń w bazie
+            </div>
+          </div>
+          <div className="pt-1 overflow-y-auto max-h-[320px] space-y-1 ">
+            {allReports.map((report) => (
+              <div
+                key={report.id}
+                className="rounded-[16px] border border-black/10 bg-[#FFF6F8] px-3 py-2 min-w-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="text-black text-sm font-semibold truncate">
+                      {report.zglaszajacy.name} ({report.zglaszajacy.login})
+                    </div>
+                    <div
+                      id="zgloszenie"
+                      className="text-black truncate text-sm font-bold mt-1">
+                      opis zgłoszenia:{report.tresc}
+                    </div>
+                    <div className="text-[11px] text-black/70 mt-1 truncate">
+                      {report.zgloszonyWynik.wyniki.length}{" "}
+                      {formatujSlowoCwiczenieWgLiczby(
+                        report.zgloszonyWynik.wyniki.length,
+                      )}{" "}
+                      z dnia{" "}
+                      {report.zgloszonyWynik.dataWykonania.toLocaleDateString()}
+                    </div>
+                    <div className="mt-2 space-y-1">
+                      {report.zgloszonyWynik.wyniki.map((wynik) => (
+                        <div
+                          key={wynik.id}
+                          className="text-[11px] text-black/80 truncate">
+                          {wynik.exercise.nazwa} - {wynik.powtorzenia}x
+                          {wynik.ciezar}kg
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <UsunZgloszonyWynikBtn wynikId={report.zgloszonyWynik.id} />
+                <UsunZgloszenieBtn reportId={report.id} />
               </div>
             ))}
           </div>

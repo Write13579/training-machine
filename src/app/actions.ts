@@ -3,7 +3,7 @@
 import { db } from "@/lib/database";
 import { getMe } from "./authutils";
 import { and, eq } from "drizzle-orm";
-import { polubienia } from "@/lib/database/scheme";
+import { polubienia, zgloszenia } from "@/lib/database/scheme";
 
 export async function polubTrening(idWyniku: number) {
   const user = await getMe();
@@ -14,7 +14,7 @@ export async function polubTrening(idWyniku: number) {
   const czyIstniejeJuzToPolubienie = await db.query.polubienia.findFirst({
     where: and(
       eq(polubienia.osobaLubiacaId, user.id),
-      eq(polubienia.wynikId, idWyniku)
+      eq(polubienia.wynikId, idWyniku),
     ),
   });
 
@@ -24,8 +24,8 @@ export async function polubTrening(idWyniku: number) {
       .where(
         and(
           eq(polubienia.osobaLubiacaId, user.id),
-          eq(polubienia.wynikId, idWyniku)
-        )
+          eq(polubienia.wynikId, idWyniku),
+        ),
       );
     return { lubi: 0, message: "Przetales lubić ten wynik" };
   } else {
@@ -35,4 +35,30 @@ export async function polubTrening(idWyniku: number) {
     });
     return { lubi: 1, message: "Polubiono wynik" };
   }
+}
+
+export async function zglosTrening(idWyniku: number, opisZgloszenia: string) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("User not logged in");
+  }
+
+  const czyIstniejeJuzToZgloszenie = await db.query.zgloszenia.findFirst({
+    where: and(
+      eq(zgloszenia.zglaszajacyId, user.id),
+      eq(zgloszenia.zgloszonyWynikId, idWyniku),
+    ),
+  });
+
+  if (czyIstniejeJuzToZgloszenie) {
+    return { message: "Już zgłosiłeś ten wynik!" };
+  }
+
+  await db.insert(zgloszenia).values({
+    zglaszajacyId: user.id,
+    zgloszonyWynikId: idWyniku,
+    tresc: opisZgloszenia,
+  });
+
+  return { message: "Zgłoszono wynik" };
 }

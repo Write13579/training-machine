@@ -71,7 +71,7 @@ export default function UdostepnijComp({
                 </FieldGroup>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
+                    <Button variant="outline">Anuluj</Button>
                   </DialogClose>
                   <Button
                     type="submit"

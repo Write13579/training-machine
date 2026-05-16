@@ -138,8 +138,8 @@ export const zgloszenia = pgTable("zgloszenia", {
   zglaszajacyId: integer("zglaszajacyId")
     .references(() => users.id)
     .notNull(),
-  zgloszonyId: integer("zgloszonyId")
-    .references(() => users.id)
+  zgloszonyWynikId: integer("zgloszonyWynikId")
+    .references(() => wyniki.id)
     .notNull(),
 });
 
@@ -250,4 +250,16 @@ export const wynikiRelations = relations(wyniki, ({ one, many }) => ({
     references: [exercises.id],
   }),
   polubienia: many(polubienia),
+  zgloszenia: many(zgloszenia),
+}));
+
+export const zgloszeniaRelations = relations(zgloszenia, ({ one }) => ({
+  zglaszajacy: one(users, {
+    fields: [zgloszenia.zglaszajacyId],
+    references: [users.id],
+  }),
+  zgloszonyWynik: one(wyniki, {
+    fields: [zgloszenia.zgloszonyWynikId],
+    references: [wyniki.id],
+  }),
 }));
