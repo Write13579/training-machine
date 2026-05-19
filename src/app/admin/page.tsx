@@ -5,13 +5,13 @@ import DeleteExComp from "./DeleteExComp";
 import Link from "next/link";
 import { FolderCode, User } from "lucide-react";
 import DeleteUserComp from "./DeleteUserComp";
-import { exercises, users, wyniki } from "@/lib/database/scheme";
+import { categories, exercises, users, wyniki } from "@/lib/database/scheme";
 import { eq } from "drizzle-orm";
 import { formatujSlowoCwiczenieWgLiczby } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { deleteWynik } from "./adminActions";
 import UsunZgloszonyWynikBtn from "./UsunZgloszonyWynikBtn";
 import UsunZgloszenieBtn from "./UsunZgloszenieBtn";
+import CreateCategoryComp from "./CreateCategoryComp";
+import DeleteCategoryComp from "./DeleteCategoryComp";
 
 export default async function AdminPage() {
   const user = await getMe();
@@ -27,6 +27,10 @@ export default async function AdminPage() {
       name: true,
       login: true,
     },
+  });
+
+  const allCategories = await db.query.categories.findMany({
+    where: eq(categories.deleted, false),
   });
 
   type Report = {
@@ -125,7 +129,7 @@ export default async function AdminPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
         <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
-          <CreateExComp />
+          <CreateExComp categories={allCategories} />
         </div>
 
         <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
@@ -241,6 +245,39 @@ export default async function AdminPage() {
                 </div>
                 <UsunZgloszonyWynikBtn wynikId={report.zgloszonyWynik.id} />
                 <UsunZgloszenieBtn reportId={report.id} />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col min-h-[360px] w-full">
+          <CreateCategoryComp />
+        </div>
+        <div className="bg-white rounded-[20px] shadow-md p-4 flex flex-col gap-2 min-h-[360px] w-full sm:col-span-2 lg:col-span-1">
+          <div className="flex flex-col items-center mb-6 mt-10">
+            <User
+              className="w-12 h-12 mb-4"
+              stroke="url(#loginGradient)"
+              strokeWidth={1.8}
+              aria-hidden="true"
+            />
+            <div className="text-black text-2xl md:text-3xl font-bold">
+              Kategorie
+            </div>
+            <div className="font-MySerif mt-5 mb-1 text-[12px] text-[#858383] font-bold">
+              Lista wszystkich kategorii w bazie
+            </div>
+          </div>
+          <div className="pt-1 overflow-y-auto max-h-[320px] space-y-1 ">
+            {allCategories.map((u) => (
+              <div
+                key={u.id}
+                className="flex items-center justify-between py-1 min-w-0">
+                <div
+                  id="uzytkownik"
+                  className="text-black truncate text-1xl md:text-1xl font-bold">
+                  {u.nazwa}
+                </div>
+                <DeleteCategoryComp categoryId={u.id} />
               </div>
             ))}
           </div>

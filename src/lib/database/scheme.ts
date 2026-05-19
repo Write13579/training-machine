@@ -29,9 +29,18 @@ export const exercises = pgTable("exercises", {
   opis: varchar("opis", { length: 700 }).notNull(),
   deleted: boolean("deleted").default(false).notNull(),
   createdByUserId: integer("createdByUserId").references(() => users.id),
+  category: integer("category").references(() => categories.id),
 });
 
 export type Exercise = typeof exercises.$inferSelect;
+
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  nazwa: varchar("nazwa", { length: 256 }).notNull(),
+  deleted: boolean("deleted").default(false).notNull(),
+});
+
+export type Category = typeof categories.$inferSelect;
 
 export const fullPlans = pgTable("fullPlans", {
   id: serial("id").primaryKey(),
@@ -234,6 +243,14 @@ export const exercisesRelations = relations(exercises, ({ many, one }) => ({
     fields: [exercises.createdByUserId],
     references: [users.id],
   }),
+  category: one(categories, {
+    fields: [exercises.category],
+    references: [categories.id],
+  }),
+}));
+
+export const categoriesRelations = relations(categories, ({ many }) => ({
+  exercises: many(exercises),
 }));
 
 export const wynikiRelations = relations(wyniki, ({ one, many }) => ({

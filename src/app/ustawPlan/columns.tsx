@@ -20,9 +20,15 @@ export const columns = (
     opis: string;
     deleted: boolean;
     createdByUserId: number | null;
+    category: number | null;
   }[],
   nazwaPlanu: string,
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[],
+  listaKategoriiZCwiczeniami: {
+    id: number;
+    nazwa: string;
+    exercises: { id: number; nazwa: string; opis: string }[];
+  }[],
 ): ColumnDef<DzienTreningowy>[] => [
   {
     accessorKey: "dzień",
@@ -90,6 +96,7 @@ export const columns = (
             row={row.original}
             listaCwiczen={filteredListaCwiczen}
             nazwaFullPlanu={nazwaPlanu}
+            listaKategoriiZCwiczeniami={listaKategoriiZCwiczeniami}
           />
           <DodajWlasneCwiczenieDoPlanu
             row={row.original}

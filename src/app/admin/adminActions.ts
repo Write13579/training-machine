@@ -8,11 +8,16 @@ import {
   wyniki,
   polubienia,
   zgloszenia,
+  categories,
 } from "@/lib/database/scheme";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { getMe } from "../authutils";
 
-export async function createExercise(name: string, description: string) {
+export async function createExercise(
+  name: string,
+  description: string,
+  categoryId?: number,
+) {
   const user = await getMe();
 
   if (!user || !user.admin) {
@@ -46,6 +51,7 @@ export async function createExercise(name: string, description: string) {
   await db.insert(exercises).values({
     nazwa: name,
     opis: description,
+    category: categoryId || null,
   });
 
   return [];
@@ -128,4 +134,37 @@ export async function deleteReport(reportId: number) {
   await db.delete(zgloszenia).where(eq(zgloszenia.id, reportId));
 
   return { message: "Zgłoszenie zostało usunięte" };
+}
+
+export async function createCategory(nazwa: string) {
+  const user = await getMe();
+  if (!user || !user.admin) {
+    throw new Error("Access Denied");
+  }
+
+  const existingCategory = await db.query.categories.findFirst({
+    where: eq(categories.nazwa, nazwa),
+  });
+  if (existingCategory) {
+    return [{ field: "nazwa", error: "Podana nazwa już istnieje" }];
+  }
+
+  await db.insert(categories).values({
+    nazwa,
+  });
+
+  return [];
+}
+
+export async function deleteCategory(categoryId: number) {
+  const user = await getMe();
+
+  if (!user || !user.admin) {
+    throw new Error("Access Denied");
+  }
+
+  await db
+    .update(categories)
+    .set({ deleted: true })
+    .where(eq(categories.id, categoryId));
 }

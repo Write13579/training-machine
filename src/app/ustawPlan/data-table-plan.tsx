@@ -36,14 +36,21 @@ interface DataTableProps<TData, TValue> {
     opis: string;
     createdByUserId: number | null;
     deleted: boolean;
+    category: number | null;
   }[];
   listaPlanowUsera: { id: number; userId: number; nazwa: string }[];
+  listaKategoriiZCwiczeniami: {
+    id: number;
+    nazwa: string;
+    exercises: { id: number; nazwa: string; opis: string }[];
+  }[];
 }
 
 export function DataTable<TData, TValue>({
   data,
   listaWszystkichCwiczen,
   listaPlanowUsera,
+  listaKategoriiZCwiczeniami,
 }: DataTableProps<TData, TValue>) {
   const [namePlan, setNamePlan] = useState<string>("");
   const [activeInput, setActiveInput] = useState<boolean>(true);
@@ -55,6 +62,7 @@ export function DataTable<TData, TValue>({
     listaWszystkichCwiczen,
     namePlan,
     listaPlanowUsera,
+    listaKategoriiZCwiczeniami,
   ) as ColumnDef<TData, TValue>[];
 
   const [idPlanu, setIdPlanu] = useState<number | null>(null);

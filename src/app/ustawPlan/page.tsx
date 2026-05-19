@@ -1,8 +1,8 @@
 import { db } from "@/lib/database";
 import { DataTable } from "./data-table-plan";
 import { getMe } from "../authutils";
-import { and, eq, inArray } from "drizzle-orm";
-import { exercises, fullPlans, plans } from "@/lib/database/scheme";
+import { and, eq, inArray, isNull } from "drizzle-orm";
+import { categories, exercises, fullPlans, plans } from "@/lib/database/scheme";
 import { CircleStar } from "lucide-react";
 import Link from "next/link";
 
@@ -12,8 +12,14 @@ export default async function UstawPlanPage() {
     return <div>wypad</div>;
   }
 
+  const listaWszystkichKategoriiZCwiczeniami =
+    await db.query.categories.findMany({
+      where: eq(categories.deleted, false),
+      with: { exercises: true },
+    });
+
   const listaWszystkichCwiczen = await db.query.exercises.findMany({
-    where: eq(exercises.deleted, false),
+    where: and(eq(exercises.deleted, false), isNull(exercises.category)),
   });
 
   const listaPlanowUsera = await db.query.fullPlans.findMany({
@@ -85,6 +91,7 @@ export default async function UstawPlanPage() {
           data={parsedData}
           listaWszystkichCwiczen={listaWszystkichCwiczen}
           listaPlanowUsera={listaPlanowUsera}
+          listaKategoriiZCwiczeniami={listaWszystkichKategoriiZCwiczeniami}
         />
       </div>
     </div>

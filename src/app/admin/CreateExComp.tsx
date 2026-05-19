@@ -5,37 +5,53 @@ import { useRouter } from "next/navigation";
 import { Path, useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
-import Link from "next/link";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createExercise } from "./adminActions";
 import { Dumbbell } from "lucide-react";
+import { Category } from "@/lib/database/scheme";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export default function CreateExComp() {
+export default function CreateExComp({
+  categories,
+}: {
+  categories: Category[];
+}) {
   const formSchema = z.object({
     name: z.string().min(1, { message: "To pole nie może być puste" }),
     description: z.string().min(1, { message: "To pole nie może być puste" }),
+    category: z.string().optional(),
   });
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
+      category: "",
     },
   });
 
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const errors = await createExercise(values.name, values.description);
+    const errors = await createExercise(
+      values.name,
+      values.description,
+      values.category ? parseInt(values.category, 10) : undefined,
+    );
     if (errors.length === 0) {
       toast(`Dodano ćwiczenie ${values.name}!`);
       form.reset();
@@ -111,6 +127,41 @@ export default function CreateExComp() {
                   aria-hidden="true"
                 />
 
+                <div className="min-h-[1.25rem]">
+                  <FormMessage className="text-red-600 font-bold text-sm" />
+                </div>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem className="text-black bg-amber-600">
+                <FormControl>
+                  <Select
+                    {...field}
+                    onValueChange={field.onChange}
+                    value={field.value?.toString()}>
+                    <SelectTrigger className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-0 transition-none placeholder:text-gray-500 py-2">
+                      <SelectValue placeholder="Wybierz kategorię" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem
+                          key={category.id}
+                          value={category.id.toString()}>
+                          {category.nazwa}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <div
+                  className="h-[2px] bg-black w-full mt-0"
+                  aria-hidden="true"
+                />
                 <div className="min-h-[1.25rem]">
                   <FormMessage className="text-red-600 font-bold text-sm" />
                 </div>

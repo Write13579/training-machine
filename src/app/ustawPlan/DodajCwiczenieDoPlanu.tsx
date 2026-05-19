@@ -23,7 +23,8 @@ import { DzienTreningowy } from "./columns";
 
 export default function DodajCwiczenieDoPlanu({
   row,
-  listaCwiczen,
+  listaCwiczen, //BEZ KATEGORII
+  listaKategoriiZCwiczeniami = [],
   nazwaFullPlanu,
 }: {
   row: DzienTreningowy;
@@ -31,12 +32,21 @@ export default function DodajCwiczenieDoPlanu({
     id: number;
     nazwa: string;
     opis: string;
+    createdByUserId: number | null;
+    category: number | null;
+  }[];
+  listaKategoriiZCwiczeniami: {
+    id: number;
+    nazwa: string;
+    exercises: { id: number; nazwa: string; opis: string }[];
   }[];
   nazwaFullPlanu: string;
 }) {
   const formSchema = z.object({
     cwiczenie: z.string(),
   });
+
+  console.log(listaCwiczen);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +61,7 @@ export default function DodajCwiczenieDoPlanu({
     const errors = await dodajCwiczenieDoDniaIPlanu(
       row.dzień,
       values.cwiczenie,
-      nazwaFullPlanu
+      nazwaFullPlanu,
     );
     if (errors.length > 0) {
       errors.forEach((error) => {
@@ -67,8 +77,7 @@ export default function DodajCwiczenieDoPlanu({
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button
-            className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center transition-all cursor-pointer  duration-500  ease-in-out hover:rotate-90 hover:bg-[#FFCCD5] active:tracking-[3px] active:bg-[#FF758F] active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+          <Button className="bg-white rounded-full w-10 h-10 p-0 text-center text-black justify-center transition-all cursor-pointer  duration-500  ease-in-out hover:rotate-90 hover:bg-[#FFCCD5] active:tracking-[3px] active:bg-[#FF758F] active:text-black active:translate-y-[-2px] active:duration-[200ms]">
             <Plus className="w-6 h-6" />
           </Button>
         </DialogTrigger>
@@ -97,6 +106,41 @@ export default function DodajCwiczenieDoPlanu({
                 render={({ field }) => (
                   <FormItem>
                     <div className="max-h-[40vh] sm:max-h-[60vh] overflow-y-auto p-1">
+                      {listaKategoriiZCwiczeniami.map((kategoria) => {
+                        return (
+                          <div key={kategoria.id} className="mb-2">
+                            <div className="px-2 py-1 font-semibold text-sm text-[#333]">
+                              {kategoria.nazwa}
+                            </div>
+                            {kategoria.exercises.map((cwiczenie) => {
+                              const selected = field.value === cwiczenie.nazwa;
+                              return (
+                                <button
+                                  type="button"
+                                  key={`${kategoria.id}-${cwiczenie.id}`}
+                                  onClick={() =>
+                                    field.onChange(cwiczenie.nazwa)
+                                  }
+                                  className={`w-full flex flex-col p-3 rounded-lg transition-colors text-left ${
+                                    selected
+                                      ? "bg-[#FF4D6D] text-white"
+                                      : "hover:bg-[#FFCCD5] bg-transparent text-black"
+                                  }`}>
+                                  <div className="w-full">
+                                    <div className="font-medium">
+                                      {cwiczenie.nazwa}
+                                    </div>
+                                    <div className="text-[12px] text-black mt-1">
+                                      {cwiczenie.opis}
+                                    </div>
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        );
+                      })}
+                      <div className="text-red-500">BEZ KATEGORII:</div>
                       {listaCwiczen.map((cwiczenie, index) => {
                         const selected = field.value === cwiczenie.nazwa;
                         return (
@@ -128,8 +172,7 @@ export default function DodajCwiczenieDoPlanu({
               />
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button
-                    className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
+                  <Button className="w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-[#FF4D6D] uppercase text-[15px] text-black font-bold transition-all duration-500 ease-in-out hover:tracking-[1px] active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[200ms]">
                     Wyjdź
                   </Button>
                 </DialogClose>
