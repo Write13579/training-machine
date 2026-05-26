@@ -37,12 +37,12 @@ export default function MyNameComp({
           }
           setEditing(!editing);
         }}
-        className="text-sm text-blue-500 mt-2"
+        className="flex items-center justify-center w-full py-[8.75px] rounded-full cursor-pointer border-0 bg-black text-white uppercase text-[15px] transition-all duration-500 ease-in-out hover:tracking-[1px] hover:text-white active:tracking-[3px] active:bg-white active:text-black active:translate-y-[-2px] active:duration-[100ms]"
       >
         {editing ? "Zapisz" : "Edytuj"}
       </button>
       <div className="font-MySerif mt-0 mb-4 text-[12px] text-[#858383] font-bold">
-        Imię i nazwisko //pseudonim?
+        Imię i nazwisko
       </div>
     </div>
   );

@@ -109,8 +109,8 @@ export default function DodajCwiczenieDoPlanu({
                       {listaKategoriiZCwiczeniami.map((kategoria) => {
                         return (
                           <div key={kategoria.id} className="mb-2">
-                            <div className="px-2 py-1 font-semibold text-sm text-[#333]">
-                              {kategoria.nazwa}
+                            <div className="px-2 py-1 font-bold text-sm uppercase text-[#FF4D6D]">
+                              {kategoria.nazwa}:
                             </div>
                             {kategoria.exercises.map((cwiczenie) => {
                               const selected = field.value === cwiczenie.nazwa;
@@ -140,7 +140,7 @@ export default function DodajCwiczenieDoPlanu({
                           </div>
                         );
                       })}
-                      <div className="text-red-500">BEZ KATEGORII:</div>
+                      <div className="px-2 py-1 font-bold text-sm uppercase text-[#FF4D6D]">BEZ KATEGORII:</div>
                       {listaCwiczen.map((cwiczenie, index) => {
                         const selected = field.value === cwiczenie.nazwa;
                         return (
