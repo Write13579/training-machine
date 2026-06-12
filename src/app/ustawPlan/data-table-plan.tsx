@@ -192,7 +192,7 @@ export function DataTable<TData, TValue>({
             UWAGA: jeśli modyfikujesz już aktywowany plan to musisz go ponownie
             aktywować po zmianach
           </div>
-          <AktywujPlanBtn fullPlanId={idPlanu} />
+          <AktywujPlanBtn fullPlanId={idPlanu} planName={namePlan} />
         </div>
       )}
     </div>

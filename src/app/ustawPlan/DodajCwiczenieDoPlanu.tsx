@@ -140,7 +140,9 @@ export default function DodajCwiczenieDoPlanu({
                           </div>
                         );
                       })}
-                      <div className="px-2 py-1 font-bold text-sm uppercase text-[#FF4D6D]">BEZ KATEGORII:</div>
+                      <div className="px-2 py-1 font-bold text-sm uppercase text-[#FF4D6D]">
+                        BEZ KATEGORII:
+                      </div>
                       {listaCwiczen.map((cwiczenie, index) => {
                         const selected = field.value === cwiczenie.nazwa;
                         return (

@@ -224,14 +224,24 @@ export async function usunCwiczenieZDnia(
     );
 }
 
-export async function aktywujPlan(fullPlanId: number) {
+export async function aktywujPlan(fullPlanId: number | null, planName: string) {
   const user = await getMe();
   if (!user) {
     throw new Error("wypad");
   }
 
   if (!fullPlanId) {
-    return [{ error: "Nie wybrano planu do aktywacji" }];
+    //return [{ error: "Nie wybrano planu do aktywacji" }];
+
+    const fetchPlanIdByPlanName = await db.query.fullPlans.findFirst({
+      where: and(eq(fullPlans.userId, user.id), eq(fullPlans.nazwa, planName)),
+    });
+
+    if (!fetchPlanIdByPlanName) {
+      return [{ error: "Nie znaleziono planu o podanej nazwie" }];
+    }
+
+    fullPlanId = fetchPlanIdByPlanName.id;
   }
 
   const planUsera = await db.query.fullPlans.findFirst({

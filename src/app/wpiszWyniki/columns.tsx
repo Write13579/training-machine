@@ -111,6 +111,7 @@ export const columns: ColumnDef<WynikType>[] = [
                           className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
                           value={seria.powtorzenia}
                           type="number"
+                          min={0}
                           onChange={(e) =>
                             updateSeria(
                               idx,
@@ -129,6 +130,7 @@ export const columns: ColumnDef<WynikType>[] = [
                           className="w-full bg-white border-0 p-2 text-sm shadow-md shadow-black/40 ring-1 ring-black/5"
                           value={seria.ciezar}
                           type="number"
+                          min={0}
                           onChange={(e) =>
                             updateSeria(idx, "ciezar", Number(e.target.value))
                           }

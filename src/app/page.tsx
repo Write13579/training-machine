@@ -284,9 +284,11 @@ export default async function Home() {
                       </div>
                     ))}
                   </div>
-                  <div className="text-black flex justify-end mr-5">
-                    <ZglosBtn wynikId={grupa.wyniki[0].id} />
-                  </div>
+                  {user && (
+                    <div className="text-black flex justify-end mr-5">
+                      <ZglosBtn wynikId={grupa.wyniki[0].id} />
+                    </div>
+                  )}
                 </article>
               ),
             )}
