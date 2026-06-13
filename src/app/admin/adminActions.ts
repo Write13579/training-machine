@@ -10,7 +10,7 @@ import {
   zgloszenia,
   categories,
 } from "@/lib/database/scheme";
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { getMe } from "../authutils";
 
 export async function createExercise(
@@ -96,33 +96,28 @@ export async function deleteWynik(wynikId: number) {
     return { message: "Wynik nie istnieje" };
   }
 
-  await db
-    .update(wyniki)
-    .set({ udostepniony: false })
-    .where(eq(wyniki.id, wynikId));
+  const dayWyniki = await db.query.wyniki.findMany({
+    where: and(
+      eq(wyniki.userId, target.userId),
+      eq(wyniki.dataWykonania, target.dataWykonania),
+    ),
+    columns: { id: true },
+  });
 
-  await db.delete(zgloszenia).where(eq(zgloszenia.zgloszonyWynikId, wynikId));
+  const ids = dayWyniki.map((w) => w.id);
 
-  // const dayWyniki = await db.query.wyniki.findMany({
-  //   where: and(
-  //     eq(wyniki.userId, target.userId),
-  //     eq(wyniki.dataWykonania, target.dataWykonania),
-  //   ),
-  //   columns: { id: true },
-  // });
+  if (ids.length > 0) {
+    await db.delete(polubienia).where(inArray(polubienia.wynikId, ids));
+    await db
+      .delete(zgloszenia)
+      .where(inArray(zgloszenia.zgloszonyWynikId, ids));
+    await db
+      .update(wyniki)
+      .set({ udostepniony: false })
+      .where(inArray(wyniki.id, ids));
+  }
 
-  // const ids = dayWyniki.map((w) => w.id);
-
-  // if (ids.length > 0) {
-  //   await db.delete(polubienia).where(inArray(polubienia.wynikId, ids));
-  //   await db
-  //     .delete(zgloszenia)
-  //     .where(inArray(zgloszenia.zgloszonyWynikId, ids));
-  //   await db.delete(wyniki).where(inArray(wyniki.id, ids));
-  // }
-
-  // return { message: `Usunięto ${ids.length} wyników z dnia` };
-  return { message: "Wynik przestał być udostępniany" };
+  return { message: `Usunięto ${ids.length} wyników z dnia` };
 }
 
 export async function deleteReport(reportId: number) {

@@ -7,6 +7,7 @@ import DodajCwiczenieDoPlanu from "./DodajCwiczenieDoPlanu";
 import WyswietlCwiczeniaZPlanu from "./WyswietlCwiczeniaZPlanu";
 import DodajWlasneCwiczenieDoPlanu from "./DodajWlasneCwiczenieDoPlanu";
 import { useAuth } from "@/lib/auth";
+import DodajWlasnaKategorie from "./DodajWlasnaKategorie";
 
 export type DzienTreningowy = {
   dzień: number;
@@ -90,6 +91,10 @@ export const columns = (
           );
         });
 
+      const nazwyCwiczenZKategorii = listaKategoriiZCwiczeniami.map(
+        (kategoria) => ({ id: kategoria.id, nazwa: kategoria.nazwa }),
+      );
+
       return (
         <div className="flex items-center justify-center">
           <DodajCwiczenieDoPlanu
@@ -101,7 +106,9 @@ export const columns = (
           <DodajWlasneCwiczenieDoPlanu
             row={row.original}
             nazwaFullPlanu={nazwaPlanu}
+            kategorie={nazwyCwiczenZKategorii}
           />
+          <DodajWlasnaKategorie />
         </div>
       );
     },

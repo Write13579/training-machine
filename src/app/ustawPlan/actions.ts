@@ -3,12 +3,13 @@
 import { db } from "@/lib/database";
 import { getMe } from "../authutils";
 import {
+  categories,
   cwiczeniaZDnia,
   daysOfPlans,
   exercises,
   fullPlans,
 } from "@/lib/database/scheme";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, or, isNull } from "drizzle-orm";
 
 export async function dodajCwiczenieDoDniaIPlanu(
   dzien: number,
@@ -103,6 +104,7 @@ export async function dodajWlasneCwiczenieDoDniaIPlanu(
   nazwaCwiczenia: string,
   opisCwiczenia: string,
   nazwaPlanu: string,
+  category: number | undefined,
 ) {
   const user = await getMe();
 
@@ -160,6 +162,7 @@ export async function dodajWlasneCwiczenieDoDniaIPlanu(
       nazwa: nazwaCwiczenia,
       opis: opisCwiczenia,
       createdByUserId: user.id,
+      category: category ?? null,
     })
     .returning({ id: exercises.id });
 
@@ -261,6 +264,33 @@ export async function aktywujPlan(fullPlanId: number | null, planName: string) {
     .update(fullPlans)
     .set({ activePlan: true })
     .where(and(eq(fullPlans.userId, user.id), eq(fullPlans.id, fullPlanId)));
+
+  return [];
+}
+
+export async function nowaKategoriaUsera(nazwaKategorii: string) {
+  const user = await getMe();
+  if (!user) {
+    throw new Error("wypad");
+  }
+
+  const istniejeKategoria = await db.query.categories.findFirst({
+    where: and(
+      eq(categories.nazwa, nazwaKategorii),
+      or(
+        eq(categories.createdByUserId, user.id),
+        isNull(categories.createdByUserId),
+      ),
+    ),
+  });
+
+  if (istniejeKategoria) {
+    return [{ error: "Kategoria o podanej nazwie już istnieje" }];
+  }
+
+  await db
+    .insert(categories)
+    .values({ nazwa: nazwaKategorii, createdByUserId: user.id });
 
   return [];
 }

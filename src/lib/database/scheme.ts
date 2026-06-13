@@ -37,6 +37,7 @@ export type Exercise = typeof exercises.$inferSelect;
 export const categories = pgTable("categories", {
   id: serial("id").primaryKey(),
   nazwa: varchar("nazwa", { length: 256 }).notNull(),
+  createdByUserId: integer("createdByUserId").references(() => users.id),
   deleted: boolean("deleted").default(false).notNull(),
 });
 
@@ -62,7 +63,6 @@ export const daysOfPlans = pgTable("daysOfPlans", {
     .notNull(),
 });
 
-// Alias kompatybilności dla istniejącego kodu aplikacji.
 export const plans = daysOfPlans;
 
 export type Plan = typeof daysOfPlans.$inferSelect;

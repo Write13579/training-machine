@@ -27,19 +27,29 @@ import { BicepsFlexed, ListPlus } from "lucide-react";
 import { DzienTreningowy } from "./columns";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function DodajWlasneCwiczenieDoPlanu({
   row,
   nazwaFullPlanu,
+  kategorie,
 }: {
   row: DzienTreningowy;
   nazwaFullPlanu: string;
+  kategorie: { id: number; nazwa: string }[];
 }) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const formSchema = z.object({
     nazwaCwiczenia: z.string().min(2).max(100),
     opisCwiczenia: z.string().min(5).max(500),
+    kategoriaCwiczenia: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +57,7 @@ export default function DodajWlasneCwiczenieDoPlanu({
     defaultValues: {
       nazwaCwiczenia: "",
       opisCwiczenia: "",
+      kategoriaCwiczenia: undefined,
     },
   });
 
@@ -58,6 +69,7 @@ export default function DodajWlasneCwiczenieDoPlanu({
       values.nazwaCwiczenia,
       values.opisCwiczenia,
       nazwaFullPlanu,
+      values.kategoriaCwiczenia ? Number(values.kategoriaCwiczenia) : undefined,
     );
     if (errors.length > 0) {
       errors.forEach((error) => {
@@ -139,6 +151,46 @@ export default function DodajWlasneCwiczenieDoPlanu({
                       placeholder="np. sztanga góra dół na płaskiej"
                       autoComplete="off"
                     />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="kategoriaCwiczenia"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    data-invalid={fieldState.invalid}
+                    className="bg-red-600">
+                    <FieldLabel
+                      htmlFor="form-rhf-demo-kategoriaCwiczenia"
+                      className="text-black">
+                      Kategoria ćwiczenia
+                    </FieldLabel>
+                    <Select
+                      name={field.name}
+                      value={field.value?.toString()}
+                      onValueChange={field.onChange}>
+                      <SelectTrigger
+                        className="text-black"
+                        id="form-rhf-demo-kategoriaCwiczenia"
+                        aria-invalid={fieldState.invalid}>
+                        <SelectValue placeholder="Wybierz kategorię" />
+                      </SelectTrigger>
+                      <SelectContent className="text-black">
+                        {kategorie.map((kategoria) => {
+                          return (
+                            <SelectItem
+                              value={kategoria.id.toString()}
+                              key={kategoria.id}>
+                              {kategoria.nazwa}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
