@@ -30,10 +30,13 @@ export default function ProfileContent({
     };
   }[];
 }) {
+  const sortedWynikiUsera = [...wynikiUsera].sort(
+    (a, b) => a.dataWykonania.getTime() - b.dataWykonania.getTime(),
+  );
   return (
     <div>
       <WynikiZDniaComp wynikiUsera={wynikiUsera} />
-      <WykresyComp wynikiUsera={wynikiUsera} />
+      <WykresyComp wynikiUsera={sortedWynikiUsera} />
     </div>
   );
 }
